@@ -9,130 +9,155 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
-<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
-<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
-<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
-<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
-<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
-<link rel="import" href="../bower_components/app-route/app-location.html">
-<link rel="import" href="../bower_components/app-route/app-route.html">
-<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
 <link rel="import" href="my-icons.html">
+
+<!-- Intl polyfill -->
+<script src="../bower_components/intl/dist/Intl.min.js"></script>
 
 <dom-module id="my-app">
   <template>
     <style>
       :host {
-        --app-primary-color: #4285f4;
-        --app-secondary-color: black;
-
+        --app-primary-color: #00C853;  /* orange */
+        --app-secondary-color: #1976D2;  /* teal */
+        --app-primary-text-color: #37474F;
+        --app-secondary-text-color: #607D8B;
+        --app-error-color: #F4511E;
         display: block;
       }
-
-      app-header {
-        color: #fff;
+      [hidden] {
+        display: none !important;
+      }
+      paper-button[raised] {
         background-color: var(--app-primary-color);
+        color: white;
+        font-size: 14px;
       }
-      app-header paper-icon-button {
-        --paper-icon-button-ink-color: white;
+      .offline {
+        font-weight: 300;
+        font-size: 18px;
       }
-
-      .drawer-list {
-        margin: 0 20px;
-      }
-
-      .drawer-list a {
-        display: block;
-
-        padding: 0 16px;
-
-        text-decoration: none;
-
-        color: var(--app-secondary-color);
-
-        line-height: 40px;
-      }
-
-      .drawer-list a.iron-selected {
+      .signin-view {
         color: black;
-
-        font-weight: bold;
+        padding-top: 10%;
+        max-width: 400px;
+        margin: auto;
+        text-align: center;
+      }
+      .header {
+        height: 350px;
+        overflow: hidden;
+      }
+      h1 {
+        letter-spacing: 2px;
+        font-weight: 500;
+      }
+      p {
+        font-weight: 300;
+        font-size: 18px;
+      }
+      .giant {
+        font-size: 3em;
+        font-weight: 300;
+      }
+      .footer {
+        font-size: 13px;
+      }
+      a:link, a:visited {
+        color: #0000EE;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      button {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        background: var(--app-primary-color);
+        color: white;
+        border: none;
+        border-radius: 3px;
+        text-transform: uppercase;
+        padding: 0.7em 0.57em;
+        font-size: 14px;
+        cursor: pointer;
       }
     </style>
 
-    <app-location route="{{route}}"></app-location>
-    <app-route
-        route="{{route}}"
-        pattern="/:page"
-        data="{{routeData}}"
-        tail="{{subroute}}"></app-route>
+    <firebase-app
+      api-key="AIzaSyC0ni874mFgKx3zd7ZoGT7fIgdmNrm_ZoM"
+      database-url="https://lettuce-go.firebaseio.com"
+      auth-domain="lettuce-go.firebaseapp.com"
+      storage-bucket="lettuce-go.appspot.com">
+    </firebase-app>
 
-    <app-drawer-layout fullbleed>
-      <!-- Drawer content -->
-      <app-drawer>
-        <app-toolbar>Menu</app-toolbar>
-        <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="view1" href="/view1">View One</a>
-          <a name="view2" href="/view2">View Two</a>
-          <a name="view3" href="/view3">View Three</a>
-        </iron-selector>
-      </app-drawer>
+    <firebase-auth id="googleAuth" user="{{user}}" provider="google"></firebase-auth>
 
-      <!-- Main content -->
-      <app-header-layout has-scrolling-region>
+    <div class="signin-view" id="signin" hidden>
+      <div class="header">
+        <div class="giant">{{localize('splash-one')}}</div>
+        <p>{{localize('splash-two')}}</p>
+        <br>
+        <button on-tap="login" raised hidden$="[[offline]]">{{localize('sign-in')}}</button>
+        <div hidden$="[[!offline]]" class="offline">{{localize('splash-offline')}}</div>
+      </div>
 
-        <app-header condenses reveals effects="waterfall">
-          <app-toolbar>
-            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-            <div main-title>My App</div>
-          </app-toolbar>
-        </app-header>
-
-        <iron-pages
-            selected="[[page]]"
-            attr-for-selected="name"
-            fallback-selection="view404"
-            role="main">
-          <my-view1 name="view1"></my-view1>
-          <my-view2 name="view2"></my-view2>
-          <my-view3 name="view3"></my-view3>
-          <my-view404 name="view404"></my-view404>
-        </iron-pages>
-      </app-header-layout>
-    </app-drawer-layout>
+      <p class="footer" inner-h-t-m-l="{{localize('splash-footer')}}"></p>
+    </div>
   </template>
 
   <script>
     Polymer({
       is: 'my-app',
-
-      properties: {
-        page: {
-          type: String,
-          reflectToAttribute: true,
-          observer: '_pageChanged'
-        }
-      },
-
-      observers: [
-        '_routePageChanged(routeData.page)'
+      behaviors: [
+        Polymer.AppLocalizeBehavior
       ],
-
-      _routePageChanged: function(page) {
-        this.page = page || 'view1';
+      properties: {
+        offline: {
+          type: Boolean,
+          value: false
+        },
       },
+      ready: function() {
+        this.loadResources(this.resolveUrl('locales.json'));
 
-      _pageChanged: function(page) {
-        // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
-        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+        this.offline = navigator.onLine === false;
+
+        window.addEventListener('online', function() {
+          this.offline = false;
+        }.bind(this));
+
+        window.addEventListener('offline', function() {
+          this.offline = true;
+        }.bind(this));
+
+        this.addEventListener('language-changed', function(event) {
+          this.language = event.detail.value;
+        }.bind(this));
+
+        this.$.googleAuth.auth.onAuthStateChanged(function(user) {
+          if (!!user) {
+            this.importHref(this.resolveUrl('activity-list.html'), function() {
+              this.$.feed.user = user;
+              this.$.signin.hidden = true;
+              //this.$.feed.hidden = false;
+              // We went from hidden to visible, so app-layout needs to recompute its size.
+              //this.$.feed.resizeHeader();
+            });
+          } else {
+            this.$.signin.hidden = false;
+            //this.$.feed.hidden = true;
+          }
+        }.bind(this));
+
       },
-
-      _showPage404: function() {
-        this.page = 'view404';
+      login: function() {
+        this.$.googleAuth.signInWithPopup();
       }
     });
   </script>
