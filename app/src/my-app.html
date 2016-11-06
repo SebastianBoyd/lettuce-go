@@ -24,8 +24,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <style>
       :host {
-        --app-primary-color: #00C853;  /* orange */
-        --app-secondary-color: #1976D2;  /* teal */
+        --app-primary-color: #00C853;
+        --app-secondary-color: #1976D2;
         --app-primary-text-color: #37474F;
         --app-secondary-text-color: #607D8B;
         --app-error-color: #F4511E;
@@ -109,6 +109,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <p class="footer" inner-h-t-m-l="{{localize('splash-footer')}}"></p>
     </div>
+    {{user}}
     <activity-list id="feed" offline="[[offline]]" language="[[language]]"></activity-list>
   </template>
 
@@ -144,7 +145,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.googleAuth.auth.onAuthStateChanged(function(user) {
           if (!!user) {
             this.importHref(this.resolveUrl('activity-list.html'), function() {
-              this.$.feed.user = user;
+              // this.$.feed.user = user;
               this.$.signin.hidden = true;
               //this.$.feed.hidden = false;
               // We went from hidden to visible, so app-layout needs to recompute its size.

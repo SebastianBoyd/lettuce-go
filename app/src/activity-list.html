@@ -23,6 +23,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-icons.html">
 
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-database-script.html">
 
 <dom-module id="activity-list">
   <template>
@@ -55,7 +56,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <firebase-query data="{{data}}" path="/activities"></firebase-query>
+    <!-- <firebase-query
+      id="query"
+      app-name="lettuce-go"
+      path="/notes"
+      data="{{data}}">
+    </firebase-query> -->
+
+    <firebase-query
+      path='/test/'
+      data="{{data}}">
+    </firebase-query>
 
     <app-location route="{{route}}"></app-location>
     <app-route
@@ -114,13 +125,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       },
       observers: [
-        '_routePageChanged(routeData.page)'
+        '_routePageChanged(routeData.page)',
+        'dataChanged(data.splices)'
       ],
       dataChanged: function (newData, oldData) {
         console.log(newData);
       },
       _routePageChanged: function(page) {
         this.page = page || 'view1';
+        //this.data = ['newData']
       },
       _pageChanged: function(page) {
         // Load page import on demand. Show 404 page if fails
