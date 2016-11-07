@@ -1,0 +1,135 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../bower_components/app-datepicker/app-datepicker.html">
+<dom-module id="new-post">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+        z-index: 10;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      textarea, #preview {
+        box-sizing: border-box;
+        margin: 0;
+        width: 100%;
+
+        font-size: 18px;
+        resize: none;
+        border: none;
+      }
+
+      textarea {
+        background: transparent;
+        height: 100px;
+      }
+
+      .bottom {
+        border-top: 1px solid var(--app-primary-color);
+        padding-top: 10px;
+      }
+
+      paper-button {
+        margin: 0;
+        padding: 0;
+        font-size: 14px;
+        color: var(--app-secondary-color);
+        @apply(--layout-flex);
+        @apply(--layout-flex-auto);
+        float: right;
+      }
+
+      select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        display: inline-block;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        cursor: pointer;
+        font-size: 36px;
+        height: 50px;
+        line-height: 50px;
+
+        padding: 0 4px;
+        background-color: #eee;
+        border-radius: 3px;
+        margin: 0 4px 4px 4px;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 5px 0 rgba(0, 0, 0, 0.12),
+                  0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      }
+
+      select:focus {
+        background-color: #7bd6cf;
+      }
+
+      .title {
+        color: var(--app-secondary-text-color);
+        font-weight: 300;
+        font-size: 16px;
+      }
+      .space {
+        margin-bottom: 16px;
+      }
+      #write {
+        font-size: 18px;
+        font-weight: 300;
+      }
+    </style>
+    <iron-ajax url="{{computeActivitiesURL()}}" last-response="{{activities}}" loading="{{req}}" handle-as="json" auto></iron-ajax>
+
+    <div class="title">{{localize('new-activity-header')}}</div>
+    <vaadin-combo-box class="space" label="{{localize('activity-selector-name')}}" value="{{activity}}" items="[[activities]]"></vaadin-combo-box>
+    <div class="title">{{localize('on-date-description')}}</div>
+
+    <app-datepicker class="space" auto-update-date date="{{date}}"></app-datepicker>
+
+    <div class="title">{{localize('describe-activity-title')}}</div>
+    <textarea id="write">{{localize('new-activity-description')}}</textarea>
+
+    <div class="bottom">
+      <span class="title">{{localize('in-region')}}: [[channel]]</span>
+      <paper-button on-click="_post">{{localize('post-button')}}</paper-button>
+    </div>
+
+  </template>
+
+  <script>
+    var SYMBOLS = '!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~';
+
+    Polymer({
+      is: 'new-post',
+
+      behaviors: [
+        Polymer.AppLocalizeBehavior
+      ],
+
+      registered: function() {
+      },
+
+      attached: function() {
+      },
+
+      _post: function () {
+        this.fire('new-post', {message: this.$.write.value.trim(), channel: this.channel, date: this.date, activity:this.activity});
+        this.$.write.value = 'Write your cool message here! ✌️';
+      },
+      computeActivitiesURL(){
+        return "src/activities-" + window.language + ".json"
+      }
+
+    });
+
+  </script>
+</dom-module>

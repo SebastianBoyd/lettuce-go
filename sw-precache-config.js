@@ -11,7 +11,16 @@ module.exports = {
   staticFileGlobs: [
     '/index.html',
     '/manifest.json',
-    '/bower_components/webcomponentsjs/webcomponents-lite.min.js'
+    '/bower_components/webcomponentsjs/webcomponents-lite.min.js',
+    '/bower_components/emojilib/emojis.json'
   ],
-  navigateFallback: '/index.html'
+  navigateFallback: '/index.html',
+  navigateFallbackWhitelist: [/^(?!\/__)/, ' /getProjectConfig/'],
+  runtimeCaching: [
+    {
+      // cache Google user profile pics
+      urlPattern: /^https:\/\/lh3.googleusercontent.com\/.*/,
+      handler: 'networkFirst'
+    }
+  ]
 };
