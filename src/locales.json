@@ -21,6 +21,9 @@
     "rename-region": "Rename region",
     "delete-channel": "Delete region",
     "rename-channel": "Rename region",
-    "public": "public"
+    "public": "public",
+    "delete-post": "Delete post",
+    "create-channel-button": "Add region",
+    "create-post-button": "Add your own activity"
   }
 }

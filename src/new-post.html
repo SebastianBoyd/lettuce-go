@@ -123,7 +123,8 @@
 
       _post: function () {
         this.fire('new-post', {message: this.$.write.value.trim(), channel: this.channel, date: this.date, activity:this.activity});
-        this.$.write.value = 'Write your cool message here! ✌️';
+        this.$.write.value = 'make a salad';
+        this.activity = null;
       },
       computeActivitiesURL(){
         return "src/activities-" + window.language + ".json"

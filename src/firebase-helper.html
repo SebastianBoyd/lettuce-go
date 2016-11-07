@@ -15,7 +15,7 @@ Polymer.FirebaseHelper = {
     firebase.database().ref('/users/' + user.uid).once('value', function(snapshot) {
       var userInfo = snapshot.val();
 
-      this.$.newPost.hidden = false;
+      this.$.newPost.hidden = true;
       this.$.loading.hidden = true;
       this.$.pages.hidden = false;
 

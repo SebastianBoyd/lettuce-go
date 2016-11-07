@@ -27,7 +27,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 
 <link rel="import" href="my-icons.html">
-<link rel="import" href="new-post.html">
 <link rel="import" href="channel-item.html">
 <link rel="import" href="firebase-helper.html">
 <link rel="import" href="view-posts.html">
@@ -308,7 +307,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <span class="subtitle">{{localize('no-internet-subtitle')}}</span>
           </div>
 
+          <paper-button raised hidden$="[[offline]]" id="createPostButton"
+              on-click="_showCreatePost" class="create-channel">
+            <iron-icon icon="icons:add"></iron-icon>
+            {{localize('create-post-button')}}
+          </paper-button>
+
           <new-post hidden channel="[[page]]" id="newPost" class="animate-appear" language="[[language]]" resources="[[resources]]"></new-post>
+
           <new-channel hidden id="newChannel" class="animate-appear" language="[[language]]"></new-channel>
           <iron-pages id="pages"
               selected="[[page]]"
@@ -439,7 +445,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             // We got things from Firebase now, so we can switch back to the easy case.
             this._initialOffline = false;
           } else {
-            this.$.newPost.hidden = false;
+            // this.$.newPost.hidden = true;
           }
         }
       },
@@ -454,6 +460,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _postNewMessage: function(event) {
         var location = this.location || '';
         console.log(event.detail);
+        this.$.newPost.hidden = true;
         this._firebaseAddMessage(event.detail.channel, event.detail.message, event.detail.activity, event.detail.date, location);
       },
 
@@ -464,6 +471,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var resolvedPageUrl = this.resolveUrl('new-channel.html');
         this.importHref(resolvedPageUrl, function() {
           this.$.newChannel.create();
+        }, null, true);
+      },
+
+      _showCreatePost: function() {
+        var resolvedPageUrl = this.resolveUrl('new-post.html');
+        this.importHref(resolvedPageUrl, function() {
+          this.$.newPost.create();
+          this.$.newPost.hidden = false;
         }, null, true);
       },
 
