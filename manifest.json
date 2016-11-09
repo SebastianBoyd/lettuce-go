@@ -1,10 +1,10 @@
 {
-  "name": "mojibrag",
-  "short_name": "mojibrag",
+  "name": "lettuce go",
+  "short_name": "Lettuce",
   "start_url": "/?homescreen=1",
   "display": "standalone",
-  "theme_color": "#ffc107",
-  "background_color": "#ffc107",
+  "theme_color": "#00C853",
+  "background_color": "#ffffff",
   "icons": [
     {
       "src": "images/manifest/icon-192x192.png",
