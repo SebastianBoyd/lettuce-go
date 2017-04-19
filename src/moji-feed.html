@@ -23,6 +23,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 
@@ -54,6 +55,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .drawer-background {
         width: 100%;
         height: 100%;
+        background: #EEEEEE;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
       }
 
       .scrollable-list {
@@ -122,6 +125,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         width: 100%;
       }
 
+      #title {
+        color: white;
+      }
+
+      paper-fab {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        margin: 0 32px 32px 0;
+        z-index: 999;
+      }
+
       /* logout button */
       app-toolbar paper-button {
         font-size: 14px;
@@ -160,6 +175,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: var(--app-primary-color);
         color: white;
         font-size: 14px;
+      }
+
+      paper-icon-button {
+        color: white;
       }
 
       @media (max-width: 620px) {
@@ -240,8 +259,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- Drawer content -->
       <app-drawer id="drawer" swipe-open>
         <div class="drawer-background">
-          <app-toolbar class="left-toolbar">Lettuce Go<span class="select-wrapper">
-              <select id="selectLanguage" value="{{queryParams.lang}}" on-change="_selectLanguageChanged">
+          <app-toolbar class="left-toolbar"><div id="title">Lettuce Go</div>
+              <!--<select id="selectLanguage" value="{{queryParams.lang}}" on-change="_selectLanguageChanged">
                 <option value="al">🇦🇱</option>
                 <option value="en">🇬🇧</option>
                 <option value="es">🇪🇸</option>
@@ -259,8 +278,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <option value="mk">🇲🇰</option>
                 <option value="sw">🇹🇿</option>
                 <option value="he">🇮🇱</option>
-              </select>
-            </span>
+              </select>-->
           </app-toolbar>
 
           <div class="scrollable-list">
@@ -292,26 +310,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <div id="createChannelButton" class="userInfo">
               <img class="avatar" alt="github avatar" src="[[user.photoURL]]">
-              <paper-button on-tap="logout" hidden$="[[offline]]">{{localize('sign-out')}}</paper-button>
+              <paper-button on-tap="logout" hidden$="[[offline]]">Sign Out</paper-button>
             </div>
           </app-toolbar>
         </app-header>
 
         <div class="main-content">
           <div id="loading">
-            <div class="giant-emoji">✋ 🎉 ⏳ 🤖</div>
+            <div class="giant-emoji">Loading...</div>
           </div>
+
+          <paper-fab id="createPostButton" icon="icons:add" on-click="_showCreatePost"></paper-fab>
 
           <div hidden$="[[!offline]]" class="no-internet animate-appear">
             <iron-icon icon="icons:cloud-off"></iron-icon>&nbsp;{{localize('no-internet-title')}}<br>
             <span class="subtitle">{{localize('no-internet-subtitle')}}</span>
           </div>
 
-          <paper-button raised hidden$="[[offline]]" id="createPostButton"
+          <!--<paper-button raised hidden$="[[offline]]" id="createPostButton"
               on-click="_showCreatePost" class="create-channel">
             <iron-icon icon="icons:add"></iron-icon>
             {{localize('create-post-button')}}
-          </paper-button>
+          </paper-button>-->
 
           <new-post hidden channel="[[page]]" id="newPost" class="animate-appear" language="[[language]]" resources="[[resources]]"></new-post>
 

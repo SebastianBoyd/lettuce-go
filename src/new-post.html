@@ -8,6 +8,7 @@
         display: block;
         position: relative;
         z-index: 10;
+        border-radius: 3px;
       }
 
       :host([hidden]) {
@@ -16,21 +17,6 @@
 
       [hidden] {
         display: none !important;
-      }
-
-      textarea, #preview {
-        box-sizing: border-box;
-        margin: 0;
-        width: 100%;
-
-        font-size: 18px;
-        resize: none;
-        border: none;
-      }
-
-      textarea {
-        background: transparent;
-        height: 100px;
       }
 
       .bottom {
@@ -79,12 +65,25 @@
         font-weight: 300;
         font-size: 16px;
       }
+
       .space {
         margin-bottom: 16px;
       }
+
       #write {
         font-size: 18px;
         font-weight: 300;
+        width: 90%;
+        min-height: 36px;
+        padding-left: 8px;
+        border: none;
+        border-radius: 3px;
+        margin: 8px 8px 8px 0;
+      }
+
+      textarea:focus, input:focus{
+        outline: none;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
       }
     </style>
     <iron-ajax url="{{computeActivitiesURL()}}" last-response="{{activities}}" loading="{{req}}" handle-as="json" auto></iron-ajax>
@@ -95,12 +94,12 @@
 
     <app-datepicker class="space" auto-update-date date="{{date}}"></app-datepicker>
 
-    <div class="title">{{localize('describe-activity-title')}}</div>
-    <textarea id="write">{{localize('new-activity-description')}}</textarea>
+    <div class="title">Describe you Activity</div>
+    <input id="write" placeholder="Description"></input>
 
     <div class="bottom">
-      <span class="title">{{localize('in-region')}}: [[channel]]</span>
-      <paper-button on-click="_post">{{localize('post-button')}}</paper-button>
+      <span class="title">In region: [[channel]]</span>
+      <paper-button elevation="1" on-click="_post">Post</paper-button>
     </div>
 
   </template>
@@ -122,10 +121,12 @@
       },
 
       _post: function () {
-        this.fire('new-post', {message: this.$.write.value.trim(), channel: this.channel, date: this.date, activity:this.activity});
-        this.$.write.value = 'make a salad';
+        // var act = this.activity.replace(/\s+/g, '');
+        this.fire('new-post', {message: this.$.write.value.trim(), channel: this.channel, date: this.date, activity: this.activity});
+        this.$.write.value = 'No Description Provided.';
         this.activity = null;
       },
+
       computeActivitiesURL(){
         return "src/activities-" + window.language + ".json"
       }
