@@ -158,6 +158,9 @@
                   <button hidden$="[[!_shouldEdit(item, offline)]]" ref="[[item.$key]]" on-click="_delete">
                     <iron-icon icon="icons:delete" class="action"></iron-icon>{{localize('delete-post')}}
                   </button>
+                  <button hidden$="[[_shouldEdit(item, offline)]]" ref="[[item.uid]]" on-click="_request">
+                    <iron-icon icon="icons:chevron-right" class="action"></iron-icon>Request
+                  </button>
                 </span>
               </div>
             </div>
@@ -247,6 +250,12 @@
         var button = this._getEventTarget(event);
         var ref = button.ref;
         this.fire('post-delete', {ref: ref, channelRef: this.ref});
+      },
+
+      _request: function(event) {
+        var button = this._getEventTarget(event);
+        var uid = button.ref;
+        this.fire('')
       },
 
       _showHint: function(event) {
