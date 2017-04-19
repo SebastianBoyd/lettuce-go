@@ -158,9 +158,6 @@
                   <button hidden$="[[!_shouldEdit(item, offline)]]" ref="[[item.$key]]" on-click="_delete">
                     <iron-icon icon="icons:delete" class="action"></iron-icon>{{localize('delete-post')}}
                   </button>
-                  <button hidden$="[[!_shouldEdit(item, offline)]]" ref="[[item.$key]]" on-click="_delete">
-                    <iron-icon icon="icons:menu" class="action"></iron-icon>Request
-                  </button>
                 </span>
               </div>
             </div>
@@ -199,13 +196,14 @@
         posts: {
           type: Array
         },
+
         offline: {
           type: Boolean,
           value: false
         }
       },
       computeBGImage: function (activity) {
-        //console.log(activity);
+        console.log(activity);
         clean = activity.replace(/\s/g,'')
         return "background-image: url('../images/activities/" + activity + ".jpg');"
       },
