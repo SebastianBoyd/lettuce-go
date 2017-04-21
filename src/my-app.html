@@ -20,8 +20,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <style>
       :host {
-        --app-primary-color: #00C853;  /* orange */
-        --app-secondary-color: #1976D2;  /* teal */
+        --app-primary-color: #00C853;
+        --app-secondary-color: #1976D2;
         --app-primary-text-color: #37474F;
         --app-secondary-text-color: #000;
         --app-error-color: #F4511E;
@@ -107,14 +107,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div class="signin-view" id="signin" hidden>
       <div class="header">
-        <div class="giant">{{localize('splash-one')}}</div>
-        <p>{{localize('splash-two')}}</p>
+        <div class="giant">🌿 Lettuce Go</div>
+        <p>(we ask for your location to provide relevant data)</p>
         <br>
-        <button on-tap="login" raised hidden$="[[offline]]">{{localize('sign-in')}}</button>
-        <div hidden$="[[!offline]]" class="offline">{{localize('splash-offline')}}</div>
+        <button on-tap="login" raised hidden$="[[offline]]">Sign in with Google</button>
+        <div hidden$="[[!offline]]" class="offline">You are currently offline, so you can't sign in to view activites. Come back and sign in when you're online!</div>
       </div>
 
-      <p class="footer" inner-h-t-m-l="{{localize('splash-footer')}}"></p>
+      <p class="footer" inner-h-t-m-l="Made by <a href='https://github.com/sebastianboyd'>Sebastian Boyd</a> and <a href='https://github.com/duncangrubbs'>Duncan Grubbs</a>.
+      Find this on <a href='https://github.com/sebastianboyd/lettuce-go'>GitHub</a>.</p>"></p>
     </div>
 
     <moji-feed id="feed" offline="[[offline]]" language="[[language]]"></moji-feed>

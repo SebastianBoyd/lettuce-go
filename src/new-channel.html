@@ -95,22 +95,20 @@
       }
     </style>
 
-    <div class="title" hidden$="[[_edit]]">{{localize('new-channel-header')}}</div>
-    <div class="title" hidden$="[[!_edit]]">{{localize('edit-channel-header')}}</div>
+    <div class="title" hidden$="[[_edit]]">Add a new Region</div>
+    <div class="title" hidden$="[[!_edit]]">Region Name</div>
 
     <div class="horizontal">
-      <input type="text" placeholder="{{localize('channel-name-placeholder')}}" id="name" required pattern="[^.#$\[\]/]+">
+      <input type="text" placeholder="Name" id="name" required pattern="[^.#$\[\]/]+">
     </div>
-
-    <span class="help">{{localize('private-channel-hint')}}</span>
 
     <div class="horizontal-reverse">
       <span>
-        <paper-button on-click="hide">{{localize('cancel')}}</paper-button>
-        <paper-button on-click="_createchannel" hidden$="[[_edit]]">{{localize('create')}}</paper-button>
+        <paper-button on-click="hide">Cancel</paper-button>
+        <paper-button on-click="_createchannel" hidden$="[[_edit]]">Create</paper-button>
 
-        <paper-button on-click="_deletechannel" hidden$="[[!_edit]]">{{localize('delete-channel')}}</paper-button>
-        <paper-button on-click="_renamechannel" hidden$="[[!_edit]]">{{localize('rename-channel')}}</paper-button>
+        <paper-button on-click="_deletechannel" hidden$="[[!_edit]]">Delete Region</paper-button>
+        <paper-button on-click="_renamechannel" hidden$="[[!_edit]]">Rename Region</paper-button>
       </span>
     </div>
 

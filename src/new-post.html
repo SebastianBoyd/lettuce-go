@@ -25,12 +25,11 @@
       }
 
       paper-button {
-        margin: 0;
-        padding: 0;
         font-size: 14px;
-        color: var(--app-secondary-color);
-        @apply(--layout-flex);
-        @apply(--layout-flex-auto);
+        background: var(--app-primary-color);
+        color: #FFF;
+        margin: 0 8px 0 8px;
+        padding: 8px;
         float: right;
       }
 
@@ -85,21 +84,27 @@
         outline: none;
         box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
       }
+
+      #cancel {
+        background: #E91E63;
+      }
     </style>
     <iron-ajax url="{{computeActivitiesURL()}}" last-response="{{activities}}" loading="{{req}}" handle-as="json" auto></iron-ajax>
 
-    <div class="title">{{localize('new-activity-header')}}</div>
-    <vaadin-combo-box class="space" label="{{localize('activity-selector-name')}}" value="{{activity}}" items="[[activities]]"></vaadin-combo-box>
-    <div class="title">{{localize('on-date-description')}}</div>
+    <div class="title">Add an Activity</div>
+    <vaadin-combo-box class="space" label="Choose an Activity" value="{{activity}}" items="[[activities]]"></vaadin-combo-box>
+    <div class="title">Pick a Date</div>
 
-    <app-datepicker class="space" auto-update-date date="{{date}}"></app-datepicker>
+    <app-datepicker class="space" theme="dark-theme" auto-update-date date="{{date}}"></app-datepicker>
 
-    <div class="title">Describe you Activity</div>
+    <div class="title">Describe your Activity</div>
     <input id="write" placeholder="Description"></input>
 
     <div class="bottom">
       <span class="title">In region: [[channel]]</span>
-      <paper-button elevation="1" on-click="_post">Post</paper-button>
+      
+      <paper-button on-click="_post">Post</paper-button>
+      <paper-button on-click="hide" id="cancel">Cancel</paper-button>
     </div>
 
   </template>
@@ -125,6 +130,11 @@
         this.fire('new-post', {message: this.$.write.value.trim(), channel: this.channel, date: this.date, activity: this.activity});
         this.$.write.value = 'No Description Provided.';
         this.activity = null;
+      },
+
+      hide: function () {
+        this.hidden = true;
+        // this._edit = false;
       },
 
       computeActivitiesURL(){
