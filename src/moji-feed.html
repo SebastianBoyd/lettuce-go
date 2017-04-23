@@ -65,11 +65,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .scrollable-list {
-        /*
-           64px is the height of header
-           and 72px is the height of create channel button
-                    with all margins
-        */
         height: calc(100% - 64px - 72px);
         overflow: auto;
       }
@@ -92,7 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .left-toolbar select {
         -webkit-appearance:none;
         -moz-appearance:none;
-        appearance:none;
+        appearance: none;
         box-sizing: border-box;
         display: inline-block;
         border: 0;
@@ -220,7 +215,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         opacity: 0;
         padding: 20px;
       }
-
       .animate-appear {
         animation: appear 300ms ease-in 300ms forwards;
         -o-animation: appear 300ms ease-in 300ms forwards;
@@ -247,7 +241,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <firebase-query data="{{_publicChannels}}" path="/publicChannels"></firebase-query>
-    <firebase-query data="{{notifications}}" path="/users/CEdbsLvDoFWkScz1Z0xUfP9lVCy1/notifications"></firebase-query>
+    <firebase-query data="{{_notifications}}" path="/users/CEdbsLvDoFWkScz1Z0xUfP9lVCy1/notifications"></firebase-query>
 
     <app-indexeddb-mirror
       session="[[uid]]"
@@ -260,6 +254,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       key="/channels"
       data="[[_channels]]"
       persisted-data="{{channels}}">
+    </app-indexeddb-mirror>
+    <app-indexeddb-mirror
+      session="[[uid]]"
+      key="/notifications"
+      data="[[_notifications]]"
+      persisted-data="{{notifications}}">
     </app-indexeddb-mirror>
 
     <app-location route="{{route}}"></app-location>
@@ -329,14 +329,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <paper-fab id="createPostButton" icon="icons:add" on-click="_showCreatePost"></paper-fab>
 
-          <div hidden$="[[!offline]]" class="no-internet animate-appear">
+          <div hidden$="[[!offline]]" class="no-internet">
             <iron-icon icon="icons:cloud-off"></iron-icon>No internet<br>
             <span class="subtitle">No Internet</span>
           </div>
 
-          <new-post hidden channel="[[page]]" id="newPost" class="animate-appear" language="[[language]]" resources="[[resources]]"></new-post>
+          <new-post hidden channel="[[page]]" id="newPost" language="[[language]]" class="animate-appear" resources="[[resources]]"></new-post>
 
-          <new-channel hidden id="newChannel" class="animate-appear" language="[[language]]"></new-channel>
+          <new-channel hidden id="newChannel" language="[[language]]"></new-channel>
           <iron-pages id="pages"
               selected="[[page]]"
               attr-for-selected="name"
@@ -375,7 +375,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         notifications: {
-          type: Object,
+          type: Array,
           observer: '_notificationsUpdated'
         },
 

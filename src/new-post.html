@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="../bower_components/app-datepicker/app-datepicker.html">
+
 <dom-module id="new-post">
   <template>
     <style>
@@ -31,32 +32,6 @@
         margin: 0 8px 0 8px;
         padding: 8px;
         float: right;
-      }
-
-      select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        display: inline-block;
-        border: 0;
-        outline: 0;
-        background: transparent;
-        cursor: pointer;
-        font-size: 36px;
-        height: 50px;
-        line-height: 50px;
-
-        padding: 0 4px;
-        background-color: #eee;
-        border-radius: 3px;
-        margin: 0 4px 4px 4px;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                  0 1px 5px 0 rgba(0, 0, 0, 0.12),
-                  0 3px 1px -2px rgba(0, 0, 0, 0.2);
-      }
-
-      select:focus {
-        background-color: #7bd6cf;
       }
 
       .title {
@@ -126,7 +101,6 @@
       },
 
       _post: function () {
-        // var act = this.activity.replace(/\s+/g, '');
         this.fire('new-post', {message: this.$.write.value.trim(), channel: this.channel, date: this.date, activity: this.activity});
         this.$.write.value = 'No Description Provided.';
         this.activity = null;
@@ -134,13 +108,11 @@
 
       hide: function () {
         this.hidden = true;
-        // this._edit = false;
       },
 
       computeActivitiesURL(){
         return "src/activities-" + window.language + ".json"
       }
-
     });
 
   </script>
