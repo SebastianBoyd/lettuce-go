@@ -241,7 +241,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <firebase-query data="{{_publicChannels}}" path="/publicChannels"></firebase-query>
-    <firebase-query data="{{_notifications}}" path="/users/CEdbsLvDoFWkScz1Z0xUfP9lVCy1/notifications"></firebase-query>
 
     <app-indexeddb-mirror
       session="[[uid]]"
@@ -254,12 +253,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       key="/channels"
       data="[[_channels]]"
       persisted-data="{{channels}}">
-    </app-indexeddb-mirror>
-    <app-indexeddb-mirror
-      session="[[uid]]"
-      key="/notifications"
-      data="[[_notifications]]"
-      persisted-data="{{notifications}}">
     </app-indexeddb-mirror>
 
     <app-location route="{{route}}"></app-location>
@@ -308,7 +301,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <!-- NOTIFICATIONS -->
             <div>
             <paper-icon-button on-click="_showNotifications" id="showNotificationsButton" icon="vaadin:bell-o" alt="inbox"></paper-icon-button>
-            <paper-badge for="showNotificationsButton" label="4" class="badge-red"></paper-badge>
+            <!--<paper-badge for="showNotificationsButton" label="4" class="badge-red"></paper-badge>-->
             </div>
 
             <!-- USER INFO -->
@@ -320,7 +313,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-toolbar>
         </app-header>
 
-        <notification-panel hidden id="notificationPanel"></notification-panel>
+        <notification-panel hidden uid="[[user.uid]]" id="notificationPanel"></notification-panel>
 
         <div class="main-content">
           <div id="loading">
@@ -547,6 +540,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
        _showCreatePost: function() {
+        window.scrollTo(0, 0);
         var resolvedPageUrl = this.resolveUrl('new-post.html');
         this.importHref(resolvedPageUrl, function() {
           this.$.newPost.create();
