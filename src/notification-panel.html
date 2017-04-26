@@ -84,8 +84,9 @@
         }
       },
 
+      // FIRED WHEN USER ID IS PASSED TO ELEMENT IN moji-feed.html
+      // THEN UPDATES this.path WHICH IS USED TO QUERY FIREBASE FOR NOTIFICATIONS
       _uid: function() {
-        console.log(this.uid);
         this.path = `/users/${this.uid}/notifications`;
       }
     });
