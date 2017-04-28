@@ -7,9 +7,9 @@
     <style>
       :host {
         display: block;
-        @apply(--layout-flex);
+        /*@apply(--layout-flex);*/
         position: relative;
-        z-index: 10;
+        z-index: 999;
       }
 
       :host([hidden]) {
@@ -165,9 +165,6 @@
         var valid = this.$.name.validity.valid;
         if (!valid)
           return;
-
-
-
         this.fire('new-channel', {name: this.$.name.value.trim(), public:true});
       },
 

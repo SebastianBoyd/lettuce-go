@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <dom-module id="notification-panel">
   <template>
@@ -18,6 +19,8 @@
         padding: 8px;
         margin: 8px 32px 0 0;
         z-index: 999;
+        max-height: 500px;
+        overflow-y: scroll;
       }
 
       :host([hidden]) {
@@ -50,16 +53,41 @@
         margin-right: 4px;
         border-radius: 50%;
       }
+
+      paper-button {
+        width: 30%;
+        max-height: 30px;
+        margin: 0;
+        margin-left: 8px;
+        font-size: 20px;
+      }
+
+      #accept {
+        background: #4CAF50;
+      }
+
+      #decline {
+        background: #E91E63;
+      }
+
+      .buttons {
+        display: flex;
+        flex-direction: row;
+      }
     </style>
 
     <firebase-query data="{{notes}}" path="[[path]]"></firebase-query>
      <div>Notifications:</div>
       <template id="list" is="dom-repeat" items="[[notes]]" initial-count="10">
-        <div class="note">
+        <div id="[[item.$key]]" class="note">
           <div>
             <img id="noteProfilePhoto" src="[[item.userPhotoURL]]" alt="Text"><b>[[item.userID]]</b>
           </div>
           <div>Wants to go <b>[[item.activity]]</b></div>
+          <div class="buttons">
+            <paper-button id="accept" on-click="_acceptRequest">Accept</paper-button>
+            <paper-button id="decline" on-click="_declineRequest">Decline</paper-button>
+          </div>
         </div>
       </template>
     </div>
@@ -88,6 +116,25 @@
       // THEN UPDATES this.path WHICH IS USED TO QUERY FIREBASE FOR NOTIFICATIONS
       _uid: function() {
         this.path = `/users/${this.uid}/notifications`;
+      },
+
+      _acceptRequest: function(evt) {
+        // TODO: otherUID should be the actual uid of the user you are chatting with
+        this.fire('create-chat', {uid: this.uid, otherUID: "John Smith"});
+        const notificationID = evt.path[2].id;
+
+        // COMMENTED OUR FOR DEV!!
+        // this.fire('delete-notification', {uid: this.uid, noteID: notificationID});
+      },
+
+      _declineRequest: function(evt) {
+        // TODO: MAKE EACH NOTIFICATION A SEPERATE ELEMENT SO WE CAN DATA BIND IMPORTANT STUFF!!
+        //       FIX SENDING THE DECLINE NOTIFICATION -- REQUIRES PREVIOUS STEP
+        // this.fire('send-notification', {sendTo: uid, activityID: key});
+        const notificationID = evt.path[2].id;
+
+        // COMMENTED OUR FOR DEV!!
+        // this.fire('delete-notification', {uid: this.uid, noteID: notificationID});
       }
     });
 

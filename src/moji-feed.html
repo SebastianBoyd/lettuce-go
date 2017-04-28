@@ -33,8 +33,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="my-icons.html">
 <link rel="import" href="channel-item.html">
+<link rel="import" href="chat-item.html">
 <link rel="import" href="firebase-helper.html">
 <link rel="import" href="view-posts.html">
+<link rel="import" href="view-chats.html">
 <link rel="import" href="notification-panel.html">
 
 <dom-module id="moji-feed">
@@ -245,6 +247,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <!-- Query Firebase for the list of public channels -->
     <!-- _ means that the data is not to be changed -->
     <firebase-query data="{{_publicChannels}}" path="/publicChannels"></firebase-query>
+    <firebase-query data="{{_chats}}" path="/chats"></firebase-query>
 
     <!-- Add public channles to indexeddb so there are persisted -->
     <app-indexeddb-mirror
@@ -280,14 +283,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-toolbar>
 
           <div class="scrollable-list">
+            <!-- SIDE BAR -->
             <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+
+              <!-- CHANNELS -->
               <template is="dom-repeat" items="[[publicChannels]]" initial-count="10">
                 <channel-item drawer-toggle public channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
               </template>
 
-              <template is="dom-repeat" items="[[channels]]" initial-count="10">
+              <!--<template is="dom-repeat" items="[[channels]]" initial-count="10">
                 <channel-item drawer-toggle channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
+              </template>-->
+
+              <!-- CHATS -->
+              <template is="dom-repeat" items="[[_chats]]" initial-count="10">
+                <chat-item drawer-toggle chat="[[item]]" uid="[[user.uid2]]" offline="[[offline]]" language="[[language]]"></chat-item>
               </template>
+
             </iron-selector>
           </div>
 
@@ -307,16 +319,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="spacer"></div>
 
             <!-- NOTIFICATIONS -->
-            <div>
             <paper-icon-button on-click="_showNotifications" id="showNotificationsButton" icon="vaadin:bell-o" alt="inbox"></paper-icon-button>
-            </div>
 
             <!-- USER INFO -->
             <div id="createChannelButton" class="userInfo">
               <img class="avatar" alt="github avatar" src="[[user.photoURL]]">
               <paper-button on-tap="logout" hidden$="[[offline]]">Sign Out</paper-button>
             </div>
-
           </app-toolbar>
         </app-header>
         <!-- END NAV BAR -->
@@ -345,21 +354,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <!-- NEW CHANNEL SECTION (DEFAULT HIDDEN) -->
           <new-channel hidden id="newChannel" language="[[language]]"></new-channel>
 
-          <!-- IRON PAGES FOR NAVIGATING CHANNELS -->
+          <!-- IRON PAGES FOR NAVIGATING REGIONS -->
           <iron-pages id="pages"
               selected="[[page]]"
               attr-for-selected="name"
               role="main">
 
+            <!-- VIEW CHATS -->
+            <template is="dom-repeat" items="[[_chats]]" initial-count="10">
+              <view-chats chat="[[item]]"></view-chats>
+            </template>
+
+            <!-- VIEW ACTIVITIES -->
             <template is="dom-repeat" items="[[publicChannels]]" initial-count="10">
               <view-posts name="[[item.name]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.$key]]" offline="[[offline]]" language="[[language]]" resources="[[resources]]"></view-posts>
             </template>
 
-            <!-- IDK WHAT THIS DOES -->
+             <!--IDK WHAT THIS DOES 
             <template is="dom-repeat" items="[[channels]]" initial-count="10">
               <view-posts name="[[item.name]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.key]]" offline="[[offline]]" language="[[language]]" resources="[[resources]]"></view-posts>
-            </template>
-
+            </template>-->
           </iron-pages>
 
         </div>
@@ -409,6 +423,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Boolean,
           observer: '_offlineChanged'
         },
+
+        _chats: {
+          type: Array,
+          observer: 'chatsChanged'
+        }
       },
 
 
@@ -419,6 +438,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // This looks like work, so do it later.
           this._getLocation();
         });
+      },
+
+      chatsChanged: function() {
+        console.log(this.chats);
       },
 
       resizeHeader: function() {
@@ -442,6 +465,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'post-unlike': '_postUnlike',
         'post-delete': '_postDelete',
         'send-notification': '_sendNotification',
+        'create-chat': '_createChat',
+        'delete-notification': '_deleteNotification'
       },
 
       // HANDLES LOGGING OUT
@@ -452,7 +477,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.loading.hidden = true;
       },
 
-      // NOTIFICATIONS
+      /*******************************
+       * NOTIFICATIONS
+       *******************************/
 
       // HANDLES DISPLAYING NOTIFICATION PANEL
       _showNotifications: function (event) {
@@ -464,7 +491,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       // EXECUTES WHEN REQUEST BUTTON CLICKED
-      _sendNotification: function(event) {
+      _sendNotification: function (event) {
         console.log('Sending Notification');
         var sendToUID = event.detail.sendTo;
         var activityID = event.detail.activityID;
@@ -472,14 +499,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this._firebaseSendNotification(user, sendToUID, activityID);
       },
 
+      _deleteNotification: function (event) {
+        let uid = event.detail.uid;
+        let noteID = event.detail.noteID;
+        this._firebaseDeleteNotification(uid, noteID);
+      },
+
+      /*******************************
+       * CHATS
+       *******************************/
+
+       _createChat: function (event) {
+         let uid = event.detail.uid;
+         let otherUID = event.detail.otherUID;
+         this._firebaseCreateChat(uid, otherUID);
+       },
+
       /*******************************
        * Routes
        *******************************/
-      _routePageChanged: function(page) {
+      _routePageChanged: function (page) {
         this.page = page || 'global';
       },
 
-      _selectLanguageChanged: function(event) {
+      _selectLanguageChanged: function (event) {
         this.set('queryParams.lang', event.target.value);
         this.fire('language-changed', {value: event.target.value});
         switch (event.target.value) {

@@ -305,6 +305,18 @@ Polymer.FirebaseHelper = {
     const note = { userID: currentUser.uid, userPhotoURL: currentUser.photoURL, activity: activityID, sentOn: now};
 
     dbRef.push().set(note);
+  },
+
+  _firebaseDeleteNotification: function(currentUser, notificationID) {
+    firebase.database().ref(`/users/${currentUser}/notifications`).child(notificationID).remove();
+  },
+
+  _firebaseCreateChat: function(uid, otherUID) {
+    const dbRef = firebase.database().ref('/chats/');
+
+    const chat = {uid1: uid, uid2: otherUID};
+
+    dbRef.push().set(chat);
   }
 };
 </script>
