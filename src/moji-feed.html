@@ -19,22 +19,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 
+<link rel="import" href="../bower_components/vaadin-icons/vaadin-icons.html">
+
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 
 <link rel="import" href="my-icons.html">
 <link rel="import" href="channel-item.html">
+<link rel="import" href="chat-item.html">
 <link rel="import" href="firebase-helper.html">
 <link rel="import" href="view-posts.html">
+<link rel="import" href="view-chats.html">
+<link rel="import" href="notification-panel.html">
 
 <dom-module id="moji-feed">
   <template>
     <style>
+      /* TODO: REMOVE EXCESS STYLES */
       :host {
         --paper-tabs-selection-bar-color: var(--app-primary-color);
         --paper-tab-ink: var(--app-primary-color);
@@ -60,11 +68,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .scrollable-list {
-        /*
-           64px is the height of header
-           and 72px is the height of create channel button
-                    with all margins
-        */
         height: calc(100% - 64px - 72px);
         overflow: auto;
       }
@@ -87,7 +90,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .left-toolbar select {
         -webkit-appearance:none;
         -moz-appearance:none;
-        appearance:none;
+        appearance: none;
         box-sizing: border-box;
         display: inline-block;
         border: 0;
@@ -166,6 +169,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin-left: 16px;
       }
 
+      .badge-red {
+        --paper-badge-background: var(--paper-red-300);
+      }
+
+      paper-badge {
+        z-index: 999;
+      }
+
       .spacer {
         @apply(--layout-flex);
         @apply(--layout-flex-auto);
@@ -192,7 +203,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .giant-emoji {
-        font-size: 4.2em;
+        font-size: 3em;
         text-align: center;
       }
 
@@ -233,7 +244,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       @-o-keyframes disappear { from { opacity: 1; } to { opacity: 0; } }
     </style>
 
+    <!-- Query Firebase for the list of public channels -->
+    <!-- _ means that the data is not to be changed -->
     <firebase-query data="{{_publicChannels}}" path="/publicChannels"></firebase-query>
+    <firebase-query data="{{_chats}}" path="/chats"></firebase-query>
+
+    <!-- Add public channles to indexeddb so there are persisted -->
     <app-indexeddb-mirror
       session="[[uid]]"
       key="/publicChannels"
@@ -255,102 +271,118 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tail="{{subroute}}"
         query-params="{{queryParams}}"></app-route>
 
+    <!-- PAGE CONTENT -->
+
+    <!-- Layout for drawer - includes side bar -->
     <app-drawer-layout id="drawerLayout">
       <!-- Drawer content -->
       <app-drawer id="drawer" swipe-open>
         <div class="drawer-background">
-          <app-toolbar class="left-toolbar"><div id="title">Lettuce Go</div>
-              <!--<select id="selectLanguage" value="{{queryParams.lang}}" on-change="_selectLanguageChanged">
-                <option value="al">🇦🇱</option>
-                <option value="en">🇬🇧</option>
-                <option value="es">🇪🇸</option>
-                <option value="fr">🇫🇷</option>
-                <option value="it">🇮🇹</option>
-                <option value="jp">🇯🇵</option>
-                <option value="ro">🇷🇴</option>
-                <option value="zh">🇨🇳</option>
-                <option value="tw">🇹🇼</option>
-                <option value="ua">🇺🇦</option>
-                <option value="br">🇧🇷</option>
-                <option value="de">🇩🇪</option>
-                <option value="sv">🇸🇪</option>
-                <option value="fi">🇫🇮</option>
-                <option value="mk">🇲🇰</option>
-                <option value="sw">🇹🇿</option>
-                <option value="he">🇮🇱</option>
-              </select>-->
+          <app-toolbar class="left-toolbar">
+            <div id="title">Lettuce Go</div>
           </app-toolbar>
 
           <div class="scrollable-list">
+            <!-- SIDE BAR -->
             <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+
+              <!-- CHANNELS -->
               <template is="dom-repeat" items="[[publicChannels]]" initial-count="10">
                 <channel-item drawer-toggle public channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
               </template>
 
-              <template is="dom-repeat" items="[[channels]]" initial-count="10">
+              <!--<template is="dom-repeat" items="[[channels]]" initial-count="10">
                 <channel-item drawer-toggle channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
+              </template>-->
+
+              <!-- CHATS -->
+              <template is="dom-repeat" items="[[_chats]]" initial-count="10">
+                <chat-item drawer-toggle chat="[[item]]" uid="[[user.uid2]]" offline="[[offline]]" language="[[language]]"></chat-item>
               </template>
+
             </iron-selector>
           </div>
 
           <paper-button raised hidden$="[[offline]]" id="createChannelButton"
               on-click="_showCreateChannel" class="create-channel">
             <iron-icon icon="icons:add"></iron-icon>
-            {{localize('create-channel-button')}}
+            Add Region
           </paper-button>
         </div>
       </app-drawer>
 
-      <!-- Main content -->
       <app-header-layout id="header">
+        <!-- NAV BAR -->
         <app-header fixed>
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
             <div class="spacer"></div>
 
+            <!-- NOTIFICATIONS -->
+            <paper-icon-button on-click="_showNotifications" id="showNotificationsButton" icon="vaadin:bell-o" alt="inbox"></paper-icon-button>
+
+            <!-- USER INFO -->
             <div id="createChannelButton" class="userInfo">
               <img class="avatar" alt="github avatar" src="[[user.photoURL]]">
               <paper-button on-tap="logout" hidden$="[[offline]]">Sign Out</paper-button>
             </div>
           </app-toolbar>
         </app-header>
+        <!-- END NAV BAR -->
 
+        <!-- NOTIFICATION PANEL -->
+        <notification-panel hidden uid="[[user.uid]]" id="notificationPanel"></notification-panel>
+
+        <!-- LIST CONTENT -->
         <div class="main-content">
           <div id="loading">
             <div class="giant-emoji">Loading...</div>
           </div>
 
+          <!-- ADD ACTIVITY BUTTON -->
           <paper-fab id="createPostButton" icon="icons:add" on-click="_showCreatePost"></paper-fab>
 
-          <div hidden$="[[!offline]]" class="no-internet animate-appear">
-            <iron-icon icon="icons:cloud-off"></iron-icon>&nbsp;{{localize('no-internet-title')}}<br>
-            <span class="subtitle">{{localize('no-internet-subtitle')}}</span>
+          <!-- OFFLINE NOTICE (DEFAULT HIDDEN) -->
+          <div hidden$="[[!offline]]" class="no-internet">
+            <iron-icon icon="icons:cloud-off"></iron-icon>No internet<br>
+            <span class="subtitle">No Internet</span>
           </div>
 
-          <!--<paper-button raised hidden$="[[offline]]" id="createPostButton"
-              on-click="_showCreatePost" class="create-channel">
-            <iron-icon icon="icons:add"></iron-icon>
-            {{localize('create-post-button')}}
-          </paper-button>-->
+          <!-- NEW POST SECTION (DEFAULT HIDDEN) -->
+          <new-post hidden channel="[[page]]" id="newPost" language="[[language]]" class="animate-appear" resources="[[resources]]"></new-post>
 
-          <new-post hidden channel="[[page]]" id="newPost" class="animate-appear" language="[[language]]" resources="[[resources]]"></new-post>
+          <!-- NEW CHANNEL SECTION (DEFAULT HIDDEN) -->
+          <new-channel hidden id="newChannel" language="[[language]]"></new-channel>
 
-          <new-channel hidden id="newChannel" class="animate-appear" language="[[language]]"></new-channel>
+          <!-- IRON PAGES FOR NAVIGATING REGIONS -->
           <iron-pages id="pages"
               selected="[[page]]"
               attr-for-selected="name"
               role="main">
+
+            <!-- VIEW CHATS -->
+            <template is="dom-repeat" items="[[_chats]]" initial-count="10">
+              <view-chats chat="[[item]]"></view-chats>
+            </template>
+
+            <!-- VIEW ACTIVITIES -->
             <template is="dom-repeat" items="[[publicChannels]]" initial-count="10">
               <view-posts name="[[item.name]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.$key]]" offline="[[offline]]" language="[[language]]" resources="[[resources]]"></view-posts>
             </template>
+
+             <!--IDK WHAT THIS DOES 
             <template is="dom-repeat" items="[[channels]]" initial-count="10">
               <view-posts name="[[item.name]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.key]]" offline="[[offline]]" language="[[language]]" resources="[[resources]]"></view-posts>
-            </template>
+            </template>-->
           </iron-pages>
+
         </div>
+        <!-- END MAIN CONTENT -->
       </app-header-layout>
 
     </app-drawer-layout>
+
+    <!-- END PAGE CONTENT -->
   </template>
 
   <script>
@@ -373,6 +405,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Array
         },
 
+        notifications: {
+          type: Array,
+          observer: '_notificationsUpdated'
+        },
+
         user: {
           type: Object,
           observer: '_updateUserInfo'
@@ -386,14 +423,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Boolean,
           observer: '_offlineChanged'
         },
+
+        _chats: {
+          type: Array,
+          observer: 'chatsChanged'
+        }
       },
 
+
+      // MAINLY FOR TRANSLATING
       ready: function() {
         this.loadResources(this.resolveUrl('locales.json'));
         Polymer.RenderStatus.afterNextRender(this, function() {
           // This looks like work, so do it later.
           this._getLocation();
         });
+      },
+
+      chatsChanged: function() {
+        console.log(this.chats);
       },
 
       resizeHeader: function() {
@@ -404,6 +452,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         '_routePageChanged(routeData.page)',
       ],
 
+      // UNIVERSAL EVENT LISTENERS (FIRED FROM OTHER ELEMENTS ex: this.fire())
       listeners: {
         'new-post': '_postNewMessage',
         'new-channel': '_createChannel',
@@ -414,9 +463,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'add-users': '_addUsers',
         'post-like': '_postLike',
         'post-unlike': '_postUnlike',
-        'post-delete': '_postDelete'
+        'post-delete': '_postDelete',
+        'send-notification': '_sendNotification',
+        'create-chat': '_createChat',
+        'delete-notification': '_deleteNotification'
       },
 
+      // HANDLES LOGGING OUT
       logout: function() {
         firebase.auth().signOut();
         this.$.newChannel.hidden = true;
@@ -425,13 +478,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       /*******************************
+       * NOTIFICATIONS
+       *******************************/
+
+      // HANDLES DISPLAYING NOTIFICATION PANEL
+      _showNotifications: function (event) {
+        this.$.notificationPanel.hidden = !this.$.notificationPanel.hidden;
+      },
+
+      _notificationsUpdated: function () {
+        this.$.notificationPanel.notes = this.notifications;
+      },
+
+      // EXECUTES WHEN REQUEST BUTTON CLICKED
+      _sendNotification: function (event) {
+        console.log('Sending Notification');
+        var sendToUID = event.detail.sendTo;
+        var activityID = event.detail.activityID;
+        var user = this.user;
+        this._firebaseSendNotification(user, sendToUID, activityID);
+      },
+
+      _deleteNotification: function (event) {
+        let uid = event.detail.uid;
+        let noteID = event.detail.noteID;
+        this._firebaseDeleteNotification(uid, noteID);
+      },
+
+      /*******************************
+       * CHATS
+       *******************************/
+
+       _createChat: function (event) {
+         let uid = event.detail.uid;
+         let otherUID = event.detail.otherUID;
+         this._firebaseCreateChat(uid, otherUID);
+       },
+
+      /*******************************
        * Routes
        *******************************/
-      _routePageChanged: function(page) {
+      _routePageChanged: function (page) {
         this.page = page || 'global';
       },
 
-      _selectLanguageChanged: function(event) {
+      _selectLanguageChanged: function (event) {
         this.set('queryParams.lang', event.target.value);
         this.fire('language-changed', {value: event.target.value});
         switch (event.target.value) {
@@ -475,30 +566,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       /*******************************
-       * Posts
-       *******************************/
-      _postNewMessage: function(event) {
-        var location = this.location || '';
-        console.log(event.detail);
-        this.$.newPost.hidden = true;
-        this._firebaseAddMessage(event.detail.channel, event.detail.message, event.detail.activity, event.detail.date, location);
-      },
-
-      /*******************************
        * Channels
        *******************************/
       _showCreateChannel: function() {
         var resolvedPageUrl = this.resolveUrl('new-channel.html');
         this.importHref(resolvedPageUrl, function() {
           this.$.newChannel.create();
-        }, null, true);
-      },
-
-      _showCreatePost: function() {
-        var resolvedPageUrl = this.resolveUrl('new-post.html');
-        this.importHref(resolvedPageUrl, function() {
-          this.$.newPost.create();
-          this.$.newPost.hidden = false;
         }, null, true);
       },
 
@@ -536,19 +609,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       /*******************************
        * Posts
        *******************************/
-      _postLike: function(event) {
-        this._firebaseLikeMessage(event.detail.ref, event.detail.channelRef);
-      },
-
-      _postUnlike: function(event) {
-        this._firebaseUnlikeMessage(event.detail.ref, event.detail.channelRef);
-      },
-
       _postDelete: function(event) {
         this._firebaseDeleteMessage(event.detail.ref, event.detail.channelRef);
       },
 
+      _postNewMessage: function(event) {
+        var location = this.location || '';
+        // console.log(event.detail);
+        this.$.newPost.hidden = true;
+        this._firebaseAddMessage(event.detail.channel, event.detail.message, event.detail.activity, event.detail.date, location);
+      },
+
+       _showCreatePost: function() {
+        window.scrollTo(0, 0);
+        var resolvedPageUrl = this.resolveUrl('new-post.html');
+        this.importHref(resolvedPageUrl, function() {
+          this.$.newPost.create();
+          this.$.newPost.hidden = false;
+        }, null, true);
+      },
+
+      // GETS LOCATION
       _getLocation: function() {
+        // TODO: Use fetch, cache location - only updates when it changes by x margin
         var self = this;
         navigator.geolocation.getCurrentPosition(function(position) {
           var request = new XMLHttpRequest();
@@ -587,7 +670,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           request.send();
         });
       }
-
     });
   </script>
 </dom-module>

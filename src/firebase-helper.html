@@ -23,7 +23,7 @@ Polymer.FirebaseHelper = {
       this._firebaseUpdatePublicChannels();
 
       if (userInfo) {
-        console.log('Existing user:', this.user);
+        // console.log('Existing user:', this.user);
 
         // Get this user's private channels, if any.
         if (!this.offline)
@@ -85,7 +85,7 @@ Polymer.FirebaseHelper = {
   },
 
   _firebaseAddMessage: function(channel, message, activity, date, location) {
-    console.log(channel, message, activity, date, location);
+    // console.log(channel, message, activity, date, location);
     // Get the channel ref from the names -> keys mapping
     firebase.database().ref('/channelNames/' + channel).once('value', function(snapshot) {
       var channelRef = snapshot.val().id;
@@ -106,22 +106,6 @@ Polymer.FirebaseHelper = {
           index: -now  /* because reverse sorting firebase data is hard */
         });
     }.bind(this));
-  },
-
-  _firebaseLikeMessage: function(post, channel) {
-    firebase.database().ref('/posts/' + channel).child(post).once('value', function(snapshot) {
-      var likes = snapshot.val().likes || 0;
-      snapshot.ref.child('likes').set(likes + 1);
-    });
-  },
-
-  _firebaseUnlikeMessage: function(post, channel) {
-    firebase.database().ref('/posts/' + channel).child(post).once('value', function(snapshot) {
-      var likes = snapshot.val().likes || 0;
-      if (likes !== 0) {
-        snapshot.ref.child('likes').set(likes - 1);
-      }
-    });
   },
 
   _firebaseDeleteMessage: function(post, channel) {
@@ -312,6 +296,27 @@ Polymer.FirebaseHelper = {
         }
       }
     });
+  },
+
+  _firebaseSendNotification: function(currentUser, sendToUID, activityID) {
+    const dbRef = firebase.database().ref('/users/' + sendToUID).child('notifications');
+    var now = new Date().getTime();
+
+    const note = { userID: currentUser.uid, userPhotoURL: currentUser.photoURL, activity: activityID, sentOn: now};
+
+    dbRef.push().set(note);
+  },
+
+  _firebaseDeleteNotification: function(currentUser, notificationID) {
+    firebase.database().ref(`/users/${currentUser}/notifications`).child(notificationID).remove();
+  },
+
+  _firebaseCreateChat: function(uid, otherUID) {
+    const dbRef = firebase.database().ref('/chats/');
+
+    const chat = {uid1: uid, uid2: otherUID};
+
+    dbRef.push().set(chat);
   }
 };
 </script>

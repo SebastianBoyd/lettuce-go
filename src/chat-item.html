@@ -1,0 +1,89 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="chat-item">
+  <template>
+    <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+        padding-left: 16px;
+      }
+
+      :host(.iron-selected) {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      :host(.iron-selected) a {
+        font-weight: bold;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      a {
+        box-sizing: border-box;
+        width: 100%;
+        text-decoration: none;
+        color: #455A64;
+        font-weight: 300;
+        @apply(--layout-horizontal);
+        @apply(--layout-justified);
+        vertical-align: middle;
+        text-align: left;
+      }
+
+      .channel-settings {
+        display: inline-block;
+        vertical-align: middle;
+        color: rgba(0, 0, 0, 0.4);
+      }
+
+      .channel-settings:hover {
+        color: rgba(0, 0, 0, 0.9);
+      }
+
+      iron-icon {
+        vertical-align: middle;
+      }
+    </style>
+
+    <a href="/[[chat.uid]]?lang=[[language]]">
+      <span style="padding:8px 0;">
+        <iron-icon class="channel-settings" icon="icons:public" hidden$=[[!public]]></iron-icon>
+        <iron-icon class="channel-settings" icon="icons:private" hidden$=[[public]]></iron-icon>
+        <span>[[chat.uid2]]</span>
+      </span>
+    </a>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'chat-item',
+
+      properties: {
+        chat: {
+          type: Object
+        },
+
+        public: {
+          type: Boolean,
+          value: false
+        },
+
+        uid1: {
+          type: String
+        }
+      },
+
+      _showEditChannel: function(event) {
+        this.fire('edit-channel', {channel: this.channel});
+      },
+
+      _shouldShowChannelSettings: function(channel, uid, offline) {
+        return !offline && (channel.owner === uid);
+      },
+    });
+  </script>
+</dom-module>

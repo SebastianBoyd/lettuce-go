@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="../bower_components/app-datepicker/app-datepicker.html">
+
 <dom-module id="new-post">
   <template>
     <style>
@@ -25,39 +26,12 @@
       }
 
       paper-button {
-        margin: 0;
-        padding: 0;
         font-size: 14px;
-        color: var(--app-secondary-color);
-        @apply(--layout-flex);
-        @apply(--layout-flex-auto);
+        background: var(--app-primary-color);
+        color: #FFF;
+        margin: 0 8px 0 8px;
+        padding: 8px;
         float: right;
-      }
-
-      select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        display: inline-block;
-        border: 0;
-        outline: 0;
-        background: transparent;
-        cursor: pointer;
-        font-size: 36px;
-        height: 50px;
-        line-height: 50px;
-
-        padding: 0 4px;
-        background-color: #eee;
-        border-radius: 3px;
-        margin: 0 4px 4px 4px;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                  0 1px 5px 0 rgba(0, 0, 0, 0.12),
-                  0 3px 1px -2px rgba(0, 0, 0, 0.2);
-      }
-
-      select:focus {
-        background-color: #7bd6cf;
       }
 
       .title {
@@ -85,22 +59,33 @@
         outline: none;
         box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
       }
+
+      #cancel {
+        background: #E91E63;
+      }
     </style>
     <iron-ajax url="{{computeActivitiesURL()}}" last-response="{{activities}}" loading="{{req}}" handle-as="json" auto></iron-ajax>
 
-    <div class="title">{{localize('new-activity-header')}}</div>
-    <vaadin-combo-box class="space" label="{{localize('activity-selector-name')}}" value="{{activity}}" items="[[activities]]"></vaadin-combo-box>
-    <div class="title">{{localize('on-date-description')}}</div>
+    <!-- BEGIN PANEL -->
+    <div class="title">Add an Activity</div>
+    <vaadin-combo-box class="space" label="Choose an Activity" value="{{activity}}" items="[[activities]]"></vaadin-combo-box>
+    <div class="title">Pick a Date</div>
 
-    <app-datepicker class="space" auto-update-date date="{{date}}"></app-datepicker>
+    <!-- DATEPICKER UI -->
+    <app-datepicker class="date-picker" disableDays="" auto-update-date date="{{date}}"></app-datepicker>
 
-    <div class="title">Describe you Activity</div>
+    <div class="title">Describe your Activity</div>
     <input id="write" placeholder="Description"></input>
 
+    <!-- BOTTOM OF PANEL -->
     <div class="bottom">
       <span class="title">In region: [[channel]]</span>
-      <paper-button elevation="1" on-click="_post">Post</paper-button>
+      
+      <paper-button on-click="_post">Post</paper-button>
+      <paper-button on-click="hide" id="cancel">Cancel</paper-button>
     </div>
+
+    <!-- END PANEL -->
 
   </template>
 
@@ -120,17 +105,21 @@
       attached: function() {
       },
 
+      // POSTS TO FIREBASE USING this.fire()
       _post: function () {
-        // var act = this.activity.replace(/\s+/g, '');
-        this.fire('new-post', {message: this.$.write.value.trim(), channel: this.channel, date: this.date, activity: this.activity});
+        this.fire('new-post', { message: this.$.write.value.trim(), channel: this.channel, date: this.date, activity: this.activity });
         this.$.write.value = 'No Description Provided.';
         this.activity = null;
+      },
+
+      // HIDES PANEL WHEN CANCEL CLICKED
+      hide: function () {
+        this.hidden = true;
       },
 
       computeActivitiesURL(){
         return "src/activities-" + window.language + ".json"
       }
-
     });
 
   </script>

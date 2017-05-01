@@ -7,6 +7,7 @@
 <dom-module id="view-posts">
   <template>
     <style>
+      /* TODO: REMOVE EXCESS STYLES */
       :host {
         display: block;
         margin-bottom: 40px;
@@ -41,6 +42,7 @@
         box-sizing: border-box;
         vertical-align: middle;
       }
+
       .avitar-conatiner {
         height: 100%;
         margin-right: 16px;
@@ -109,6 +111,7 @@
       button:hover {
         color: var(--app-error-color);
       }
+      
       .card-top {
         height: 20vh;
         width: 100%;
@@ -156,9 +159,9 @@
                     <iron-icon icon="icons:location" class="action"></iron-icon>[[item.location]]
                   </span>
                   <button hidden$="[[!_shouldEdit(item, offline)]]" ref="[[item.$key]]" on-click="_delete">
-                    <iron-icon icon="icons:delete" class="action"></iron-icon>{{localize('delete-post')}}
+                    <iron-icon icon="icons:delete" class="action"></iron-icon>Delete Post
                   </button>
-                  <button hidden$="[[_shouldEdit(item, offline)]]" ref="[[item.uid]]" on-click="_request">
+                  <button hidden$="[[_shouldEdit(item, offline)]]" ref="[[item]]" on-click="_request">
                     <iron-icon icon="icons:chevron-right" class="action"></iron-icon>Request
                   </button>
                 </span>
@@ -183,6 +186,7 @@
       behaviors: [
         Polymer.AppLocalizeBehavior
       ],
+
       properties: {
         channel: {
           type: String
@@ -205,8 +209,9 @@
           value: false
         }
       },
+
       computeBGImage: function (activity) {
-        console.log(activity);
+        // console.log(activity);
         clean = activity.replace(/\s/g,'')
         return "background-image: url('../images/activities/" + activity + ".jpg');"
       },
@@ -233,19 +238,6 @@
         }
       },
 
-      _like: function(event) {
-        var button = this._getEventTarget(event);
-        var ref = button.ref;
-
-        if (button.icon === 'icons:favorite-border') {
-          button.icon = 'icons:favorite';
-          this.fire('post-like', {ref: ref, channelRef: this.ref});
-        } else {
-          button.icon = 'icons:favorite-border';
-          this.fire('post-unlike', {ref: ref, channelRef: this.ref});
-        }
-      },
-
       _delete: function(event) {
         var button = this._getEventTarget(event);
         var ref = button.ref;
@@ -254,17 +246,9 @@
 
       _request: function(event) {
         var button = this._getEventTarget(event);
-        var uid = button.ref;
-        this.fire('')
-      },
-
-      _showHint: function(event) {
-        var button = this._getEventTarget(event);
-
-        // lol.
-        var hintNode = button.parentNode.parentNode.querySelector('.hint');
-        if (hintNode)
-          hintNode.className += ' showing';
+        var uid = button.ref.uid;
+        var key = button.ref.$key;
+        this.fire('send-notification', {sendTo: uid, activityID: key});
       },
 
       _hasLocation: function(location) {
@@ -274,11 +258,7 @@
       _shouldEdit: function(item, offline) {
         return !offline && this.uid === item.uid;
       },
-
-      _shouldShowHint: function(item) {
-        return (item.original !== undefined);
-      },
-
+      
       _getEventTarget: function(event) {
         var button = Polymer.dom(event).localTarget;
 
