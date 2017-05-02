@@ -303,7 +303,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               <!-- CHATS -->
               <template is="dom-repeat" items="[[_chats]]" initial-count="10">
-                <chat-item drawer-toggle chat="[[item]]" uid="[[user.uid2]]" offline="[[offline]]" language="[[language]]"></chat-item>
+                <chat-item drawer-toggle chat="[[item]]" uid="[[user.name]]" offline="[[offline]]" language="[[language]]"></chat-item>
               </template>
 
             </iron-selector>
@@ -368,7 +368,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <!-- VIEW CHATS -->
             <template is="dom-repeat" items="[[_chats]]" initial-count="10">
-              <view-chats chat="[[item]]"></view-chats>
+              <view-chats ref="[[item.uid1]]" name="[[item.chatName]]"></view-chats>
             </template>
 
             <!-- VIEW ACTIVITIES -->
@@ -376,7 +376,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <view-posts name="[[item.name]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.$key]]" offline="[[offline]]" language="[[language]]" resources="[[resources]]"></view-posts>
             </template>
 
-             <!--IDK WHAT THIS DOES 
+             <!--IDK WHAT THIS DOES
             <template is="dom-repeat" items="[[channels]]" initial-count="10">
               <view-posts name="[[item.name]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.key]]" offline="[[offline]]" language="[[language]]" resources="[[resources]]"></view-posts>
             </template>-->
@@ -450,7 +450,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       observers: [
-        '_routePageChanged(routeData.page)',
+        '_routePageChanged(subroute.path)',
       ],
 
       // UNIVERSAL EVENT LISTENERS (FIRED FROM OTHER ELEMENTS ex: this.fire())
@@ -520,7 +520,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * Routes
        *******************************/
       _routePageChanged: function (page) {
-        this.page = page || 'global';
+        console.log(page);
+        this.page = page.replace(/^\/|\/$/g, '') || 'global';
+        console.log('page ' + this.page);
       },
 
       _selectLanguageChanged: function (event) {

@@ -24,7 +24,7 @@
         color: var(--app-text-color);
       }
 
-      ::-webkit-scrollbar { 
+      ::-webkit-scrollbar {
           display: none;
       }
 
@@ -196,10 +196,11 @@
         position: static;
       }
     </style>
+    Wow this really works
     <div id="list">
-      <h1>[[chat.uid]]</h1>
+      <h1>[[ref]]</h1>
     </div>
-    
+
   </template>
 
   <script>
@@ -230,6 +231,10 @@
           type: Boolean,
           value: false
         }
+      },
+
+      ready: function() {
+        console.log('yo ' + this.ref);
       },
 
       computeBGImage: function (activity) {
@@ -280,7 +285,7 @@
       _shouldEdit: function(item, offline) {
         return !offline && this.uid === item.uid;
       },
-      
+
       _getEventTarget: function(event) {
         var button = Polymer.dom(event).localTarget;
 
