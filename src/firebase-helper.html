@@ -298,12 +298,15 @@ Polymer.FirebaseHelper = {
     });
   },
 
+  /*******************************
+  * NOTIFICATIONS
+  *******************************/
+
   _firebaseSendNotification: function(currentUser, sendToUID, activityID) {
     const dbRef = firebase.database().ref('/users/' + sendToUID).child('notifications');
-    var now = new Date().getTime();
-
-    const note = { userID: currentUser.uid, userPhotoURL: currentUser.photoURL, activity: activityID, sentOn: now};
-
+    let now = new Date().getTime();
+    const user = {name: currentUser.displayName, photoURL: currentUser.photoURL, userID: currentUser.uid};
+    const note = { user: user, activity: activityID, sentOn: now};
     dbRef.push().set(note);
   },
 
@@ -313,9 +316,7 @@ Polymer.FirebaseHelper = {
 
   _firebaseCreateChat: function(uid, otherUID) {
     const dbRef = firebase.database().ref('/chats/');
-
     const chat = {uid1: uid, uid2: otherUID};
-
     dbRef.push().set(chat);
   }
 };

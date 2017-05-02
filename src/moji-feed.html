@@ -202,6 +202,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       }
 
+      #chats-header {
+        margin: 0;
+        padding: 8px;
+      }
+
       .giant-emoji {
         font-size: 3em;
         text-align: center;
@@ -294,6 +299,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <!--<template is="dom-repeat" items="[[channels]]" initial-count="10">
                 <channel-item drawer-toggle channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
               </template>-->
+              <h3 id="chats-header">Chats:</h3>
 
               <!-- CHATS -->
               <template is="dom-repeat" items="[[_chats]]" initial-count="10">
@@ -303,11 +309,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </iron-selector>
           </div>
 
-          <paper-button raised hidden$="[[offline]]" id="createChannelButton"
+          <!--<paper-button raised hidden$="[[offline]]" id="createChannelButton"
               on-click="_showCreateChannel" class="create-channel">
             <iron-icon icon="icons:add"></iron-icon>
             Add Region
-          </paper-button>
+          </paper-button>-->
         </div>
       </app-drawer>
 
@@ -425,8 +431,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         _chats: {
-          type: Array,
-          observer: 'chatsChanged'
+          type: Array
         }
       },
 
@@ -438,10 +443,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // This looks like work, so do it later.
           this._getLocation();
         });
-      },
-
-      chatsChanged: function() {
-        console.log(this.chats);
       },
 
       resizeHeader: function() {
@@ -493,9 +494,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       // EXECUTES WHEN REQUEST BUTTON CLICKED
       _sendNotification: function (event) {
         console.log('Sending Notification');
-        var sendToUID = event.detail.sendTo;
-        var activityID = event.detail.activityID;
-        var user = this.user;
+        let sendToUID = event.detail.sendTo;
+        let activityID = event.detail.activityID;
+        let user = this.user;
         this._firebaseSendNotification(user, sendToUID, activityID);
       },
 

@@ -48,10 +48,9 @@
       }
     </style>
 
-    <a href="/[[chat.uid]]?lang=[[language]]">
+    <a href="/chat/[[chat.uid2]]?lang=[[language]]">
       <span style="padding:8px 0;">
-        <iron-icon class="channel-settings" icon="icons:public" hidden$=[[!public]]></iron-icon>
-        <iron-icon class="channel-settings" icon="icons:private" hidden$=[[public]]></iron-icon>
+        <iron-icon class="channel-settings" on-click="_deleteChannel" icon="icons:delete"></iron-icon>
         <span>[[chat.uid2]]</span>
       </span>
     </a>
@@ -77,13 +76,10 @@
         }
       },
 
-      _showEditChannel: function(event) {
-        this.fire('edit-channel', {channel: this.channel});
-      },
-
-      _shouldShowChannelSettings: function(channel, uid, offline) {
-        return !offline && (channel.owner === uid);
-      },
+      _deleteChannel: function(event) {
+        event.preventDefault();
+        console.log(`delete chat: ${event}`);
+      }
     });
   </script>
 </dom-module>

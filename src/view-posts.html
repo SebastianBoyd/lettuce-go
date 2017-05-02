@@ -247,7 +247,7 @@
       _request: function(event) {
         var button = this._getEventTarget(event);
         var uid = button.ref.uid;
-        var key = button.ref.$key;
+        var key = button.ref.activity;
         this.fire('send-notification', {sendTo: uid, activityID: key});
       },
 
