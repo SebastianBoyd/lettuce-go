@@ -23,7 +23,7 @@
     "emojilib": "muan/emojilib#^2.0.0",
     "intl": "andyearnshaw/intl.js#^1.0.0",
     "vaadin-combo-box": "^1.1.5",
-    "app-datepicker": "^2.9.0",
+    "app-datepicker": "^2.9.1",
     "paper-fab": "^1.2.2",
     "paper-badge": "^1.1.4",
     "vaadin-icons": "^3.0.0"
