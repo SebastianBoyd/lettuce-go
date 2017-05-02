@@ -48,10 +48,10 @@
       }
     </style>
 
-    <a href="/chat/[[chat.chatName]]">
+    <a href="/chat/[[user.name]]">
       <span style="padding:8px 0;">
         <iron-icon class="channel-settings" on-click="_deleteChannel" icon="icons:delete"></iron-icon>
-        <span>[[chat.chatName]]</span>
+        <span>[[user.name]]</span>
       </span>
     </a>
 
@@ -71,14 +71,19 @@
           value: false
         },
 
-        uid1: {
-          type: String
+        user: {
+          type: Object,
+          observer: '_userChattingWithInfoUpdate'
         }
       },
 
       _deleteChannel: function(event) {
         event.preventDefault();
         console.log(`delete chat: ${event}`);
+      },
+
+      _userChattingWithInfoUpdate: function() {
+        // console.log(this.user);
       }
     });
   </script>

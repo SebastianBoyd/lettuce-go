@@ -314,9 +314,14 @@ Polymer.FirebaseHelper = {
     firebase.database().ref(`/users/${currentUser}/notifications`).child(notificationID).remove();
   },
 
-  _firebaseCreateChat: function(uid, otherUID) {
+  /*******************************
+  * CHATS
+  *******************************/
+
+  _firebaseCreateChat: function(currentUser, otherUser) {
     const dbRef = firebase.database().ref('/chats/');
-    const chat = {uid1: uid, chatName: otherUID};
+    const userList = {user1: currentUser, user2: otherUser};
+    const chat = {users: userList}
     dbRef.push().set(chat);
   }
 };

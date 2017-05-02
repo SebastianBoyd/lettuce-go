@@ -104,7 +104,9 @@
       },
 
       _acceptRequest: function(evt) {
-        this.fire('create-chat', {uid: this.uid, otherUID: this.user.name});
+        // TODO: Fix user ID of other user (not yourself) in chat
+        const otherUser = {name: this.user.name, photoURL: this.user.photoURL, uid: "needs fixing"};
+        this.fire('create-chat', {otherUser: otherUser});
         const notificationID = evt.path[2].id;
 
         // COMMENTED OUR FOR DEV!!

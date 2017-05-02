@@ -303,7 +303,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               <!-- CHATS -->
               <template is="dom-repeat" items="[[_chats]]" initial-count="10">
-                <chat-item drawer-toggle chat="[[item]]" uid="[[user.name]]" offline="[[offline]]" language="[[language]]"></chat-item>
+                <chat-item drawer-toggle chat="[[item]]" user="[[item.users.user2]]" offline="[[offline]]" language="[[language]]"></chat-item>
               </template>
 
             </iron-selector>
@@ -368,7 +368,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <!-- VIEW CHATS -->
             <template is="dom-repeat" items="[[_chats]]" initial-count="10">
-              <view-chats ref="[[item.uid1]]" name="[[item.chatName]]"></view-chats>
+              <view-chats ref="[[item.users.user2.name]]" name="[[item.users.user2.name]]"></view-chats>
             </template>
 
             <!-- VIEW ACTIVITIES -->
@@ -511,16 +511,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        *******************************/
 
        _createChat: function (event) {
-         let uid = event.detail.uid;
-         let otherUID = event.detail.otherUID;
-         this._firebaseCreateChat(uid, otherUID);
+         let currentUser = {name: this.user.displayName, photoURL: this.user.photoURL, uid: this.user.uid};
+         let otherUser = event.detail.otherUser;
+         this._firebaseCreateChat(currentUser, otherUser);
        },
 
       /*******************************
        * Routes
        *******************************/
       _routePageChanged: function (page) {
-        console.log(page);
+        console.log('Page:' + page);
         this.page = page.replace(/^\/|\/$/g, '') || 'global';
         console.log('page ' + this.page);
       },
