@@ -12,13 +12,7 @@
         display: block;
         margin-bottom: 40px;
         font-weight: 300;
-        --app-primary-color: #03A9F4;
-        --app-background-color: #212121;
-        --app-accent-color: #5C6BC0;
-        --app-secondary-color: #4CAF50;
-        --app-text-color: #FFF;
-        font-family: 'Roboto', sans-serif;
-        background: var(--app-background-color);
+        width: 100%;
         margin: 0;
         padding: 0;
         color: var(--app-text-color);
@@ -95,31 +89,16 @@
 
       /* ID RULES  --- SORTED LINEAR */
 
-      #wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 95vh;
-      }
-
-      #app {
-        overflow-y: hidden;
-        margin: 0;
-      }
-
       #panel {
         display: flex;
         flex-direction: column;
-        height: 100vh;
-      }
-
-      #top-bar {
-        display: flex;
+        height: 90vh;
+        color: white;
+        background: rebeccapurple;
       }
 
       .line {
-        width: 100vw;
+        width: 100%;
         height: .5vh;
         border-radius: 3px;
         background: var(--app-primary-color);
@@ -128,7 +107,6 @@
       #messages {
         display: flex;
         flex-direction: column;
-        height: 80%;
         width: 100%;
         overflow-y: scroll;
         flex-grow: 8;
@@ -142,17 +120,12 @@
       }
 
       #message {
-        width: 78vw;
+        width: 90%;
         height: 5vh;
         border: none;
         border-radius: 3px;
         padding: 8px;
         font-size: 2vh;
-      }
-
-      #send {
-        width: 5vw;
-        height: 5vw;
       }
 
       /* CLASS RULES */
@@ -196,9 +169,19 @@
         position: static;
       }
     </style>
-    Wow this really works
-    <div id="list">
-      <h1>[[ref]]</h1>
+    <h3>Chatting with: [[name]]</h3>
+
+    <div id="panel">
+      <div class="line"></div>
+
+      <div id="messages">
+      </div>
+      <div class="line lower-line"></div>
+
+      <div id="bottom">
+        <input id="message" type="text" placeholder="Message" value="[[textMessage]]">
+        <paper-icon-button icon="icons:chevron-right" on-click="_sendMessage"></paper-icon-button>
+      </div>
     </div>
 
   </template>
@@ -265,33 +248,9 @@
         }
       },
 
-      _delete: function(event) {
-        var button = this._getEventTarget(event);
-        var ref = button.ref;
-        this.fire('post-delete', {ref: ref, channelRef: this.ref});
-      },
-
-      _request: function(event) {
-        var button = this._getEventTarget(event);
-        var uid = button.ref.uid;
-        var key = button.ref.$key;
-        this.fire('send-notification', {sendTo: uid, activityID: key});
-      },
-
-      _hasLocation: function(location) {
-        return !!location;
-      },
-
-      _shouldEdit: function(item, offline) {
-        return !offline && this.uid === item.uid;
-      },
-
-      _getEventTarget: function(event) {
-        var button = Polymer.dom(event).localTarget;
-
-        // TODO: figure out why this is: If you click on the icon, the
-        // rootTarget/localTarget is the icon and not the button
-        return (button.tagName === 'IRON-ICON') ? button.parentNode : button;
+      _sendMessage: function(evt) {
+        console.log('send message');
+        console.log(evt);
       }
     });
   </script>
