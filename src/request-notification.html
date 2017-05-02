@@ -104,7 +104,7 @@
       },
 
       _acceptRequest: function(evt) {
-        this.fire('create-chat', {uid: this.uid, otherUID: this.user});
+        this.fire('create-chat', {uid: this.uid, otherUID: this.user.name});
         const notificationID = evt.path[2].id;
 
         // COMMENTED OUR FOR DEV!!
