@@ -9,7 +9,6 @@
   <template>
     <style>
       /* TODO: REMOVE EXCESS STYLES */
-      
        :host {
         display: block;
         margin-bottom: 40px;
@@ -103,7 +102,6 @@
         flex-direction: column;
         height: 90vh;
         background: #eeeeee;
-        /*overflow-y: scroll;*/
       }
       
       .line {
@@ -122,14 +120,11 @@
       }
       
       #mesageWrapper {
-        /*height: 75vh;*/
         height: 74vh;
-        /*flex-direction: column;*/
         overflow-y: scroll;
       }
       
       #bottom {
-        /*position: fixed;*/
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -162,7 +157,6 @@
         padding-left: 8px;
         padding-right: 8px;
         min-height: 5vh;
-        max-width: 50%;
         overflow-y: visible;
         font-size: 2vh;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -188,12 +182,12 @@
     </style>
 
     <div id="panel">
-      <h3>Chatting with: [[name]]</h3>
+      <h3>Chatting with: [[users.user2.name]]</h3>
       <div class="line"></div>
 
       <div id="mesageWrapper">
-        <template is="dom-repeat" id="messages" items="[[chats]]" initial-count="10" scroll-target="document">
-          <div class="textMessage">
+        <template is="dom-repeat" id="messages" items="[[messages]]" initial-count="10" scroll-target="document">
+          <div class="textMessage" style="[[_computeAlignment(item.userSent)]]">
             <div class="name">[[item.userSent]]</div>
             <div class="lower">
               <div class="text">[[item.text]]</div>
@@ -202,10 +196,6 @@
         </template>
       </div>
 
-      <!--<div id="messages">
-        <div class="textMessage"><div class="name">tenaciousblues@gmail.com</div><div class="lower">
-        <div class="text">Longer message</div></div></div>
-      </div>-->
       <div class="line lower-line"></div>
 
       <div id="bottom">
@@ -228,45 +218,24 @@
           type: String
         },
 
-        ref: {
-          type: String
+        users: {
+          type: Array
         },
 
         uid: {
           type: String
         },
 
-        posts: {
-          type: Array
-        },
-
-        offline: {
-          type: Boolean,
-          value: false
-        },
         textMessage: {},
-        chats: {
+        messages: {
           type: Array,
-          observer: '_chats'
+        },
+        currentUser: {
+          type: Object
         }
       },
 
       ready: function () {
-        console.log('yo ' + this.ref);
-      },
-
-      computeBGImage: function (activity) {
-        // console.log(activity);
-        clean = activity.replace(/\s/g, '')
-        return "background-image: url('../images/activities/" + activity + ".jpg');"
-      },
-
-      _chats: function () {
-        console.log(this.chats);
-      },
-
-      _getTitle: function (title) {
-        return title || '';
       },
 
       _getDate: function (timestamp) {
@@ -284,6 +253,14 @@
           var monthIndex = date.getMonth();
           var year = date.getFullYear();
           return day + ' ' + monthNames[monthIndex] + ' ' + year;
+        }
+      },
+
+      _computeAlignment: function(name) {
+        if (name == 'Duncan') {
+          return 'align-items: flex-end;';
+        } else {
+          return 'align-items: flex-start;';
         }
       },
 

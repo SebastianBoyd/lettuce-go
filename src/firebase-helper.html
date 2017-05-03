@@ -321,7 +321,7 @@ Polymer.FirebaseHelper = {
   _firebaseCreateChat: function(currentUser, otherUser) {
     const dbRef = firebase.database().ref('/chats/');
     const userList = {user1: currentUser, user2: otherUser};
-    const chat = {users: userList}
+    const chat = {users: userList};
     dbRef.push().set(chat);
   },
 

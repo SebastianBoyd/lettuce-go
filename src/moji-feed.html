@@ -372,7 +372,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <!-- VIEW CHATS -->
             <template is="dom-repeat" items="[[_chats]]" initial-count="10">
-              <view-chats ref="[[item.users.user2.name]]" name="[[item.users.user2.name]]" chats="[[_sampleChat]]"></view-chats>
+              <view-chats current-user="[[user]]" users="[[item.users]]" name="[[item.users.user2.name]]" messages="[[_sampleChat]]"></view-chats>
             </template>
 
             <!-- VIEW ACTIVITIES -->

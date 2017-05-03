@@ -10,6 +10,7 @@
         position: relative;
         z-index: 10;
         border-radius: 3px;
+        color: #000;
       }
 
       :host([hidden]) {
@@ -35,7 +36,6 @@
       }
 
       .title {
-        color: var(--app-secondary-text-color);
         font-weight: 300;
         font-size: 16px;
       }
@@ -61,7 +61,7 @@
       }
 
       #cancel {
-        background: #E91E63;
+        background: #F44336;
       }
     </style>
     <iron-ajax url="{{computeActivitiesURL()}}" last-response="{{activities}}" loading="{{req}}" handle-as="json" auto></iron-ajax>
