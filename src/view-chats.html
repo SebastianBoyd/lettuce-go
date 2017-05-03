@@ -181,14 +181,18 @@
       }
     </style>
 
+    <firebase-query data="{{test}}" path="[[computePath(chatKey)]]"></firebase-query>
+
     <div id="panel">
       <h3>Chatting with: [[users.user2.name]]</h3>
       <div class="line"></div>
 
       <div id="mesageWrapper">
-        <template is="dom-repeat" id="messages" items="[[messages]]" initial-count="10" scroll-target="document">
+        <template is="dom-repeat" id="messages" items="[[test]]" initial-count="10" scroll-target="document">
           <div class="textMessage" style="[[_computeAlignment(item.userSent)]]">
-            <div class="name">[[item.userSent]]</div>
+            <div class="name">
+              [[item.userSent]] - [[_getDate(item.timeSent)]]
+            </div>
             <div class="lower">
               <div class="text">[[item.text]]</div>
             </div>
@@ -200,7 +204,7 @@
 
       <div id="bottom">
         <input id="message" is="iron-input" placeholder="Message" bind-value="{{textMessage}}">
-        <paper-icon-button icon="icons:chevron-right" on-click="_sendMessage"></paper-icon-button>
+        <paper-icon-button icon="icons:arrow-forward" on-click="_sendMessage"></paper-icon-button>
       </div>
     </div>
 
@@ -214,28 +218,20 @@
       ],
 
       properties: {
-        chat: {
-          type: String
-        },
-
         users: {
           type: Array
         },
-
-        uid: {
-          type: String
-        },
-
         textMessage: {},
-        messages: {
-          type: Array,
-        },
         currentUser: {
           type: Object
+        },
+        chatKey: {
+          type: String
         }
       },
 
-      ready: function () {
+      computePath: function(id) {
+        return `/chats/${id}/chats`;
       },
 
       _getDate: function (timestamp) {
@@ -244,7 +240,7 @@
 
         if (seconds < 3600) {
           var minutes = Math.floor(seconds / 60)
-          return (minutes > 1) ? minutes + " minutes ago" : "1 minute ago";
+          return (minutes > 1) ? minutes + " minutes ago" : "Now";
         } else if (seconds < 86400) {
           var hours = Math.floor(seconds / 3600)
           return (hours > 1) ? hours + " hours ago" : "1 hour ago";
@@ -257,7 +253,7 @@
       },
 
       _computeAlignment: function(name) {
-        if (name == 'Duncan') {
+        if (name == this.currentUser.displayName) {
           return 'align-items: flex-end;';
         } else {
           return 'align-items: flex-start;';
@@ -265,8 +261,10 @@
       },
 
       _sendMessage: function (evt) {
-        // TODO: FIX THIS
-        this.fire('send-message', { messageID: "sample", value: this.textMessage, user: 'Duncan' })
+        if (this.$.message.value != '') {
+          this.fire('send-message', { messageID: this.chatKey, value: this.textMessage, user: this.currentUser.displayName });
+          this.$.message.value = '';
+        }
       }
     });
   </script>

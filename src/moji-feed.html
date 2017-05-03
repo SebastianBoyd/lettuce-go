@@ -256,7 +256,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <!-- _ means that the data is not to be changed -->
     <firebase-query data="{{_publicChannels}}" path="/publicChannels"></firebase-query>
     <firebase-query data="{{_chats}}" path="/chats"></firebase-query>
-    <firebase-query data="{{_sampleChat}}" path="/chats/sample/chats"></firebase-query>
+    <firebase-query data="{{_sampleChat}}" path="/chats/-Kj8y3w__YhIVjbjVfbS/chats"></firebase-query>
 
     <!-- Add public channles to indexeddb so there are persisted -->
     <app-indexeddb-mirror
@@ -372,7 +372,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <!-- VIEW CHATS -->
             <template is="dom-repeat" items="[[_chats]]" initial-count="10">
-              <view-chats current-user="[[user]]" users="[[item.users]]" name="[[item.users.user2.name]]" messages="[[_sampleChat]]"></view-chats>
+              <view-chats chat-key="[[item.$key]]" current-user="[[user]]" users="[[item.users]]" name="[[item.users.user2.name]]"></view-chats>
             </template>
 
             <!-- VIEW ACTIVITIES -->
@@ -525,13 +525,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          this._firebaseSendChat(event.detail.messageID, event.detail.user, event.detail.value);
        },
 
+       //TODO: FIX THIS
+
+       hideFab: function() {
+        // let url = window.location.href.toString();
+        // if (url.includes('chat')) {
+        //   return true;
+        // } else {
+        //   return false;
+        // }
+       },
+
       /*******************************
        * Routes
        *******************************/
       _routePageChanged: function (page) {
-        console.log('Page:' + page);
+        // console.log('Page:' + page);
         this.page = page.replace(/^\/|\/$/g, '') || 'global';
-        console.log('page ' + this.page);
+        // console.log('page ' + this.page);
       },
 
       _selectLanguageChanged: function (event) {
