@@ -11,8 +11,8 @@
       :host {
         display: block;
         position: relative;
-        background: mediumslateblue;
-        color: #FFF;
+        background: white;
+        color: #000;
         box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
         position: fixed;
         right: 0;
@@ -35,7 +35,7 @@
     </style>
 
     <firebase-query data="{{notes}}" path="[[path]]"></firebase-query>
-     <div>Notifications:</div>
+     <div><b>Notifications:</b></div>
       <template id="list" is="dom-repeat" items="[[notes]]" initial-count="10">
         <request-notification uid="[[uid]]" key="[[item.$key]]" user="[[item.user]]" activity="[[item.activity]]"></request-notification>
       </template>

@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-input/iron-input.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
 <link rel="import" href="my-icons.html">
@@ -15,7 +16,7 @@
         width: 100%;
         margin: 0;
         padding: 0;
-        color: var(--app-text-color);
+        color: #000;
       }
 
       ::-webkit-scrollbar {
@@ -36,7 +37,6 @@
       }
 
       h1 {
-        color: var(--app-text-color);
         margin: 8px;
         font-size: 3vh;
       }
@@ -93,8 +93,7 @@
         display: flex;
         flex-direction: column;
         height: 90vh;
-        color: white;
-        background: rebeccapurple;
+        background: #eeeeee;
       }
 
       .line {
@@ -169,18 +168,26 @@
         position: static;
       }
     </style>
-    <h3>Chatting with: [[name]]</h3>
-
+  
     <div id="panel">
+      <h3>Chatting with: [[name]]</h3>
       <div class="line"></div>
 
-      <div id="messages">
-      </div>
+       <template is="dom-repeat" id="messages" items="[[chats]]" initial-count="10">
+         <div class="textMessage"><div class="name">[[item.userSent]]</div><div class="lower">
+         <div class="text">[[item.text]]</div></div></div>
+       </template>
+
+      <!--<div id="messages">
+        <div class="textMessage"><div class="name">tenaciousblues@gmail.com</div><div class="lower">
+        <div class="text">Longer message</div></div></div>
+      </div>-->
       <div class="line lower-line"></div>
 
       <div id="bottom">
-        <input id="message" type="text" placeholder="Message" value="[[textMessage]]">
+        <input id="message" is="iron-input" placeholder="Message" bind-value="{{textMessage}}">
         <paper-icon-button icon="icons:chevron-right" on-click="_sendMessage"></paper-icon-button>
+        
       </div>
     </div>
 
@@ -213,6 +220,11 @@
         offline: {
           type: Boolean,
           value: false
+        },
+        textMessage: {},
+        chats: {
+          type: Array,
+          observer: '_chats'
         }
       },
 
@@ -224,6 +236,10 @@
         // console.log(activity);
         clean = activity.replace(/\s/g,'')
         return "background-image: url('../images/activities/" + activity + ".jpg');"
+      },
+
+      _chats: function() {
+        console.log(this.chats);
       },
 
       _getTitle: function(title) {
@@ -249,8 +265,8 @@
       },
 
       _sendMessage: function(evt) {
-        console.log('send message');
-        console.log(evt);
+        // TODO: FIX THIS
+        this.fire('send-message', {messageID: "sample", value: this.textMessage, user: 'Duncan'})
       }
     });
   </script>

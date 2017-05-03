@@ -39,9 +39,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="view-chats.html">
 <link rel="import" href="notification-panel.html">
 
+<link rel="import" href="shared-styles.html">
+
 <dom-module id="moji-feed">
   <template>
-    <style>
+    <style is="custom-style" include="shared-styles">
       /* TODO: REMOVE EXCESS STYLES */
       :host {
         --paper-tabs-selection-bar-color: var(--app-primary-color);
@@ -138,6 +140,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         bottom: 0;
         margin: 0 32px 32px 0;
         z-index: 999;
+        background: var(--app-secondary-color);
       }
 
       /* logout button */
@@ -253,6 +256,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <!-- _ means that the data is not to be changed -->
     <firebase-query data="{{_publicChannels}}" path="/publicChannels"></firebase-query>
     <firebase-query data="{{_chats}}" path="/chats"></firebase-query>
+    <firebase-query data="{{_sampleChat}}" path="/chats/sample/chats"></firebase-query>
 
     <!-- Add public channles to indexeddb so there are persisted -->
     <app-indexeddb-mirror
@@ -303,7 +307,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               <!-- CHATS -->
               <template is="dom-repeat" items="[[_chats]]" initial-count="10">
-                <chat-item drawer-toggle chat="[[item]]" user="[[item.users.user2]]" offline="[[offline]]" language="[[language]]"></chat-item>
+                <chat-item drawer-toggle user="[[item.users.user2]]" offline="[[offline]]" language="[[language]]"></chat-item>
               </template>
 
             </iron-selector>
@@ -368,7 +372,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <!-- VIEW CHATS -->
             <template is="dom-repeat" items="[[_chats]]" initial-count="10">
-              <view-chats ref="[[item.users.user2.name]]" name="[[item.users.user2.name]]"></view-chats>
+              <view-chats ref="[[item.users.user2.name]]" name="[[item.users.user2.name]]" chats="[[_sampleChat]]"></view-chats>
             </template>
 
             <!-- VIEW ACTIVITIES -->
@@ -467,7 +471,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'post-delete': '_postDelete',
         'send-notification': '_sendNotification',
         'create-chat': '_createChat',
-        'delete-notification': '_deleteNotification'
+        'delete-notification': '_deleteNotification',
+        'send-message': '_sendMessage'
       },
 
       // HANDLES LOGGING OUT
@@ -514,6 +519,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          let currentUser = {name: this.user.displayName, photoURL: this.user.photoURL, uid: this.user.uid};
          let otherUser = event.detail.otherUser;
          this._firebaseCreateChat(currentUser, otherUser);
+       },
+
+       _sendMessage: function(event) {
+         this._firebaseSendChat(event.detail.messageID, event.detail.user, event.detail.value);
        },
 
       /*******************************

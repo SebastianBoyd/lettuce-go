@@ -26,7 +26,8 @@
     "app-datepicker": "^2.9.1",
     "paper-fab": "^1.2.2",
     "paper-badge": "^1.1.4",
-    "vaadin-icons": "^3.0.0"
+    "vaadin-icons": "^3.0.0",
+    "iron-input": "^1.0.11"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
