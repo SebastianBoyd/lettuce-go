@@ -253,6 +253,7 @@
       },
 
       _computeAlignment: function(name) {
+        console.log(this.currentUser.displayName);
         if (name == this.currentUser.displayName) {
           return 'align-items: flex-end;';
         } else {
