@@ -500,9 +500,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _sendNotification: function (event) {
         console.log('Sending Notification');
         let sendToUID = event.detail.sendTo;
-        let activityID = event.detail.activityID;
+        let activity = event.detail.activityID;
+        let type = event.detail.type;
         let user = this.user;
-        this._firebaseSendNotification(user, sendToUID, activityID);
+        this._firebaseSendNotification(user, sendToUID, activity, type);
       },
 
       _deleteNotification: function (event) {

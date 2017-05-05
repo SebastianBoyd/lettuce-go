@@ -3,7 +3,7 @@
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
-<link rel="import" href="request-notification.html">
+<link rel="import" href="view-notification.html">
 
 <dom-module id="notification-panel">
   <template>
@@ -37,7 +37,7 @@
     <firebase-query data="{{notes}}" path="[[path]]"></firebase-query>
      <div><b>Notifications:</b></div>
       <template id="list" is="dom-repeat" items="[[notes]]" initial-count="10">
-        <request-notification uid="[[uid]]" key="[[item.$key]]" user="[[item.user]]" activity="[[item.activity]]"></request-notification>
+        <view-notification type="[[item.type]]" uid="[[uid]]" key="[[item.$key]]" user="[[item.user]]" activity="[[item.activity]]"></view-notification>
       </template>
     </div>
 

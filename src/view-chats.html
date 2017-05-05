@@ -119,7 +119,7 @@
         flex-grow: 8;
       }
       
-      #mesageWrapper {
+      #messageWrapper {
         height: 74vh;
         overflow-y: scroll;
       }
@@ -181,14 +181,14 @@
       }
     </style>
 
-    <firebase-query data="{{test}}" path="[[computePath(chatKey)]]"></firebase-query>
+    <firebase-query data="{{chats}}" path="[[computePath(chatKey)]]"></firebase-query>
 
     <div id="panel">
       <h3>Chatting with: [[users.user2.name]]</h3>
       <div class="line"></div>
 
-      <div id="mesageWrapper">
-        <template is="dom-repeat" id="messages" items="[[test]]" initial-count="10" scroll-target="document">
+      <div id="messageWrapper">
+        <template is="dom-repeat" id="messages" items="[[chats]]" initial-count="10" scroll-target="document">
           <div class="textMessage" style="[[_computeAlignment(item.userSent)]]">
             <div class="name">
               [[item.userSent]] - [[_getDate(item.timeSent)]]
@@ -203,7 +203,7 @@
       <div class="line lower-line"></div>
 
       <div id="bottom">
-        <input id="message" is="iron-input" placeholder="Message" bind-value="{{textMessage}}">
+        <input id="message" is="iron-input" on-keydown="checkForEnter" placeholder="Message" bind-value="{{textMessage}}">
         <paper-icon-button icon="icons:arrow-forward" on-click="_sendMessage"></paper-icon-button>
       </div>
     </div>
@@ -216,7 +216,6 @@
       behaviors: [
         Polymer.AppLocalizeBehavior
       ],
-
       properties: {
         users: {
           type: Array
@@ -227,7 +226,22 @@
         },
         chatKey: {
           type: String
+        },
+        chats: {
+          observer: '_chatsUpdated'
         }
+      },
+
+      checkForEnter: function(evt) {
+        if (evt.keyCode == 13) {
+          this._sendMessage(evt);
+        }
+      },
+
+      _chatsUpdated: function() {
+        let $messages = this.$.messageWrapper;
+        console.log('Yo the chat updated!');
+        $messages.scrollIntoView(true);
       },
 
       computePath: function(id) {

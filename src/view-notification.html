@@ -3,7 +3,7 @@
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
-<dom-module id="request-notification">
+<dom-module id="view-notification">
   <template>
     <style>
       :host {
@@ -54,7 +54,7 @@
         color: white;
       }
 
-      #accept {
+      #accept, #ok {
         background: #00C853;
       }
 
@@ -70,13 +70,14 @@
 
     <div id="[[key]]" class="note">
       <div>
-        <img id="noteProfilePhoto" src="[[user.photoURL]]" alt="Text"><b>[[user.name]]</b>
+        <img id="noteProfilePhoto" src="[[user.photoURL]]" alt="Text">
       </div>
-      <div>Wants to go <b>[[activity]]</b></div>
-      <div class="buttons">
+      <div>[[message]]</div>
+      <div class="buttons" style="[[buttonDisplay]]">
         <paper-button id="accept" on-click="_acceptRequest">Accept</paper-button>
         <paper-button id="decline" on-click="_declineRequest">Decline</paper-button>
       </div>
+      <paper-button id="ok" on-click="_okNotification" style="display: none;">Ok</paper-button>
     </div>
 
   </template>
@@ -84,7 +85,7 @@
   <script>
 
     Polymer({
-      is: 'request-notification',
+      is: 'view-notification',
 
       properties: {
         photoUrl: {
@@ -101,7 +102,31 @@
         },
         uid: {
           type: String
+        },
+        type: {
+          type: String,
+          observer: '_typeChanged'
+        },
+        messsage: {
+          type: String
+        },
+        buttonDisplay: {
+          type: String,
         }
+      },
+
+      _typeChanged: function() {
+        let $buttons = this.$$('.buttons');;
+        if (this.type == "request") {
+          this.message = `${this.user.name} requested to ${this.activity} with you.`;
+        } else if (this.type == "decline") {
+          this.message = `${this.user.name} declined your request to ${this.activity}.`;
+          this.buttonDisplay = 'display: none;';
+          this.$.ok.style = 'display: block;';
+        } else {
+          this.message = 'We don\'t know!';
+        }
+       
       },
 
       _acceptRequest: function(evt) {
@@ -116,11 +141,15 @@
 
       _declineRequest: function(evt) {
         // TODO: MAKE NOTIFICATIONS GENERIC SO YOU CAN SEND DECLINE NOTIFICATION
-        // this.fire('send-notification', {sendTo: this.user.userID, activityID: this.activity});
+        this.fire('send-notification', {sendTo: this.user.userID, activityID: this.activity, type: 'decline'});
 
         // const notificationID = evt.path[2].id;
 
         // COMMENTED OUR FOR DEV!!
+        this.fire('delete-notification', {uid: this.uid, noteID: this.key});
+      },
+
+      _okNotification: function() {
         this.fire('delete-notification', {uid: this.uid, noteID: this.key});
       }
     });

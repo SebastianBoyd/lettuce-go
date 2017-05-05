@@ -302,11 +302,11 @@ Polymer.FirebaseHelper = {
   * NOTIFICATIONS
   *******************************/
 
-  _firebaseSendNotification: function(currentUser, sendToUID, activityID) {
+  _firebaseSendNotification: function(currentUser, sendToUID, activityID, type) {
     const dbRef = firebase.database().ref('/users/' + sendToUID).child('notifications');
     let now = new Date().getTime();
     const user = {name: currentUser.displayName, photoURL: currentUser.photoURL, userID: currentUser.uid};
-    const note = { user: user, activity: activityID, sentOn: now};
+    const note = { user: user, activity: activityID, sentOn: now, type: type};
     dbRef.push().set(note);
   },
 
