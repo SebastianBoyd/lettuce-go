@@ -72,7 +72,7 @@
       <div>
         <img id="noteProfilePhoto" src="[[user.photoURL]]" alt="Text">
       </div>
-      <div>[[message]]</div>
+      <div>[[message]] - [[_getDate(sent)]]</div>
       <div class="buttons" style="[[buttonDisplay]]">
         <paper-button id="accept" on-click="_acceptRequest">Accept</paper-button>
         <paper-button id="decline" on-click="_declineRequest">Decline</paper-button>
@@ -112,17 +112,19 @@
         },
         buttonDisplay: {
           type: String,
-        }
+        },
+        sent: {}
       },
 
       _typeChanged: function() {
+        console.log(this.sent);
         let $buttons = this.$$('.buttons');;
         if (this.type == "request") {
           this.message = `${this.user.name} requested to ${this.activity} with you.`;
         } else if (this.type == "decline") {
           this.message = `${this.user.name} declined your request to ${this.activity}.`;
           this.buttonDisplay = 'display: none;';
-          this.$.ok.style = 'display: block;';
+          this.$.ok.style = 'display: flex;';
         } else {
           this.message = 'We don\'t know!';
         }
@@ -151,6 +153,24 @@
 
       _okNotification: function() {
         this.fire('delete-notification', {uid: this.uid, noteID: this.key});
+      },
+
+      _getDate: function (timestamp) {
+        var date = new Date(timestamp);
+        var seconds = Math.floor((new Date() - date) / 1000);
+
+        if (seconds < 3600) {
+          var minutes = Math.floor(seconds / 60)
+          return (minutes > 1) ? minutes + " minutes ago" : "Now";
+        } else if (seconds < 86400) {
+          var hours = Math.floor(seconds / 3600)
+          return (hours > 1) ? hours + " hours ago" : "1 hour ago";
+        } else {
+          var day = date.getDate();
+          var monthIndex = date.getMonth();
+          var year = date.getFullYear();
+          return day + ' ' + monthNames[monthIndex] + ' ' + year;
+        }
       }
     });
 

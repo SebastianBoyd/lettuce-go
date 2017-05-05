@@ -72,8 +72,7 @@
         },
 
         user: {
-          type: Object,
-          observer: '_userChattingWithInfoUpdate'
+          type: Object
         }
       },
 
@@ -81,10 +80,6 @@
         event.preventDefault();
         console.log(`delete chat: ${event}`);
       },
-
-      _userChattingWithInfoUpdate: function() {
-        // console.log(this.user);
-      }
     });
   </script>
 </dom-module>

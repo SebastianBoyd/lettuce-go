@@ -37,7 +37,7 @@
     <firebase-query data="{{notes}}" path="[[path]]"></firebase-query>
      <div><b>Notifications:</b></div>
       <template id="list" is="dom-repeat" items="[[notes]]" initial-count="10">
-        <view-notification type="[[item.type]]" uid="[[uid]]" key="[[item.$key]]" user="[[item.user]]" activity="[[item.activity]]"></view-notification>
+        <view-notification sent="[[item.sentOn]]" type="[[item.type]]" uid="[[uid]]" key="[[item.$key]]" user="[[item.user]]" activity="[[item.activity]]"></view-notification>
       </template>
     </div>
 
