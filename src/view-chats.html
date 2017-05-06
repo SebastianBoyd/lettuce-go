@@ -5,6 +5,7 @@
 <link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
 <link rel="import" href="my-icons.html">
 
+<link rel="import" href="shared-styles.html">
 <dom-module id="view-chats">
   <template>
     <style>
@@ -43,11 +44,6 @@
         color: #000;
       }
       
-      h1 {
-        margin: 8px;
-        font-size: 3vh;
-      }
-      
       input {
         display: flex;
         border: none;
@@ -68,32 +64,6 @@
       input:focus {
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
         outline: none;
-      }
-      
-      button {
-        width: 30vw;
-        min-width: 150px;
-        height: 5vh;
-        color: white;
-        border-radius: 3px;
-        border: none;
-        font-size: 2.5vh;
-        margin: 6px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-        transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
-        background: var(--app-primary-color);
-      }
-      
-      button:hover {
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-        background: var(--app-accent-color);
-      }
-      
-      button#logOut,
-      button#theme {
-        font-size: 2vh;
-        height: 5vh;
-        width: 5vh;
       }
       
       /* ID RULES  --- SORTED LINEAR */

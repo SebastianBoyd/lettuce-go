@@ -2,6 +2,7 @@
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="shared-styles.html">
 
 <dom-module id="view-notification">
   <template>
@@ -23,7 +24,7 @@
       }
 
       .note {
-        width: 90%;
+        width: 95%;
         margin: 8px 0px 8px 0px;
         padding: 8px;
         color: black;
@@ -34,8 +35,14 @@
       }
 
       .note:hover {
-         box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+         /*box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);*/
+         background: #eeeeee;
          cursor: pointer;
+      }
+
+      .top {
+        display: flex;
+        flex-direction: row;
       }
 
       #noteProfilePhoto {
@@ -49,7 +56,7 @@
         width: 30%;
         max-height: 30px;
         margin: 0;
-        margin-left: 8px;
+        /*margin-left: 8px;*/
         font-size: 20px;
         color: white;
       }
@@ -59,26 +66,44 @@
       }
 
       #decline {
-        background: #F44336;
+        background: var(--app-error-color);
+        margin-left: 8px;
       }
 
       .buttons {
         display: flex;
         flex-direction: row;
       }
+
+      .message {
+        font-size: 1em;
+      }
+
+      .time {
+        font-size: .7em;
+      }
+
+      .line {
+        background: grey;
+        height: 3px;
+        width: 100%;
+        border-radius: 3px;
+      }
     </style>
 
     <div id="[[key]]" class="note">
-      <div>
+      <div class="top">
         <img id="noteProfilePhoto" src="[[user.photoURL]]" alt="Text">
+        <div class="message">[[message]]</div>
       </div>
-      <div>[[message]] - [[_getDate(sent)]]</div>
+      <div class="time">[[_getDate(sent)]]</div>
       <div class="buttons" style="[[buttonDisplay]]">
         <paper-button id="accept" on-click="_acceptRequest">Accept</paper-button>
         <paper-button id="decline" on-click="_declineRequest">Decline</paper-button>
       </div>
       <paper-button id="ok" on-click="_okNotification" style="display: none;">Ok</paper-button>
     </div>
+    <div class="line"></div>
 
   </template>
 
@@ -117,7 +142,6 @@
       },
 
       _typeChanged: function() {
-        console.log(this.sent);
         let $buttons = this.$$('.buttons');;
         if (this.type == "request") {
           this.message = `${this.user.name} requested to ${this.activity} with you.`;
@@ -128,7 +152,6 @@
         } else {
           this.message = 'We don\'t know!';
         }
-       
       },
 
       _acceptRequest: function(evt) {

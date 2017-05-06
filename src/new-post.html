@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="../bower_components/app-datepicker/app-datepicker.html">
+<link rel="import" href="shared-styles.html">
 
 <dom-module id="new-post">
   <template>
@@ -29,7 +30,7 @@
       paper-button {
         font-size: 14px;
         background: var(--app-primary-color);
-        color: #FFF;
+        color: var(--app-primary-text-color);
         margin: 0 8px 0 8px;
         padding: 8px;
         float: right;
@@ -61,7 +62,7 @@
       }
 
       #cancel {
-        background: #F44336;
+        background: var(--app-error-color);
       }
     </style>
     <iron-ajax url="{{computeActivitiesURL()}}" last-response="{{activities}}" loading="{{req}}" handle-as="json" auto></iron-ajax>
@@ -74,7 +75,7 @@
     <!-- DATEPICKER UI -->
     <app-datepicker class="date-picker" disable-days="[]" auto-update-date date="{{date}}"></app-datepicker>
 
-    <div class="title">Describe your Activity</div>
+    <div class="title">Describe your Activity:</div>
     <input id="write" placeholder="Description"></input>
 
     <!-- BOTTOM OF PANEL -->
