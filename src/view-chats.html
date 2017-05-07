@@ -149,6 +149,12 @@
         margin-top: -527px;
         position: static;
       }
+
+      #sendButton {
+        color: var(--app-primary-color);
+        background: var(--app-secondary-light-color);
+        border-radius: 50%;
+      }
     </style>
 
     <firebase-query data="{{chats}}" path="[[computePath(chatKey)]]"></firebase-query>
@@ -174,7 +180,7 @@
 
       <div id="bottom">
         <input id="message" is="iron-input" on-keydown="checkForEnter" placeholder="Message" bind-value="{{textMessage}}">
-        <paper-icon-button icon="icons:send" on-click="_sendMessage"></paper-icon-button>
+        <paper-icon-button id="sendButton" icon="icons:send" on-click="_sendMessage"></paper-icon-button>
       </div>
     </div>
 
