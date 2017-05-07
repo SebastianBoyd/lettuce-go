@@ -73,12 +73,15 @@
 
         user: {
           type: Object
+        },
+        key: {
+          type: String
         }
       },
 
       _deleteChannel: function(event) {
         event.preventDefault();
-        console.log(`delete chat: ${event}`);
+        this.fire('delete-chat', {key: this.key});
       },
     });
   </script>

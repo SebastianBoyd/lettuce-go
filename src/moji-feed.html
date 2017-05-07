@@ -123,7 +123,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       select:focus {
-        background-color: #7bd6cf;
+        background-color: var(--app-secondary-light-color);
       }
 
       channel-item {
@@ -170,14 +170,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         height: 36px;
         vertical-align: middle;
         margin-left: 16px;
-      }
-
-      .badge-red {
-        --paper-badge-background: var(--paper-red-300);
-      }
-
-      paper-badge {
-        z-index: 999;
       }
 
       .spacer {
@@ -308,7 +300,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <!-- CHATS -->
               <h3 id="chats-header">Chats:</h3>
               <template is="dom-repeat" items="[[_chats]]" initial-count="10">
-                <chat-item drawer-toggle user="[[item.users.user2]]" offline="[[offline]]" language="[[language]]"></chat-item>
+                <chat-item drawer-toggle key="[[item.$key]]" user="[[item.users.user2]]" offline="[[offline]]" language="[[language]]"></chat-item>
               </template>
 
             </iron-selector>
@@ -472,6 +464,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'post-delete': '_postDelete',
         'send-notification': '_sendNotification',
         'create-chat': '_createChat',
+        'delete-chat': '_deleteChat',
         'delete-notification': '_deleteNotification',
         'send-message': '_sendMessage'
       },
@@ -523,7 +516,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          this._firebaseCreateChat(currentUser, otherUser);
        },
 
-       _sendMessage: function(event) {
+       _deleteChat: function (event) {
+        this._firebaseDeleteChat(event.detail.key);
+       },
+
+       _sendMessage: function (event) {
          this._firebaseSendChat(event.detail.messageID, event.detail.user, event.detail.value);
        },
 

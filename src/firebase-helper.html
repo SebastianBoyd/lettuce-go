@@ -325,6 +325,10 @@ Polymer.FirebaseHelper = {
     dbRef.push().set(chat);
   },
 
+  _firebaseDeleteChat: function(key) {
+    firebase.database().ref(`/chats/${key}`).remove();
+  },
+
   _firebaseSendChat: function(id, user, message) {
     const dbRef = firebase.database().ref(`/chats/${id}/chats`);
     let now = new Date().getTime();
