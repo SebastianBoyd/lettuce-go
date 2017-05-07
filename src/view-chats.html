@@ -154,7 +154,7 @@
     <firebase-query data="{{chats}}" path="[[computePath(chatKey)]]"></firebase-query>
 
     <div id="panel">
-      <h3>Chatting with: [[users.user2.name]]</h3>
+      <h3>[[users.user2.name]]</h3>
       <div class="line"></div>
 
       <div id="messageWrapper">
@@ -234,7 +234,7 @@
           var day = date.getDate();
           var monthIndex = date.getMonth();
           var year = date.getFullYear();
-          return day + ' ' + monthNames[monthIndex] + ' ' + year;
+          return `${monthNames[monthIndex]} ${day}, ${year}`;
         }
       },
 

@@ -220,7 +220,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         box-sizing: border-box;
         margin: auto;
         width: 100%;
-        background: rgba(255, 255, 255, 0.5);
+        background: #F5F5F5;
         margin-bottom: 40px;
         box-shadow:0px 0px 10px rgba(0, 0, 0, 0.14);
         opacity: 0;
@@ -296,6 +296,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
 
               <!-- CHANNELS -->
+              <h3 id="chats-header">Regions:</h3>
               <template is="dom-repeat" items="[[publicChannels]]" initial-count="10">
                 <channel-item drawer-toggle public channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
               </template>
@@ -303,9 +304,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <!--<template is="dom-repeat" items="[[channels]]" initial-count="10">
                 <channel-item drawer-toggle channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]" offline="[[offline]]" language="[[language]]"></channel-item>
               </template>-->
-              <h3 id="chats-header">Chats:</h3>
 
               <!-- CHATS -->
+              <h3 id="chats-header">Chats:</h3>
               <template is="dom-repeat" items="[[_chats]]" initial-count="10">
                 <chat-item drawer-toggle user="[[item.users.user2]]" offline="[[offline]]" language="[[language]]"></chat-item>
               </template>

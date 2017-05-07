@@ -23,13 +23,13 @@
       }
 
       .bottom {
-        border-top: 1px solid var(--app-primary-color);
+        border-top: 1px solid #000;
         padding-top: 10px;
       }
 
       paper-button {
         font-size: 14px;
-        background: var(--app-primary-color);
+        background: var(--app-secondary-light-color);
         color: var(--app-primary-text-color);
         margin: 0 8px 0 8px;
         padding: 8px;
@@ -63,6 +63,15 @@
 
       #cancel {
         background: var(--app-error-color);
+      }
+
+      app-datepicker {
+        --app-datepicker-calendar-bg: #F5F5F5;
+        --app-datepicker-selection-bg: var(--app-secondary-color);
+        --app-datepicker-selection-color: #fff;
+        --app-datepicker-today-color: var(--app-secondary-light-color);
+        --app-datepicker-date-hover-background-color: var(--app-secondary-light-color);
+        --app-datepicker-selected-day-bg: var(--app-secondary-color);
       }
     </style>
     <iron-ajax url="{{computeActivitiesURL()}}" last-response="{{activities}}" loading="{{req}}" handle-as="json" auto></iron-ajax>
