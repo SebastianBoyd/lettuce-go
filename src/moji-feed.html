@@ -365,7 +365,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <!-- VIEW CHATS -->
             <template is="dom-repeat" items="[[_chats]]" initial-count="10">
-              <view-chats chat-key="[[item.$key]]" current-user="[[user]]" users="[[item.users]]" name="[[item.users.user2.name]]"></view-chats>
+              <view-chats chat-key="[[item.$key]]" current-user="[[user]]" user1="[[item.users.user1]]" user2="[[item.users.user2]]"></view-chats>
             </template>
 
             <!-- VIEW ACTIVITIES -->
@@ -525,8 +525,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        },
 
        isPersonalChat: function(item) {
-         console.log(item.users.user1.name);
-         console.log(this.user.displayName);
          if (item.users.user1.uid == this.user.uid || item.users.user2.uid == this.user.uid){
           return true;
          } else {
