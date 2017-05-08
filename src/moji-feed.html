@@ -248,7 +248,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <!-- _ means that the data is not to be changed -->
     <firebase-query data="{{_publicChannels}}" path="/publicChannels"></firebase-query>
     <firebase-query data="{{_chats}}" path="/chats"></firebase-query>
-    <firebase-query data="{{_sampleChat}}" path="/chats/-Kj8y3w__YhIVjbjVfbS/chats"></firebase-query>
 
     <!-- Add public channles to indexeddb so there are persisted -->
     <app-indexeddb-mirror
@@ -364,7 +363,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               role="main">
 
             <!-- VIEW CHATS -->
-            <template is="dom-repeat" items="[[_chats]]" initial-count="10">
+            <template is="dom-repeat" items="[[_chats]]" filter="isPersonalChat" initial-count="10">
               <view-chats chat-key="[[item.$key]]" current-user="[[user]]" user1="[[item.users.user1]]" user2="[[item.users.user2]]"></view-chats>
             </template>
 
