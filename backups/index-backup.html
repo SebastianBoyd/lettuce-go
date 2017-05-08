@@ -1,3 +1,14 @@
+
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -46,13 +57,63 @@
         height: 100%;
         min-height: 100vh;
         background: #eee;
+        /*background: -webkit-linear-gradient(left top, #00E676, #3f51b5);
+        background: -o-linear-gradient(bottom right, #00E676, #3f51b5);
+        background: -moz-linear-gradient(bottom right, #00E676, #3f51b5);
+        background: linear-gradient(to bottom right, #00E676, #3f51b5);*/
+      }
+      /* styling for render while resources are loading */
+      .splash {
+        display: block;
+        text-align: center;
+        font-weight: 300;
+        font-size: 16px;
+        color: black;
+        max-width: 400px;
+        margin: auto;
+        padding-top: 10%;
+      }
+      .header {
+        height: 350px;
+        overflow: hidden;
+      }
+      .loading {
+        animation: blink 1.5s linear infinite;
+        -o-animation: blink 1.5s linear infinite;
+        -moz-animation: blink 1.5s linear infinite;
+        -webkit-animation: blink 1.5s linear infinite;
+      }
+      @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
+      @-webkit-keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
+      @-moz-keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
+      @-o-keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
+      .footer {
+        font-size: 13px;
+      }
+      a, a:visited {
+        color: #FF9800;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
       }
     </style>
-
   </head>
-
   <body>
-    <my-app id="app"></my-app>
+    <my-app id="app">
+      <div class="splash">
+        <div class="header">
+          <div style="font-size: 3em;">🌿 Lettuce Go</div>
+          <p>(we ask for your location to provide relevant data)</p>
+          <br>
+          <p class="loading">Loading...</p>
+        </div>
+
+        <p class="footer">Made by <a href="https://github.com/sebastianboyd">Sebastian Boyd</a>.
+          Find this on <a href="https://github.com/sebastianboyd/lettuce-go">GitHub</a>.</p>
+      </div>
+    </my-app>
+
     <script>
       // Setup Polymer options
       window.Polymer = {
@@ -106,6 +167,5 @@
         window.location.search = '?lang=en';
       }
     </script>
-
   </body>
 </html>

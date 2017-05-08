@@ -19,77 +19,168 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="my-app">
   <template>
-    <style>
+    <style is="custom-style">
       /* TODO: REMOVE EXCESS STYLES */
       /* COLOR THEME FOR APP */
       :host {
         display: block;
+        margin: 0;
+        padding: 0;
       }
 
       [hidden] {
         display: none !important;
       }
 
-      paper-button[raised] {
-        background-color: var(--app-primary-color);
-        color: white;
-        font-size: 14px;
-      }
-
-      .offline {
-        font-weight: 300;
-        font-size: 18px;
-      }
-
-      .signin-view {
-        color: black;
-        padding-top: 10%;
-        max-width: 400px;
-        margin: auto;
-        text-align: center;
-      }
-
-      .header {
-        height: 350px;
-        overflow: hidden;
-      }
-
       h1 {
-        letter-spacing: 2px;
-        font-weight: 500;
+        font-size: 7em;
+        color: #FFF;
+        margin: 0;
       }
 
       p {
-        font-weight: 300;
-        font-size: 18px;
+        font-size: 40px;
+        color: #FFF;
+        padding: 0;
+        margin: 0;
       }
 
-      .giant {
-        font-size: 3em;
-        font-weight: 300;
-      }
-
-      .footer {
-        font-size: 13px;
-      }
-
-      a:link, a:visited {
-        color: var(--app-primary-color);
+      a {
         text-decoration: none;
+        color: #FFF;
       }
 
       a:hover {
-        text-decoration: underline;
+        color: #CFD8DC;
+      }
+
+      a#sb {
+        color: #FFF;
+      }
+
+      #top-bar {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 64px;
+        align-items: center;
+        background: #FF9800;
+        color: white;
+        font-size: 19px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+      }
+
+      .item {
+        padding: 8px;
+      }
+
+      .title {
+        padding-left: 16px;
+      }
+
+      .sign {
+        padding-right: 16px;
+      }
+
+      #left {
+        display: flex;
+        width: 50%;
+        justify-content: flex-start;
+      }
+
+      #right {
+        display: flex;
+        width: 50%;
+        justify-content: flex-end;
+      }
+
+      #right-footer {
+        width: 50%;
+        padding-right: 16px;
+        text-align: right;
+      }
+
+      #left-footer {
+        padding-left: 16px;
+        display: flex;
+        width: 50%;
+        color: #FFF;
+      }
+
+      #splash-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100vh;
+        background-image: url('/images/splash.jpeg');
+        background-position: center center;
+        background-size: cover;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #info-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        /*height: 600px;*/
+        background: #FFF;
+        padding-left: 8px;
+        padding-right: 8px;
+        font-size: 18px;
+      }
+
+      #footer {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        background: #FF9800;
+        height: 64px;
+      }
+
+      .info {
+        width: 70%;
+        padding: 16px;
+      }
+
+      .line {
+        width: 85%;
+        height: 5px;
+        border-radius: 2px;
+        background: #FF9800;
+        margin-top: 36px;
+      }
+
+      @media (max-width: 620px) {
+        #splash-content {
+          text-align: center;
+          height: 60vh;
+        }
+        #info-content {
+          font-size: 28px;
+          background: #FFF;
+        }
+        #top-bar {
+          font-size: 28px;
+        }
+
+        #footer {
+          height: 100px;
+        }
       }
 
       button {
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        background: var(--app-primary-color);
+        background: #3f51b5;
+        min-width: 100px;
         color: white;
         border: none;
         border-radius: 3px;
         text-transform: uppercase;
-        padding: 0.7em 0.57em;
+        margin-right: 16px;
+        padding: 12px;
         font-size: 14px;
         cursor: pointer;
       }
@@ -104,16 +195,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <firebase-auth id="googleAuth" user="{{user}}" provider="google"></firebase-auth>
 
     <div class="signin-view" id="signin" hidden>
-      <div class="header">
-        <div class="giant">🌿 Lettuce Go</div>
-        <p>(we ask for your location to provide relevant data)</p>
-        <br>
-        <button on-tap="login" raised hidden$="[[offline]]">Sign in with Google</button>
-        <div hidden$="[[!offline]]" class="offline">You are currently offline, so you can't sign in to view activites. Come back and sign in when you're online!</div>
+    <div id="top-bar">
+      <div id="left">
+        <div class="item title">Let's Go</div>
+      </div>
+      <div id="right">
+        <button on-tap="login" raised hidden$="[[offline]]">Sign In</button>
+      </div>
+    </div>
+    <div id="splash-content">
+      <h1>Let's GO</h1>
+      <p id="adjective">An app for finding active friends.</p>
+    </div>
+    <div id="info-content">
+      <div class="info" id="info_2">
+        <h2>About</h2>
+        Let's Go is an app that allows you to find new friends. It does this by using common activities.
+        You simply add activities to your profile so people can find you, and then you search for people near you
+        with similar activities. If you both request each other, your contact information is shared.
       </div>
 
-      <p class="footer">Made by <a href='https://github.com/sebastianboyd'>Sebastian Boyd</a> and <a href='https://github.com/duncangrubbs'>Duncan Grubbs</a>.
-      Find this on <a href='https://github.com/sebastianboyd/lettuce-go'>GitHub</a></p>
+      <div class="line"></div>
+
+      <div class="info" id="info_1">
+        <h2>Team</h2>
+        Let's Go is built and maintaned by a small team of young students from Northern California.
+        <ul>
+          <li>Ryan McNeil - Founder and CEO</li>
+          <li>Duncan Grubbs - Lead Developer</li>
+          <li>Sebastian Boyd - Lead Backend Developer</li>
+          <li>Luke Martel - Web Developer</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="footer">
+      <div id="left-footer"><em><b>Copyright © <a target="_blank" id="sb" href="http://sebastianboyd.com">2016 SB Technology Holding International</a></b></em></div>
+      <div id="right-footer"><a target="_blank" href="https://github.com/DHSDevelopersClub/app-challenge">Source Code</a></div>
+    </div>
+
     </div>
 
     <moji-feed id="feed" offline="[[offline]]" language="[[language]]"></moji-feed>
