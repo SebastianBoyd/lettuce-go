@@ -299,7 +299,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               <!-- CHATS -->
               <h3 id="chats-header">Chats:</h3>
-              <template is="dom-repeat" items="[[_chats]]" initial-count="10">
+              <template is="dom-repeat" items="[[_chats]]" filter="isPersonalChat" initial-count="10">
                 <chat-item drawer-toggle key="[[item.$key]]" user="[[item.users.user2]]" offline="[[offline]]" language="[[language]]"></chat-item>
               </template>
 
@@ -524,24 +524,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          this._firebaseSendChat(event.detail.messageID, event.detail.user, event.detail.value);
        },
 
-       //TODO: FIX THIS
+       isPersonalChat: function(item) {
+         console.log(item.users.user1.name);
+         console.log(this.user.displayName);
+         if (item.users.user1.uid == this.user.uid || item.users.user2.uid == this.user.uid){
+          return true;
+         } else {
+           return false;
+         }
+       },
 
+       //TODO: FIX THIS
        hideFab: function() {
-        // let url = window.location.href.toString();
-        // if (url.includes('chat')) {
-        //   return true;
-        // } else {
-        //   return false;
-        // }
+        let urlBool = window.location.href.includes('chat');
+        if (urlBool) {
+          this.$.createPostButton.hidden = true;
+        } else {
+          this.$.createPostButton.hidden = false;
+        }
        },
 
       /*******************************
        * Routes
        *******************************/
       _routePageChanged: function (page) {
-        // console.log('Page:' + page);
+        this.hideFab();
         this.page = page.replace(/^\/|\/$/g, '') || 'global';
-        // console.log('page ' + this.page);
       },
 
       _selectLanguageChanged: function (event) {
