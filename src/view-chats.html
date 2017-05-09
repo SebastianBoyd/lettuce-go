@@ -221,6 +221,13 @@
         }
       },
 
+      ready: function() {
+        this.$.messageWrapper.scrollTop = this.$.messageWrapper.scrollHeight - this.$.messageWrapper.clientHeight;
+        this.$.messages.addEventListener('dom-change', evt => {
+          this.$.messageWrapper.scrollTop = this.$.messageWrapper.scrollHeight - this.$.messageWrapper.clientHeight;
+        });
+      },
+
       checkForEnter: function(evt) {
         if (evt.keyCode == 13) {
           this._sendMessage(evt);

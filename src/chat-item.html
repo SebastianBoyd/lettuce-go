@@ -46,12 +46,20 @@
       iron-icon {
         vertical-align: middle;
       }
+
+      #profilePhoto {
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        vertical-align: middle;
+      }
     </style>
 
-    <a href="/chat/[[user]]">
+    <a href="/chat/[[user.name]]">
       <span style="padding:8px 0;">
+        <img src="[[user.url]]" alt="Photo" id="profilePhoto">
+        <span>[[user.name]]</span>
         <iron-icon class="channel-settings" on-click="_deleteChannel" icon="icons:delete"></iron-icon>
-        <span>[[user]]</span>
       </span>
     </a>
 
@@ -70,7 +78,6 @@
           type: Boolean,
           value: false
         },
-
         user: {
           type: Object
         },

@@ -533,9 +533,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
        _computeChatName: function(item) {
          if (item.users.user2.uid == this.user.uid) {
-           return item.users.user1.name;
+           return {name: item.users.user1.name, url: item.users.user1.photoURL};
          } else {
-           return item.users.user2.name;
+           return {name: item.users.user2.name, url: item.users.user2.photoURL};
          }
        },
 
