@@ -299,7 +299,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <!-- CHATS -->
               <h3 id="chats-header">Chats:</h3>
               <template is="dom-repeat" items="[[_chats]]" filter="isPersonalChat" initial-count="10">
-                <chat-item drawer-toggle key="[[item.$key]]" user="[[item.users.user2]]" offline="[[offline]]" language="[[language]]"></chat-item>
+                <chat-item drawer-toggle key="[[item.$key]]" user="[[_computeChatName(item)]]" offline="[[offline]]" language="[[language]]"></chat-item>
               </template>
 
             </iron-selector>
@@ -363,7 +363,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               role="main">
 
             <!-- VIEW CHATS -->
-            <template is="dom-repeat" items="[[_chats]]" filter="isPersonalChat" initial-count="10">
+            <template is="dom-repeat" items="[[_chats]]" initial-count="10">
               <view-chats chat-key="[[item.$key]]" current-user="[[user]]" user1="[[item.users.user1]]" user2="[[item.users.user2]]"></view-chats>
             </template>
 
@@ -528,6 +528,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           return true;
          } else {
            return false;
+         }
+       },
+
+       _computeChatName: function(item) {
+         if (item.users.user2.uid == this.user.uid) {
+           return item.users.user1.name;
+         } else {
+           return item.users.user2.name;
          }
        },
 
