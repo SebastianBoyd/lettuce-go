@@ -553,6 +553,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * Routes
        *******************************/
       _routePageChanged: function (page) {
+        this.$.notificationPanel.hidden = true;
         this.hideFab();
         this.page = page.replace(/^\/|\/$/g, '') || 'global';
       },
