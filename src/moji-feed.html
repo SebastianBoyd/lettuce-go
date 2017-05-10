@@ -202,11 +202,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 8px;
       }
 
-      .giant-emoji {
-        font-size: 3em;
-        text-align: center;
-      }
-
       .no-internet, new-post, new-channel {
         display: block;
         box-sizing: border-box;
@@ -220,17 +215,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .animate-appear {
-        animation: appear 300ms ease-in 300ms forwards;
-        -o-animation: appear 300ms ease-in 300ms forwards;
-        -moz-animation: appear 300ms ease-in 300ms forwards;
-        -webkit-animation: appear 300ms ease-in 300ms forwards;
+        animation: appear 100ms ease-in 100ms forwards;
+        -o-animation: appear 100ms ease-in 100ms forwards;
+        -moz-animation: appear 100ms ease-in 100ms forwards;
+        -webkit-animation: appear 100ms ease-in 100ms forwards;
       }
 
       .animate-disappear {
-        animation: disappear 300ms ease-in 300ms forwards;
-        -o-animation: disappear 300ms ease-in 300ms forwards;
-        -moz-animation: disappear 300ms ease-in 300ms forwards;
-        -webkit-animation: disappear 300ms ease-in 300ms forwards;
+        animation: disappear 100ms ease-in 100ms forwards;
+        -o-animation: disappear 100ms ease-in 100ms forwards;
+        -moz-animation: disappear 100ms ease-in 100ms forwards;
+        -webkit-animation: disappear 100ms ease-in 100ms forwards;
       }
 
       @keyframes appear { from { opacity: 0; } to { opacity: 1; } }
@@ -242,6 +237,47 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       @-moz-keyframes disappear { from { opacity: 1; } to { opacity: 0; } }
       @-webkit-keyframes disappear { from { opacity: 1; } to { opacity: 0; } }
       @-o-keyframes disappear { from { opacity: 1; } to { opacity: 0; } }
+
+      /* new dank loading thing */
+
+      #loading {
+        display: flex;
+        justify-content: center;
+      }
+      #spinner {
+        display: block;
+        position: relative;
+        margin: 16px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: var(--app-primary-color);
+      }
+
+      #spinner::after, #spinner::before {
+        content: '';
+        display: block;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+
+      #spinner:after {
+        background: transparent;
+        position: absolute;
+        top: -4px;
+        left: -4px;
+        border: 4px solid transparent;
+        border-top-color: var(--app-secondary-color);
+        border-bottom-color: var(--app-secondary-color);
+        animation: spinny 2s linear infinite;
+      }
+
+      @keyframes spinny {
+        0% {transform: rotate(0deg) scale(1);}
+        50% {transform: rotate(45deg) scale(1.2);}
+        100% {transform: rotate(360deg) scale(1);}
+      }
     </style>
 
     <!-- Query Firebase for the list of public channels -->
@@ -338,7 +374,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <!-- LIST CONTENT -->
         <div class="main-content">
           <div id="loading">
-            <div class="giant-emoji">Loading...</div>
+            <div id="spinner"></div>
+            <!--<div class="giant-emoji">Loading...</div>-->
           </div>
 
           <!-- ADD ACTIVITY BUTTON -->
