@@ -1,10 +1,10 @@
 {
-  "name": "lettuce go",
-  "short_name": "Lettuce",
+  "name": "Let's Go",
+  "short_name": "Let's Go",
   "start_url": "/?homescreen=1",
   "display": "standalone",
-  "theme_color": "#00C853",
-  "background_color": "#ffffff",
+  "theme_color": "#FF9800",
+  "background_color": "#FFF",
   "icons": [
     {
       "src": "images/manifest/icon-192x192.png",
