@@ -12,6 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
+
 <link rel="import" href="shared-styles.html">
 
 <!-- Intl polyfill -->
@@ -19,7 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="my-app">
   <template>
-    <style is="custom-style">
+    <style is="custom-style" include="shared-styles">
       /* TODO: REMOVE EXCESS STYLES */
       /* COLOR THEME FOR APP */
       :host {
