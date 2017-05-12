@@ -48,15 +48,11 @@
       }
     </style>
 
-    <a href="/channel/[[channel.name]]?lang=[[language]]">
+    <a href="/channel/[[channel.name]]?lang=en">
       <span style="padding:8px 0;">
-        <iron-icon class="channel-settings" icon="icons:public" hidden$=[[!public]]></iron-icon>
-        <iron-icon class="channel-settings" icon="icons:private" hidden$=[[public]]></iron-icon>
+        <iron-icon class="channel-settings" icon="icons:public"></iron-icon>
         <span>[[channel.name]]</span>
       </span>
-      <paper-icon-button class="channel-settings" channel="[[channel]]" icon="icons:settings"
-          on-click="_showEditChannel" hidden$="[[!_shouldShowChannelSettings(channel, uid, offline)]]">
-      </paper-icon-button>
     </a>
 
   </template>
@@ -83,15 +79,7 @@
           type: Boolean,
           value: false
         }
-      },
-
-      _showEditChannel: function(event) {
-        this.fire('edit-channel', {channel: this.channel});
-      },
-
-      _shouldShowChannelSettings: function(channel, uid, offline) {
-        return !offline && (channel.owner === uid);
-      },
+      }
     });
   </script>
 </dom-module>

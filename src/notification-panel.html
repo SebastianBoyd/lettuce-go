@@ -39,9 +39,9 @@
       }
     </style>
 
-    <firebase-query data="{{notes}}" path="[[path]]"></firebase-query>
+    <firebase-query data="{{notifications}}" path="[[path]]"></firebase-query>
      <div id="notifications-title">Notifications:</div>
-      <template id="list" is="dom-repeat" items="[[notes]]" initial-count="10">
+      <template id="list" is="dom-repeat" items="[[notifications]]" initial-count="10">
         <view-notification sent="[[item.sentOn]]" type="[[item.type]]" uid="[[uid]]" key="[[item.$key]]" user="[[item.user]]" activity="[[item.activity]]"></view-notification>
       </template>
     </div>
@@ -54,7 +54,7 @@
       is: 'notification-panel',
 
       properties: {
-        notes: {
+        notifications: {
           type: Array,
         },
         path: {
