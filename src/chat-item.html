@@ -10,7 +10,10 @@
       }
 
       :host(.iron-selected) {
-        background: black;
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      :host(.iron-selected) a {
         font-weight: bold;
       }
 
@@ -52,7 +55,7 @@
       }
     </style>
 
-    <a href="/chat/[[user.name]]">
+    <a href="/chat/[[key]]">
       <span style="padding:8px 0;">
         <img src="[[user.url]]" alt="Photo" id="profilePhoto">
         <span>[[user.name]]</span>

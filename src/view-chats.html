@@ -166,7 +166,7 @@
     <firebase-query data="{{chats}}" path="[[computePath(chatKey)]]"></firebase-query>
 
     <div id="panel">
-      <h3 id="name">[[name]]</h3>
+      <h3 id="name">[[chattingWithName]]</h3>
       <div class="line"></div>
 
       <div id="messageWrapper">
@@ -215,7 +215,7 @@
         user2: {
           type: Object
         },
-        name: {
+        chattigWithName: {
           type: String
         },
         chatKey: {
@@ -228,7 +228,6 @@
 
       ready: function() {
         // AUTO SCROLL
-        this.$.messageWrapper.scrollTop = this.$.messageWrapper.scrollHeight - this.$.messageWrapper.clientHeight;
         this.$.messages.addEventListener('dom-change', evt => {
           this.$.messageWrapper.scrollTop = this.$.messageWrapper.scrollHeight - this.$.messageWrapper.clientHeight;
         });
@@ -242,14 +241,13 @@
 
       _getName: function() {
         if (this.user1.uid == this.currentUser.uid) {
-          this.name = this.user2.name;
+          this.chattingWithName = this.user2.name;
         } else {
-          this.name = this.user1.name;
+          this.chattingWithName = this.user1.name;
         }
       },
 
       computePath: function(id) {
-        console.log(this.chatKey);
         return `/chats/${id}/chats`;
       },
 

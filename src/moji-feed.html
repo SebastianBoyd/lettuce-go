@@ -274,6 +274,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <!-- _ means that the data is not to be changed -->
     <firebase-query data="{{_publicChannels}}" path="/publicChannels"></firebase-query>
     <firebase-query data="{{_chats}}" path="/chats"></firebase-query>
+    <firebase-query data="{{_notifications}}" path="[[pathToNotifications]]"></firebase-query>
 
     <!-- Add public channles to indexeddb so there are persisted -->
     <app-indexeddb-mirror
@@ -295,6 +296,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       key="/chats"
       data="[[_chats]]"
       persisted-data="{{chats}}">
+    </app-indexeddb-mirror>
+
+    <!-- PERSISTED NOTIFICATIONS -->
+     <app-indexeddb-mirror
+      session="[[uid]]"
+      key="/chats"
+      data="[[_notifications]]"
+      persisted-data="{{notifications}}">
     </app-indexeddb-mirror>
 
     <app-location route="{{route}}"></app-location>
@@ -329,7 +338,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <!-- CHAT LINKS -->
               <h3 id="chats-header">Chats:</h3>
               <template is="dom-repeat" items="[[chats]]" filter="isPersonalChat" initial-count="10">
-                <chat-item drawer-toggle key="[[item.$key]]" user="[[_computeChatName(item)]]"></chat-item>
+                <chat-item drawer-toggle key="[[item.$key]]" name="[[item.$key]]" user="[[_computeChatName(item)]]"></chat-item>
               </template>
 
             </iron-selector>
@@ -346,9 +355,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="spacer"></div>
 
             <!-- NOTIFICATIONS -->
-            <paper-icon-button on-click="_showNotifications" id="showNotificationsButton" icon="vaadin:bell-o" alt="inbox">
-            </paper-icon-button>
-
+            <div style="display:inline-block">
+              <paper-icon-button on-click="_showNotifications" id="showNotificationsButton" icon="vaadin:bell-o" alt="inbox">
+              </paper-icon-button>
+              <paper-badge label="[[notifications.length]]"></paper-badge>
+            </div>
             <!-- PROFILE PHOTO AND SIGN OUT BUTTON -->
             <div id="createChannelButton" class="userInfo">
               <img class="avatar" alt="github avatar" src="[[user.photoURL]]">
@@ -359,7 +370,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <!-- END NAV BAR -->
 
         <!-- NOTIFICATION PANEL -->
-        <notification-panel hidden uid="[[user.uid]]" id="notificationPanel"></notification-panel>
+        <notification-panel hidden uid="[[user.uid]]" id="notificationPanel" notifications="[[notifications]]"></notification-panel>
 
         <!-- LIST CONTENT -->
         <div class="main-content">
@@ -386,8 +397,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               role="main">
 
             <!-- VIEW CHATS -->
-            <template is="dom-repeat" items="[[chats]]" initial-count="10">
-              <view-chats chat-key="[[item.$key]]" current-user="[[user]]" user1="[[item.users.user1]]" user2="[[item.users.user2]]"></view-chats>
+            <template is="dom-repeat" items="[[chats]]" filter="isPersonalChat" initial-count="10">
+              <view-chats name="[[item.$key]]" chat-key="[[item.$key]]" current-user="[[user]]" user1="[[item.users.user1]]" user2="[[item.users.user2]]"></view-chats>
             </template>
 
             <!-- VIEW ACTIVITIES -->
@@ -441,6 +452,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         chats: {
           type: Array
+        },
+
+        pathToNotifications: {
+          type: String
         }
       },
 
@@ -491,6 +506,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       /*******************************
        * NOTIFICATIONS
        *******************************/
+
+      computeNotificationPath: function() {
+        this.pathToNotifications = `/users/${this.user.uid}/notifications`;
+      },
 
       // HANDLES DISPLAYING NOTIFICATION PANEL
       _showNotifications: function (event) {
@@ -653,6 +672,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _updateUserInfo: function(user) {
         this._firebaseUpdateUserInfo(user);
+        this.computeNotificationPath();
       },
 
       /*******************************

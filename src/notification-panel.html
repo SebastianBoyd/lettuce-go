@@ -38,8 +38,6 @@
         font-size: 1.2em;
       }
     </style>
-
-    <firebase-query data="{{notifications}}" path="[[path]]"></firebase-query>
      <div id="notifications-title">Notifications:</div>
       <template id="list" is="dom-repeat" items="[[notifications]]" initial-count="10">
         <view-notification sent="[[item.sentOn]]" type="[[item.type]]" uid="[[uid]]" key="[[item.$key]]" user="[[item.user]]" activity="[[item.activity]]"></view-notification>
@@ -56,13 +54,7 @@
       properties: {
         notifications: {
           type: Array,
-        },
-        path: {
-          type: String
-        },
-        uid: {
-          type: String,
-          observer: '_uid'
+          value: []
         },
         userNoteFrom: {
           type: Object
@@ -71,9 +63,7 @@
 
       // FIRED WHEN USER ID IS PASSED TO ELEMENT IN moji-feed.html
       // THEN UPDATES this.path WHICH IS USED TO QUERY FIREBASE FOR NOTIFICATIONS
-      _uid: function() {
-        this.path = `/users/${this.uid}/notifications`;
-      }
+      
     });
 
   </script>
