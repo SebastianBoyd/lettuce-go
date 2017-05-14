@@ -141,6 +141,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin: 0 32px 32px 0;
         z-index: 999;
         background: var(--app-secondary-color);
+        --paper-fab-disabled-background: var(--app-secondary-light-color);
+        --paper-fab-disabled-text: var(--app-primary-text-color);
+        --paper-fab-keyboard-focus-background: var(--app-secondary-dark-color);
       }
 
       /* logout button */
@@ -193,16 +196,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 8px;
       }
 
-      .no-internet, new-post {
+      new-post {
         display: block;
         box-sizing: border-box;
         margin: auto;
         width: 100%;
         background: #F5F5F5;
         margin-bottom: 40px;
-        box-shadow:0px 0px 10px rgba(0, 0, 0, 0.14);
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.14);
         opacity: 0;
         padding: 20px;
+      }
+
+      #no-internet {
+        background: var(--app-secondary-light-color);
+        text-align: center;
+        font-size: 2em;
+        border-radius: 3px;
+        width: 100%;
+        height: 100px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.14);
       }
 
       .animate-appear {
@@ -234,6 +247,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: flex;
         justify-content: center;
       }
+
       #spinner {
         display: block;
         position: relative;
@@ -358,7 +372,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div style="display:inline-block">
               <paper-icon-button on-click="_showNotifications" id="showNotificationsButton" icon="vaadin:bell-o" alt="inbox">
               </paper-icon-button>
-              <paper-badge label="[[notifications.length]]"></paper-badge>
+              <!--<paper-badge label="[[notifications.length]]"></paper-badge>-->
             </div>
             <!-- PROFILE PHOTO AND SIGN OUT BUTTON -->
             <div id="createChannelButton" class="userInfo">
@@ -379,12 +393,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
 
           <!-- ADD ACTIVITY BUTTON -->
-          <paper-fab id="createPostButton" icon="icons:add" on-click="_showCreatePost"></paper-fab>
+          <paper-fab id="createPostButton" icon="icons:add" on-click="_showCreatePost" disabled="[[offline]]"></paper-fab>
 
           <!-- OFFLINE NOTICE (DEFAULT HIDDEN) -->
-          <div hidden$="[[!offline]]" class="no-internet">
-            <iron-icon icon="icons:cloud-off"></iron-icon>No internet<br>
-            <span class="subtitle">No Internet</span>
+          <div hidden="[[!offline]]" id="no-internet">
+            <iron-icon icon="icons:cloud-off"></iron-icon>
+            No internet
           </div>
 
           <!-- NEW POST SECTION (DEFAULT HIDDEN) -->
@@ -479,14 +493,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       // UNIVERSAL EVENT LISTENERS (FIRED FROM OTHER ELEMENTS ex: this.fire())
       listeners: {
         'new-post': '_postNewMessage',
-        'new-channel': '_createChannel',
-        'edit-channel': '_showEditChannel',
-        'delete-channel': '_deleteChannel',
-        'rename-channel': '_renameChannel',
         'delete-users': '_deleteUsers',
         'add-users': '_addUsers',
-        'post-like': '_postLike',
-        'post-unlike': '_postUnlike',
         'post-delete': '_postDelete',
         'send-notification': '_sendNotification',
         'create-chat': '_createChat',
@@ -507,6 +515,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * NOTIFICATIONS
        *******************************/
 
+      // COMPUTES PATH THAT IS GIVEN TO FIERBASE TO QUERY FOR NOTIFICATIONS
       computeNotificationPath: function() {
         this.pathToNotifications = `/users/${this.user.uid}/notifications`;
       },
@@ -537,20 +546,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * CHATS
        *******************************/
 
+       // CREATES CHAT, CALLED WHEN YOU ACCEPT ACTIVITY REQUEST
        _createChat: function (event) {
          let currentUser = {name: this.user.displayName, photoURL: this.user.photoURL, uid: this.user.uid};
          let otherUser = event.detail.otherUser;
          this._firebaseCreateChat(currentUser, otherUser);
        },
 
+       // DELETES GIVEN CHAT
+       // TODO: CONVERT TO BLOCKING
        _deleteChat: function (event) {
         this._firebaseDeleteChat(event.detail.key);
        },
 
+       // SENDS MESSAGE TO GIVE CHAT
        _sendMessage: function (event) {
          this._firebaseSendChat(event.detail.messageID, event.detail.user, event.detail.value);
        },
 
+       // FILTER FUNCTION FOR KNOWING IF CHAT IS PERSONAL
+       // TODO: ONY QUERY FOR PERSONAL CHATS
        isPersonalChat: function(item) {
          if (item.users.user1.uid == this.user.uid || item.users.user2.uid == this.user.uid){
           return true;
@@ -559,6 +574,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          }
        },
 
+       // COMPUTES NAME OF CHAT THAT SHOWS UP IN SIDEBAR
        _computeChatName: function(item) {
          if (item.users.user2.uid == this.user.uid) {
            return {name: item.users.user1.name, url: item.users.user1.photoURL};
@@ -684,11 +700,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _postNewMessage: function(event) {
         var location = this.location || '';
-        // console.log(event.detail);
         this.$.newPost.hidden = true;
         this._firebaseAddMessage(event.detail.channel, event.detail.message, event.detail.activity, event.detail.date, location);
       },
 
+      // FUNCTION THAT TOGGLES POST CREATION ELEMENT
        _showCreatePost: function() {
         window.scrollTo(0, 0);
         var resolvedPageUrl = this.resolveUrl('new-post.html');
