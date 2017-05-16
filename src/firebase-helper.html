@@ -334,6 +334,7 @@ Polymer.FirebaseHelper = {
   _firebaseSendChat: function(id, user, message) {
     const dbRef = firebase.database().ref(`/chats/${id}/chats`);
     let now = new Date().getTime();
+    console.log(user);
     const chat = {text: message, timeSent: now, userSent: user};
     dbRef.push().set(chat);
   }

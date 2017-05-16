@@ -97,7 +97,7 @@
       }
       
       #messageWrapper {
-        height: 72vh;
+        height: 74vh;
         overflow-y: scroll;
       }
 
@@ -170,9 +170,9 @@
             <div class="time">
               [[_getDate(item.timeSent)]]
             </div>
-            <div class="lower">
-              <img class="profilePhoto" src="[[computeProfilePhoto(item.userSent)]]" alt="Photo">
+            <div class="lower" style="[[computePhotoAlignment(item.userSent)]]">
               <div class="text">[[item.text]]</div>
+              <img class="profilePhoto" src="[[item.userSent.photoURL]]" alt="Photo">
             </div>
           </div>
         </template>
@@ -246,14 +246,6 @@
         return `/chats/${id}/chats`;
       },
 
-      computeProfilePhoto: function(name) {
-        if (name == this.currentUser.displayName) {
-          return this.currentUser.photoURL;
-        } else {
-          return this.otherUser.photoURL;
-        }
-      },
-
       _getDate: function (timestamp) {
         var date = new Date(timestamp);
         var seconds = Math.floor((new Date() - date) / 1000);
@@ -272,23 +264,31 @@
         }
       },
 
-      computeAlignment: function(name) {
-        if (name == this.currentUser.displayName) {
+      computeAlignment: function(user) {
+        if (user.uid == this.currentUser.uid) {
           return 'align-items: flex-end;';
         } else {
           return 'align-items: flex-start;';
         }
       },
 
+      computePhotoAlignment: function(user) {
+        if (user.uid != this.currentUser.uid) {
+          return 'flex-direction: row-reverse;';
+        }
+      },
+
       _sendMessage: function (evt) {
         if (this.$.message.value != '') {
-          this.fire('send-message', { messageID: this.chatKey, value: this.textMessage, user: this.currentUser.displayName });
+          let user = {name: this.currentUser.displayName, photoURL: this.currentUser.photoURL, uid: this.currentUser.uid};
+          this.fire('send-message', { messageID: this.chatKey, value: this.textMessage, user: user});
           this.$.message.value = '';
         }
       },
 
       addToCalendar: function() {
-
+        let url = `https://calendar.google.com/calendar/render#eventpage_6`;
+        window.open(url,'_blank');
       }
     });
   </script>
