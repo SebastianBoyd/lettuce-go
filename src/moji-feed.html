@@ -282,6 +282,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         50% {transform: rotate(45deg) scale(1.2);}
         100% {transform: rotate(360deg) scale(1);}
       }
+
+      #badge {
+        display: flex;
+        font-size: .5em;
+        background: var(--app-secondary-color);
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        z-index: 100;
+        align-items: center;
+        justify-content: center;
+        color: var(--app-secondary-text-color);
+      }
+
+      #showNotificationsButton {
+        margin: 0;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+      }
     </style>
 
     <!-- Query Firebase for the list of public channels -->
@@ -369,10 +389,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="spacer"></div>
 
             <!-- NOTIFICATIONS -->
-            <div style="display:inline-block">
+            <div style="display:flex">
+              <!--<paper-badge label="[[notifications.length]]"></paper-badge>-->
               <paper-icon-button on-click="_showNotifications" id="showNotificationsButton" icon="vaadin:bell-o" alt="inbox">
               </paper-icon-button>
-              <!--<paper-badge label="[[notifications.length]]"></paper-badge>-->
+              <div id="badge">[[notifications.length]]</div>
             </div>
             <!-- PROFILE PHOTO AND SIGN OUT BUTTON -->
             <div id="createChannelButton" class="userInfo">
