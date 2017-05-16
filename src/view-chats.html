@@ -6,7 +6,7 @@
 <link rel="import" href="my-icons.html">
 
 <link rel="import" href="shared-styles.html">
-<dom-module id="view-chats">
+<dom-module id="view-chats" include="shared-styles">
   <template>
     <style>
       /* TODO: REMOVE EXCESS STYLES */
@@ -18,30 +18,12 @@
         color: #000;
         overflow: hidden;
       }
-      
-       ::-webkit-scrollbar {
-        display: none;
-      }
-      
-       ::-webkit-input-placeholder {
-        /* Chrome/Opera/Safari */
-        color: #000;
-      }
-      
-       ::-moz-placeholder {
-        /* Firefox 19+ */
-        color: #000;
-      }
-      
-       :-ms-input-placeholder {
-        /* IE 10+ */
-        color: #000;
-      }
-      
-       :-moz-placeholder {
-        /* Firefox 18- */
-        color: #000;
-      }
+
+      ::-webkit-scrollbar {display: none;}
+      input:focus::-webkit-input-placeholder { color:transparent; }
+      input:focus:-moz-placeholder { color:transparent; } /* Firefox 18- */
+      input:focus::-moz-placeholder { color:transparent; } /* Firefox 19+ */
+      input:focus:-ms-input-placeholder { color:transparent; } /* oldIE ;) */
 
       #name {
         padding: 0;
@@ -51,23 +33,40 @@
       input {
         display: flex;
         border: none;
+        height: 100%;
+        color: #000;
+        flex-grow: 8;
+        background: #FFF;
+      }
+
+      textarea:focus,
+      input:focus {
+        outline: none;
+      }
+
+      #message {
+        width: 90%;
+        height: 5vh;
+        min-height: 1.7em;
+        font-size: 1.3em;
+      }
+
+      #bottom {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        padding: 8px;
         background: var(--app-secondary-color);
-        height: 6vh;
-        border-radius: 3px;
+        height: 3em;
+        border-radius: 8px;
         color: #000;
         flex-grow: 8;
         margin: 8px;
-        font-size: 3vh;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
         transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
         padding: 8px;
         background: #FFF;
-      }
-      
-      textarea:focus,
-      input:focus {
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-        outline: none;
       }
       
       /* ID RULES  --- SORTED LINEAR */
@@ -93,23 +92,6 @@
       #messageWrapper {
         height: 72vh;
         overflow-y: scroll;
-      }
-      
-      #bottom {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        padding: 8px;
-      }
-      
-      #message {
-        width: 90%;
-        height: 5vh;
-        min-height: 2em;
-        border: none;
-        border-radius: 10px;
-        padding: 8px;
-        font-size: 1.1em;
       }
 
       /* CLASS RULES */
@@ -147,9 +129,7 @@
       }
 
       #sendButton {
-        color: var(--app-primary-text-color);
-        background: var(--app-secondary-light-color);
-        border-radius: 50%;
+        color: var(--app-secondary-color);
       }
 
       .profilePhoto {
