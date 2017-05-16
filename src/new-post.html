@@ -24,6 +24,11 @@
         display: none !important;
       }
 
+      input:focus::-webkit-input-placeholder { color:transparent; }
+      input:focus:-moz-placeholder { color:transparent; } /* Firefox 18- */
+      input:focus::-moz-placeholder { color:transparent; } /* Firefox 19+ */
+      input:focus:-ms-input-placeholder { color:transparent; } /* oldIE ;) */
+
       .bottom {
         border-top: 1px solid #000;
         padding-top: 10px;
@@ -56,6 +61,7 @@
         border: none;
         border-radius: 3px;
         margin: 8px 8px 8px 0;
+        transition: all 0.3s cubic-bezier(.25,.8,.25,1);
       }
 
       textarea:focus, input:focus{
@@ -68,8 +74,8 @@
       }
 
       app-datepicker {
-        --app-datepicker-calendar-bg: #F5F5F5;
-        background: #F5F5F5;
+        --app-datepicker-calendar-bg: #FFF;
+        background: #FFF;
         --app-datepicker-selection-bg: var(--app-secondary-color);
         --app-datepicker-selection-color: #fff;
         --app-datepicker-today-color: var(--app-secondary-light-color);
@@ -82,10 +88,10 @@
     <!-- BEGIN PANEL -->
     <div class="title">Add an Activity</div>
     <vaadin-combo-box class="space" label="Choose an Activity" value="{{activity}}" items="[[activities]]"></vaadin-combo-box>
-    <div class="title">Pick a Date</div>
+    <div class="title">Pick a Date:</div>
 
     <!-- DATEPICKER UI -->
-    <app-datepicker class="date-picker" disable-days="[]" auto-update-date date="{{date}}"></app-datepicker>
+    <app-datepicker class="date-picker" min-date="[[currentDate]]" disable-days="[]" auto-update-date date="{{date}}"></app-datepicker>
 
     <div class="title">Describe your Activity:</div>
     <input id="write" placeholder="Description" maxlength="100"></input>
@@ -112,10 +118,22 @@
         Polymer.AppLocalizeBehavior
       ],
 
-      registered: function() {
+      properties: {
+        currentDate: {
+          type: String
+        }
       },
 
-      attached: function() {
+      ready: function() {
+        let date = new Date();
+        var mm = date.getMonth() + 1; // getMonth() is zero-based
+        var dd = date.getDate();
+
+        this.currentDate = [date.getFullYear(),
+                (mm>9 ? '' : '0') + mm,
+                (dd>9 ? '' : '0') + dd
+              ].join('/');
+        console.log(this.currentDate);
       },
 
       // POSTS TO FIREBASE USING this.fire()

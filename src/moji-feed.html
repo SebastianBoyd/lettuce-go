@@ -201,7 +201,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         box-sizing: border-box;
         margin: auto;
         width: 100%;
-        background: #F5F5F5;
+        background: #FFF;
         margin-bottom: 40px;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.14);
         opacity: 0;
@@ -288,19 +288,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-size: .5em;
         background: var(--app-secondary-color);
         border-radius: 50%;
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
         z-index: 100;
         align-items: center;
         justify-content: center;
         color: var(--app-secondary-text-color);
       }
 
-      #showNotificationsButton {
+      #showNotificationButton {
         margin: 0;
         padding: 0;
-        width: 24px;
-        height: 24px;
       }
     </style>
 
@@ -391,7 +389,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <!-- NOTIFICATIONS -->
             <div style="display:flex">
               <!--<paper-badge label="[[notifications.length]]"></paper-badge>-->
-              <paper-icon-button on-click="_showNotifications" id="showNotificationsButton" icon="vaadin:bell-o" alt="inbox">
+              <paper-icon-button on-click="_showNotifications" id="showNotificationsButton" icon="icons:notifications" alt="inbox">
               </paper-icon-button>
               <div id="badge">[[notifications.length]]</div>
             </div>
@@ -414,7 +412,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
 
           <!-- ADD ACTIVITY BUTTON -->
-          <paper-fab id="createPostButton" icon="icons:add" on-click="_showCreatePost" disabled="[[offline]]"></paper-fab>
+          <paper-fab id="createPostButton" icon="icons:add" on-click="_showCreatePost" disabled="[[offline]]" elevation="4"></paper-fab>
 
           <!-- OFFLINE NOTICE (DEFAULT HIDDEN) -->
           <div hidden="[[!offline]]" id="no-internet">
@@ -527,7 +525,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       // HANDLES LOGGING OUT
       logout: function() {
         firebase.auth().signOut();
-        this.$.newChannel.hidden = true;
         this.$.newPost.hidden = true;
         this.$.loading.hidden = true;
       },
@@ -619,6 +616,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        *******************************/
       _routePageChanged: function (page) {
         this.$.notificationPanel.hidden = true;
+        if (window.location.href.includes('chat')) {
+          this.$.newPost.hidden = true;
+        }
         this.hideFab();
         this.page = page.replace(/^\/|\/$/g, '') || 'global';
       },

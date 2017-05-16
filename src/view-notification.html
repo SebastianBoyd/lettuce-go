@@ -36,7 +36,6 @@
       }
 
       .note:hover {
-         /*box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);*/
          background: #eeeeee;
          cursor: pointer;
       }
@@ -98,7 +97,7 @@
       }
     </style>
 
-    <div id="[[key]]" class="note">
+    <div id="[[key]]" class="note" on-tap="routeToChat">
       <div class="top">
         <img id="noteProfilePhoto" src="[[user.photoURL]]" alt="Text">
         <div class="message">[[message]]</div>
@@ -149,7 +148,7 @@
       },
 
       _typeChanged: function() {
-        let $buttons = this.$$('.buttons');;
+        let $buttons = this.$$('.buttons');
         if (this.type == "request") {
           this.message = `${this.user.name} requested to ${this.activity} with you.`;
         } else if (this.type == "decline") {
@@ -175,9 +174,6 @@
         // TODO: MAKE NOTIFICATIONS GENERIC SO YOU CAN SEND DECLINE NOTIFICATION
         this.fire('send-notification', {sendTo: this.user.userID, activityID: this.activity, type: 'decline'});
 
-        // const notificationID = evt.path[2].id;
-
-        // COMMENTED OUR FOR DEV!!
         this.fire('delete-notification', {uid: this.uid, noteID: this.key});
       },
 
@@ -186,19 +182,19 @@
       },
 
       _getDate: function (timestamp) {
-        var date = new Date(timestamp);
-        var seconds = Math.floor((new Date() - date) / 1000);
+        let date = new Date(timestamp);
+        let seconds = Math.floor((new Date() - date) / 1000);
 
         if (seconds < 3600) {
-          var minutes = Math.floor(seconds / 60)
+          let minutes = Math.floor(seconds / 60)
           return (minutes > 1) ? minutes + " minutes ago" : "Now";
         } else if (seconds < 86400) {
-          var hours = Math.floor(seconds / 3600)
+          let hours = Math.floor(seconds / 3600)
           return (hours > 1) ? hours + " hours ago" : "1 hour ago";
         } else {
-          var day = date.getDate();
-          var monthIndex = date.getMonth();
-          var year = date.getFullYear();
+          let day = date.getDate();
+          let monthIndex = date.getMonth();
+          let year = date.getFullYear();
           return `${monthNames[monthIndex]} ${day}, ${year}`;
         }
       }

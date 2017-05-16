@@ -75,6 +75,13 @@
         flex-direction: column;
         background: #eee;
       }
+
+      #top {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 4px;
+      }
       
       .line {
         width: 100%;
@@ -139,12 +146,22 @@
         margin: 0 4px;
         align-self: center;
       }
+
+      #addCalendar {
+        color: white;
+        float: right;
+      }
     </style>
 
     <firebase-query data="{{chats}}" path="[[computePath(chatKey)]]"></firebase-query>
 
     <div id="panel">
-      <h3 id="name">[[chattingWithName]]</h3>
+      <div id="top">
+        <iron-icon icon="icons:chat"></iron-icon>
+        <h3 id="name">[[chattingWithName]]</h3>
+        <paper-fab id="addCalendar" icon="icons:perm-contact-calendar" on-click="addToCalendar"></paper-fab>
+      </div>
+
       <div class="line"></div>
 
       <div id="messageWrapper">
@@ -268,6 +285,10 @@
           this.fire('send-message', { messageID: this.chatKey, value: this.textMessage, user: this.currentUser.displayName });
           this.$.message.value = '';
         }
+      },
+
+      addToCalendar: function() {
+
       }
     });
   </script>
