@@ -667,36 +667,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       /*******************************
-       * Channels
-       *******************************/
-      _showCreateChannel: function() {
-        var resolvedPageUrl = this.resolveUrl('new-channel.html');
-        this.importHref(resolvedPageUrl, function() {
-          this.$.newChannel.create();
-        }, null, true);
-      },
-
-      _showEditChannel: function(event) {
-        var channelName = event.detail.channel;
-        var resolvedPageUrl = this.resolveUrl('new-channel.html');
-        this.importHref(resolvedPageUrl, function() {
-          this.$.newChannel.edit(channelName);
-        }, null, true);
-      },
-
-      _createChannel: function(event) {
-        this._firebaseAddChannel(event.detail.name, event.detail.users, event.detail.public);
-      },
-
-      _deleteChannel: function(event) {
-        this._firebaseDeleteChannel(event.detail.ref, event.detail.name);
-      },
-
-      _renameChannel: function(event) {
-        this._firebaseRenameChannel(event.detail.ref, event.detail.oldName, event.detail.newName);
-      },
-
-      /*******************************
        * Users
        *******************************/
       _addUsers: function(event) {

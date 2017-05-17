@@ -85,7 +85,7 @@
     <app-datepicker class="date-picker" min-date="[[currentDate]]" disable-days="[]" auto-update-date date="{{date}}"></app-datepicker>
 
     <div class="title">Describe your Activity:</div>
-    <paper-input id="write" placeholder="Description" maxlength="100"></paper-input>
+    <paper-input id="write" label="Description" maxlength="100"></paper-input>
 
     <!-- BOTTOM OF PANEL -->
     <div class="bottom">
@@ -124,7 +124,6 @@
                 (mm>9 ? '' : '0') + mm,
                 (dd>9 ? '' : '0') + dd
               ].join('/');
-        console.log(this.currentDate);
       },
 
       // POSTS TO FIREBASE USING this.fire()
