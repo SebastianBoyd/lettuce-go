@@ -304,17 +304,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!-- Query Firebase for the list of public channels -->
     <!-- _ means that the data is not to be changed -->
-    <firebase-query data="{{_publicChannels}}" path="/publicChannels"></firebase-query>
+    <firebase-query data="{{_channels}}" path="/channels"></firebase-query>
     <firebase-query data="{{_chats}}" path="/chats"></firebase-query>
     <firebase-query data="{{_notifications}}" path="[[pathToNotifications]]"></firebase-query>
 
     <!-- Add public channles to indexeddb so there are persisted -->
-    <app-indexeddb-mirror
-      session="[[uid]]"
-      key="/publicChannels"
-      data="[[_publicChannels]]"
-      persisted-data="{{publicChannels}}">
-    </app-indexeddb-mirror>
     <app-indexeddb-mirror
       session="[[uid]]"
       key="/channels"
@@ -363,8 +357,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               <!-- REGION LINKS -->
               <h3 id="chats-header">Regions:</h3>
-              <template is="dom-repeat" items="[[publicChannels]]" initial-count="10">
-                <channel-item drawer-toggle public channel="[[item]]" name="[[item.name]]" uid="[[user.uid]]"></channel-item>
+              <template is="dom-repeat" items="[[channels]]" initial-count="10">
+                <channel-item drawer-toggle channel="[[item]]"></channel-item>
               </template>
 
               <!-- CHAT LINKS -->
@@ -435,8 +429,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </template>
 
             <!-- VIEW ACTIVITIES -->
-            <template is="dom-repeat" items="[[publicChannels]]" initial-count="10">
-              <view-posts name="[[item.name]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.$key]]" resources="[[resources]]"></view-posts>
+            <template is="dom-repeat" items="[[channels]]" initial-count="10">
+              <view-posts name="[[item.$key]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.$key]]" resources="[[resources]]"></view-posts>
             </template>
           </iron-pages>
 
@@ -463,10 +457,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         channels: {
           type: Array,
           value: []
-        },
-
-        publicChannels: {
-          type: Array
         },
 
         user: {
@@ -620,7 +610,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.newPost.hidden = true;
         }
         this.hideFab();
-        this.page = page.replace(/^\/|\/$/g, '') || 'global';
+        this.page = page.replace(/^\/|\/$/g, '') || '-KVw-R8wx3CVtu3b_grO';
       },
 
        /*******************************

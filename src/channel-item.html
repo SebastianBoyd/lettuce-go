@@ -48,7 +48,7 @@
       }
     </style>
 
-    <a href="/channel/[[channel.name]]?lang=en">
+    <a href="/channel/[[channel.$key]]?lang=en">
       <span style="padding:8px 0;">
         <iron-icon class="channel-settings" icon="icons:public"></iron-icon>
         <span>[[channel.name]]</span>
@@ -64,15 +64,6 @@
       properties: {
         channel: {
           type: Object
-        },
-
-        public: {
-          type: Boolean,
-          value: false
-        },
-
-        uid: {
-          type: String
         },
 
         offline: {
