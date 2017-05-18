@@ -241,7 +241,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </div>
 
-    <moji-feed id="feed" offline="[[offline]]" language="[[language]]"></moji-feed>
+    <lets-go id="feed" offline="[[offline]]" language="[[language]]"></lets-go>
   </template>
 
   <script>
@@ -276,7 +276,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         this.$.googleAuth.auth.onAuthStateChanged(function(user) {
           if (!!user) {
-            this.importHref(this.resolveUrl('moji-feed.html'), function() {
+            this.importHref(this.resolveUrl('lets-go.html'), function() {
               this.$.feed.user = user;
               this.$.signin.hidden = true;
               this.$.feed.hidden = false;

@@ -3,7 +3,7 @@
   "shell": "src/my-app.html",
   "fragments": [
     "src/my-app.html",
-    "src/moji-feed.html",
+    "src/lets-go.html",
     "src/new-post.html",
     "src/new-channel.html",
     "src/channel-item.html",
