@@ -4,7 +4,6 @@
 <link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 
-</hgroup>
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="new-post">
@@ -128,8 +127,10 @@
 
       // POSTS TO FIREBASE USING this.fire()
       _post: function () {
+        if (!this.$.write.value) {
+          this.$.write.value = 'No Description Provided.';
+        }
         this.fire('new-post', { message: this.$.write.value.trim(), channel: this.channel, date: this.date, activity: this.activity });
-        this.$.write.value = 'No Description Provided.';
         this.activity = null;
       },
 

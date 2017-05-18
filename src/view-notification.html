@@ -150,9 +150,9 @@
       _typeChanged: function() {
         let $buttons = this.$$('.buttons');
         if (this.type == "request") {
-          this.message = `${this.user.name} requested to ${this.activity} with you.`;
+          this.message = `${this.user.name} requested ${this.activity} with you.`;
         } else if (this.type == "decline") {
-          this.message = `${this.user.name} declined your request to ${this.activity}.`;
+          this.message = `${this.user.name} declined your request ${this.activity}.`;
           this.buttonDisplay = 'display: none;';
           this.$.ok.style = 'display: flex;';
         } else {
