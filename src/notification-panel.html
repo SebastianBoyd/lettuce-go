@@ -39,7 +39,7 @@
       }
     </style>
      <div id="notifications-title">Notifications:</div>
-      <template id="list" is="dom-repeat" items="[[notifications]]" initial-count="10">
+      <template id="list" is="dom-repeat" items="[[notifications]]" initial-count="10" sort="_sort">
         <view-notification sent="[[item.sentOn]]" type="[[item.type]]" uid="[[uid]]" key="[[item.$key]]" user="[[item.user]]" activity="[[item.activity]]"></view-notification>
       </template>
     </div>
@@ -61,8 +61,9 @@
         }
       },
 
-      // FIRED WHEN USER ID IS PASSED TO ELEMENT IN lets-go.html
-      // THEN UPDATES this.path WHICH IS USED TO QUERY FIREBASE FOR NOTIFICATIONS
+      _sort: function(a, b) {
+        // MAGIC SORTING WIZARD STUFF THING
+      }
       
     });
 

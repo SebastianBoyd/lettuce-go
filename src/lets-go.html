@@ -358,7 +358,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <!-- REGION LINKS -->
               <h3 id="chats-header">Regions:</h3>
               <template is="dom-repeat" items="[[channels]]" initial-count="10">
-                <channel-item drawer-toggle channel="[[item]]"></channel-item>
+                <channel-item drawer-toggle name="[[item.$key]]" channel="[[item]]"></channel-item>
               </template>
 
               <!-- CHAT LINKS -->
