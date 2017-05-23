@@ -3,6 +3,8 @@
 <link rel="import" href="../bower_components/app-datepicker/app-datepicker.html">
 <link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-input-char-counter.html">
+<link rel="import" href="../bower_components/paper-input/paper-input-container.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -83,13 +85,11 @@
     <!-- DATEPICKER UI -->
     <app-datepicker class="date-picker" min-date="[[currentDate]]" disable-days="[]" auto-update-date date="{{date}}"></app-datepicker>
 
-    <div class="title">Describe your Activity:</div>
     <paper-input id="write" label="Description" maxlength="100"></paper-input>
 
     <!-- BOTTOM OF PANEL -->
     <div class="bottom">
       <span class="title">In region: Global</span>
-
       <paper-button on-click="_post">Post</paper-button>
       <paper-button on-click="hide" id="cancel">Cancel</paper-button>
     </div>
