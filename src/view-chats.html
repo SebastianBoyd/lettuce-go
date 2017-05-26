@@ -158,7 +158,7 @@
     <div id="panel">
       <div id="top">
         <iron-icon icon="icons:chat"></iron-icon>
-        <h3 id="name">[[chattingWithName]]</h3>
+        <h3 id="name">[[otherUser.name]]</h3>
         <paper-icon-button class="top-icon" icon="icons:perm-contact-calendar" on-click="addToCalendar"></paper-icon-button>
       </div>
 
@@ -202,14 +202,11 @@
           type: Object,
           observer: '_getName'
         },
-        user1: {
+        otherUser: {
           type: Object
         },
-        user2: {
+        users: {
           type: Object
-        },
-        chattingWithName: {
-          type: String
         },
         chatKey: {
           type: String
@@ -233,12 +230,10 @@
       },
 
       _getName: function() { 
-        if (this.user1.uid == this.currentUser.uid) {
-          this.chattingWithName = this.user2.name;
-          this.otherUser = this.user2;
+        if (this.users.user1.uid == this.currentUser.uid) {
+          this.otherUser = this.users.user2;
         } else {
-          this.chattingWithName = this.user1.name;
-          this.otherUser = this.user1;
+          this.otherUser = this.users.user1;
         }
       },
 
@@ -280,8 +275,9 @@
 
       _sendMessage: function (evt) {
         if (this.$.message.value != '') {
-          let user = {name: this.currentUser.displayName, photoURL: this.currentUser.photoURL, uid: this.currentUser.uid};
-          this.fire('send-message', { messageID: this.chatKey, value: this.textMessage, user: user});
+          let user = { name: this.currentUser.displayName, photoURL: this.currentUser.photoURL, uid: this.currentUser.uid };
+          this.fire('send-message', { messageID: this.chatKey, value: this.textMessage, user: user });
+          this.fire('send-notification', { sendTo: this.otherUser.uid, user: user, message: this.textMessage, type: 'chat' });
           this.$.message.value = '';
         }
       },

@@ -38,9 +38,9 @@
         font-size: 1.2em;
       }
     </style>
-     <div id="notifications-title">Notifications:</div>
+     <div id="notifications-title"><b>Notifications:</b></div>
       <template id="list" is="dom-repeat" items="[[notifications]]" initial-count="10" sort="_sort">
-        <view-notification sent="[[item.sentOn]]" type="[[item.type]]" uid="[[uid]]" key="[[item.$key]]" user="[[item.user]]" activity="[[item.activity]]"></view-notification>
+        <view-notification notification="[[item]]" key="[[item.$key]]"></view-notification>
       </template>
     </div>
 
@@ -55,16 +55,11 @@
         notifications: {
           type: Array,
           value: []
-        },
-        userNoteFrom: {
-          type: Object
         }
       },
-
       _sort: function(a, b) {
         // MAGIC SORTING WIZARD STUFF THING
       }
-      
     });
 
   </script>

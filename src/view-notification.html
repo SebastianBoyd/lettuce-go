@@ -99,10 +99,10 @@
 
     <div id="[[key]]" class="note">
       <div class="top">
-        <img id="noteProfilePhoto" src="[[user.photoURL]]" alt="Text">
-        <div class="message">[[message]]</div>
+        <img id="noteProfilePhoto" src="[[notification.userSent.photoURL]]" alt="Text">
+        <div class="message">[[displayMesssage]]</div>
       </div>
-      <div class="time">[[_getDate(sent)]]</div>
+      <div class="time">[[_getDate(notification.sentOn)]]</div>
       <div class="buttons" style="[[buttonDisplay]]">
         <paper-button id="decline" on-click="_declineRequest">Decline</paper-button>
         <paper-button id="accept" on-click="_acceptRequest">Accept</paper-button>
@@ -120,65 +120,66 @@
 
       properties: {
         photoUrl: {
-          type: String,
-        },
-        activity: {
           type: String
         },
-        user: {
-          type: Object
+        notification: {
+          type: Object,
+          observer: '_notificationArrive'
+        },
+        displayMesssage: {
+          type: String
+        },
+        buttonDisplay: {
+          type: String
         },
         key: {
           type: String
         },
-        uid: {
-          type: String
-        },
-        type: {
-          type: String,
-          observer: '_typeChanged'
-        },
-        messsage: {
-          type: String
-        },
-        buttonDisplay: {
-          type: String,
-        },
-        sent: {}
+        sent: {
+          type: Number
+        }
       },
 
-      _typeChanged: function() {
+      _notificationArrive: function() {
         let $buttons = this.$$('.buttons');
-        if (this.type == "request") {
-          this.message = `${this.user.name} requested ${this.activity} with you.`;
-        } else if (this.type == "decline") {
-          this.message = `${this.user.name} declined your request ${this.activity}.`;
-          this.buttonDisplay = 'display: none;';
-          this.$.ok.style = 'display: flex;';
-        } else {
-          this.message = 'We don\'t know!';
+        let userSent = this.notification.userSent;
+        let message = this.notification.message;
+        switch (this.notification.type) {
+          case 'request':
+            this.displayMesssage = `${userSent.name} requested ${message} with you.`;
+            break;
+          case 'decline':
+            this.displayMesssage = `${userSent.name} declined your request ${message}.`;
+            this.buttonDisplay = 'display: none;';
+            this.$.ok.style = 'display: flex;';
+            break;
+          case 'chat':
+            this.displayMesssage = `${userSent.name} sent you a message.`;
+            this.buttonDisplay = 'display: none;';
+            this.$.ok.style = 'display: flex;';
+            break;
+          default:
+            this.displayMesssage = 'We don\'t know!';
+            break;
         }
       },
 
       _acceptRequest: function(evt) {
-        // TODO: Fix user ID of other user (not yourself) in chat
-        const otherUser = {name: this.user.name, photoURL: this.user.photoURL, uid: this.user.userID};
-        this.fire('create-chat', {otherUser: otherUser});
+        // const otherUser = {name: this.user.name, photoURL: this.user.photoURL, uid: this.user.userID};
+        this.fire('create-chat', { otherUser: this.notification.userSent });
         const notificationID = evt.path[2].id;
 
         // COMMENTED OUR FOR DEV!!
-        this.fire('delete-notification', {uid: this.uid, noteID: notificationID});
+        this.fire('delete-notification', { noteID: notificationID });
       },
 
       _declineRequest: function(evt) {
-        // TODO: MAKE NOTIFICATIONS GENERIC SO YOU CAN SEND DECLINE NOTIFICATION
-        this.fire('send-notification', {sendTo: this.user.userID, activityID: this.activity, type: 'decline'});
-
-        this.fire('delete-notification', {uid: this.uid, noteID: this.key});
+        this.fire('send-notification', { sendTo: this.notification.userSent.id, message: this.notification.message, type: 'decline' });
+        this.fire('delete-notification', { noteID: this.key });
       },
 
       _okNotification: function() {
-        this.fire('delete-notification', {uid: this.uid, noteID: this.key});
+        this.fire('delete-notification', { noteID: this.key });
       },
 
       _getDate: function (timestamp) {

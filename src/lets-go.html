@@ -303,7 +303,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
     <!-- _ means that the data is not to be changed -->
     <firebase-query data="{{_channels}}" path="/channels"></firebase-query>
     <firebase-query data="{{_chats}}" path="/chats"></firebase-query>
-    <firebase-query data="{{_notifications}}" path="[[pathToNotifications]]"></firebase-query>
+    <firebase-query data="{{_notifications}}" path="/notifications/[[user.uid]]"></firebase-query>
 
     <!-- Add public channles to indexeddb so there are persisted -->
     <app-indexeddb-mirror
@@ -394,7 +394,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
         <!-- END NAV BAR -->
 
         <!-- NOTIFICATION PANEL -->
-        <notification-panel hidden uid="[[user.uid]]" id="notificationPanel" notifications="[[notifications]]"></notification-panel>
+        <notification-panel hidden id="notificationPanel" notifications="[[notifications]]"></notification-panel>
 
         <!-- LIST CONTENT -->
         <div class="main-content">
@@ -422,7 +422,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 
             <!-- VIEW CHATS -->
             <template is="dom-repeat" items="[[chats]]" filter="isPersonalChat" initial-count="10">
-              <view-chats name="[[item.$key]]" chat-key="[[item.$key]]" current-user="[[user]]" user1="[[item.users.user1]]" user2="[[item.users.user2]]"></view-chats>
+              <view-chats name="[[item.$key]]" chat-key="[[item.$key]]" current-user="[[user]]" users="[[item.users]]"></view-chats>
             </template>
 
             <!-- VIEW ACTIVITIES -->
@@ -534,17 +534,16 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
       _sendNotification: function (event) {
         console.log('Sending Notification');
         let sendToUID = event.detail.sendTo;
-        let activity = event.detail.activityID;
+        let message = event.detail.message;
         let type = event.detail.type;
         let user = this.user;
-        this._firebaseSendNotification(user, sendToUID, activity, type);
+        this._firebaseSendNotification(user, sendToUID, message, type);
       },
 
       // FIRED WHEN USER ACCEPTS OR DECLINES NOTIFICATION
       _deleteNotification: function (event) {
-        let uid = event.detail.uid;
         let noteID = event.detail.noteID;
-        this._firebaseDeleteNotification(uid, noteID);
+        this._firebaseDeleteNotification(this.user.uid, noteID);
       },
 
       /*******************************

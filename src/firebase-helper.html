@@ -126,16 +126,21 @@ Polymer.FirebaseHelper = {
   * NOTIFICATIONS
   *******************************/
 
-  _firebaseSendNotification: function(currentUser, sendToUID, activityID, type) {
-    const dbRef = firebase.database().ref('/users/' + sendToUID).child('notifications');
+  _firebaseSendNotification: function(currentUser, sendToUID, message, type) {
+    const dbRef = firebase.database().ref('/notifications/').child(sendToUID);
     let now = new Date().getTime();
-    const user = {name: currentUser.displayName, photoURL: currentUser.photoURL, userID: currentUser.uid};
-    const note = { user: user, activity: activityID, sentOn: now, type: type};
+    const userSent = { name: currentUser.displayName, photoURL: currentUser.photoURL, id: currentUser.uid };
+    const note = { userSent: userSent, message: message, sentOn: now, type: type, read: false };
     dbRef.push().set(note);
   },
 
-  _firebaseDeleteNotification: function(currentUser, notificationID) {
-    firebase.database().ref(`/users/${currentUser}/notifications`).child(notificationID).remove();
+  _firebaseDeleteNotification: function(uid, notificationID) {
+    firebase.database().ref(`/notifications/${uid}`).child(notificationID).remove();
+  },
+
+  _firebaseReadNotification: function(currentUser, notificationID) {
+    const dbRef = firebase.database().ref(`/notifications/${currentUser}/${notificationID}`).child(read);
+    dbRef.push().set(true);
   },
 
   /*******************************
