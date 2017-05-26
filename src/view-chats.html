@@ -3,12 +3,13 @@
 <link rel="import" href="../bower_components/iron-input/iron-input.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
-<link rel="import" href="my-icons.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/communication-icons.html">
 
 <link rel="import" href="shared-styles.html">
-<dom-module id="view-chats" include="shared-styles">
+<dom-module id="view-chats">
   <template>
-    <style>
+    <style include="shared-styles">
       /* TODO: REMOVE EXCESS STYLES */
        :host {
         display: block;
@@ -20,10 +21,6 @@
       }
 
       ::-webkit-scrollbar {display: none;}
-      input:focus::-webkit-input-placeholder { color:transparent; }
-      input:focus:-moz-placeholder { color:transparent; } /* Firefox 18- */
-      input:focus::-moz-placeholder { color:transparent; } /* Firefox 19+ */
-      input:focus:-ms-input-placeholder { color:transparent; } /* oldIE ;) */
 
       #name {
         padding: 0;
@@ -157,7 +154,7 @@
 
     <div id="panel">
       <div id="top">
-        <iron-icon icon="icons:chat"></iron-icon>
+        <iron-icon icon="communication:chat"></iron-icon>
         <h3 id="name">[[otherUser.name]]</h3>
         <paper-icon-button class="top-icon" icon="icons:perm-contact-calendar" on-click="addToCalendar"></paper-icon-button>
       </div>

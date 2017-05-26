@@ -29,6 +29,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --app-secondary-text-color: #FFF;
         --app-error-color: #F44336;
       }
+      ::-webkit-input-placeholder {color: #000;}
+      :-moz-placeholder {color: #000;}
+      ::-moz-placeholder {color: #000;}
+      :-ms-input-placeholder {color: #000;}
+      input:focus::-webkit-input-placeholder { color:transparent; }
+      input:focus:-moz-placeholder { color:transparent; } /* Firefox 18- */
+      input:focus::-moz-placeholder { color:transparent; } /* Firefox 19+ */
+      input:focus:-ms-input-placeholder { color:transparent; } /* oldIE ;) */
     </style>
   </template>
 </dom-module>
