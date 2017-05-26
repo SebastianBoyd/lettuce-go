@@ -227,7 +227,7 @@
       },
 
       _getName: function() { 
-        if (this.users.user1.uid == this.currentUser.uid) {
+        if (this.users.user1.id == this.currentUser.uid) {
           this.otherUser = this.users.user2;
         } else {
           this.otherUser = this.users.user1;
@@ -274,7 +274,7 @@
         if (this.$.message.value != '') {
           let user = { name: this.currentUser.displayName, photoURL: this.currentUser.photoURL, uid: this.currentUser.uid };
           this.fire('send-message', { messageID: this.chatKey, value: this.textMessage, user: user });
-          this.fire('send-notification', { sendTo: this.otherUser.uid, user: user, message: this.textMessage, type: 'chat' });
+          this.fire('send-notification', { sendTo: this.otherUser.id, user: user, message: this.textMessage, type: 'chat' });
           this.$.message.value = '';
         }
       },

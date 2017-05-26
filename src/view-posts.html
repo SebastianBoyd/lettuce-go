@@ -7,6 +7,8 @@
 <link rel="import" href="../bower_components/iron-icons/communication-icons.html">
 <link rel="import" href="../bower_components/iron-icons/device-icons.html">
 
+<link rel="import" href="filter-element.html">
+
 <link rel="import" href="shared-styles.html">
 <dom-module id="view-posts">
   <template>
@@ -146,11 +148,16 @@
         padding: 0 8px;
         font-size: 1.3em;
         color: black;
-        z-index: 999;
+        z-index: 9;
       }
 
       textarea:focus, input:focus{
         outline: none;
+      }
+      .wrapper {
+        display: flex;
+        justify-content: center;
+        margin: 8px;
       }
     </style>
 
@@ -167,11 +174,15 @@
       persisted-data="{{posts}}">
     </app-indexeddb-mirror>
 
-    <div id="search-section">
-      <iron-icon icon="search" id="search"></iron-icon>
-      <input is="iron-input" bind-value="{{searchValue}}" id="my_input" placeholder="Search">
-      <paper-icon-button style="z-index: 999" id="filter" icon="icons:filter-list"></paper-icon-button>
+    <div class="wrapper">
+      <div id="search-section">
+        <iron-icon icon="search" id="search"></iron-icon>
+        <input is="iron-input" bind-value="{{searchValue}}" id="my_input" placeholder="Search">
+        <paper-icon-button style="z-index: 9" id="filter" on-tap="toggleFilter" icon="icons:filter-list"></paper-icon-button>
+      </div>
     </div>
+
+    <filter-element hidden id="filterElement"></filter-element>
 
     <h1>[[channel]]</h1>
     <iron-list items="[[posts]]" as="item" id="list" scroll-target="document">
@@ -302,6 +313,10 @@
         // TODO: figure out why this is: If you click on the icon, the
         // rootTarget/localTarget is the icon and not the button
         return (button.tagName === 'IRON-ICON') ? button.parentNode : button;
+      },
+
+      toggleFilter: function() {
+        this.$.filterElement.hidden = !this.$.filterElement.hidden;
       }
     });
   </script>

@@ -1,0 +1,75 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
+
+<dom-module id="filter-element">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+        background: white;
+        color: #000;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        position: fixed;
+        right: 0;
+        border-radius: 3px;
+        max-width: 200px;
+        width: 90vw;
+        padding: 8px;
+        margin: 0 16px;
+        z-index: 11;
+        max-height: 500px;
+        overflow-y: scroll;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+      paper-slider {
+        --paper-slider-active-color: var(--app-secondary-color);
+        --paper-slider-knob-color: var(--app-secondary-color);
+        --paper-slider-secondary-color: var(--app-secondary-color);
+        --paper-slider-pin-color: var(--app-secondary-color);
+      }
+      paper-button {
+        background: var(--app-secondary-color);
+        color: #FFF;
+        width: 90%;
+      }
+
+      h3 {
+        margin: 8px 0;
+      }
+    </style>
+    <h3>Filter</h3>
+    Distance: {{distanceValue}} mi
+    <paper-slider immediate-value="{{distanceValue}}" id="distance" pin min="0" max="100" value="{{lastValue}}"></paper-slider>
+    Min Age: {{minAge}} years
+    <paper-slider class="age" immediate-value="{{minAge}}" pin min="18" max="100" value="{{18}}"></paper-slider>
+    Max Age: {{maxAge}} years
+    <paper-slider class="age" immediate-value="{{maxAge}}" pin min="[[minAge]]" max="100"></paper-slider>
+    <paper-button raised on-tap="filterUpdate">Apply</paper-button>
+  </template>
+
+  <script>
+
+    Polymer({
+      is: 'filter-element',
+
+      properties: {
+        notifications: {
+          type: Array,
+          value: []
+        }
+      }
+    });
+
+  </script>
+</dom-module>

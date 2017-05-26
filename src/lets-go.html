@@ -553,7 +553,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 
        // CREATES CHAT, CALLED WHEN YOU ACCEPT ACTIVITY REQUEST
        _createChat: function (event) {
-         let currentUser = {name: this.user.displayName, photoURL: this.user.photoURL, uid: this.user.uid};
+         let currentUser = {name: this.user.displayName, photoURL: this.user.photoURL, id: this.user.uid};
          let otherUser = event.detail.otherUser;
          this._firebaseCreateChat(currentUser, otherUser);
        },
@@ -572,7 +572,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
        // FILTER FUNCTION FOR KNOWING IF CHAT IS PERSONAL
        // TODO: ONY QUERY FOR PERSONAL CHATS
        isPersonalChat: function(item) {
-         if (item.users.user1.uid == this.user.uid || item.users.user2.uid == this.user.uid){
+         if (item.users.user1.id == this.user.uid || item.users.user2.id == this.user.uid){
           return true;
          } else {
            return false;
