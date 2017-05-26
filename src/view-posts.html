@@ -159,6 +159,11 @@
         justify-content: center;
         margin: 8px;
       }
+      #filter-wrapper {
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+      }
     </style>
 
     <firebase-query
@@ -182,7 +187,7 @@
       </div>
     </div>
 
-    <filter-element hidden id="filterElement"></filter-element>
+    <div id="filter-wrapper"><filter-element hidden id="filterElement"></filter-element></div>
 
     <h1>[[channel]]</h1>
     <iron-list items="[[posts]]" as="item" id="list" scroll-target="document">
