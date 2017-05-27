@@ -166,11 +166,9 @@
       },
 
       _acceptRequest: function(evt) {
-        // const otherUser = {name: this.user.name, photoURL: this.user.photoURL, uid: this.user.userID};
         this.fire('create-chat', { otherUser: this.notification.userSent });
         const notificationID = evt.path[2].id;
 
-        // COMMENTED OUR FOR DEV!!
         this.fire('delete-notification', { noteID: notificationID });
       },
 

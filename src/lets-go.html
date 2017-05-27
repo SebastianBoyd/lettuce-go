@@ -471,10 +471,6 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 
         chats: {
           type: Array
-        },
-
-        pathToNotifications: {
-          type: String
         }
       },
 
@@ -518,11 +514,6 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
       /*******************************
        * NOTIFICATIONS
        *******************************/
-
-      // COMPUTES PATH THAT IS GIVEN TO FIERBASE TO QUERY FOR NOTIFICATIONS
-      computeNotificationPath: function() {
-        this.pathToNotifications = `/users/${this.user.uid}/notifications`;
-      },
 
       // HANDLES DISPLAYING NOTIFICATION PANEL
       _showNotifications: function (event) {
@@ -579,7 +570,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 
        // COMPUTES NAME OF CHAT THAT SHOWS UP IN SIDEBAR
        _computeChatName: function(item) {
-         if (item.users.user2.uid == this.user.uid) {
+         if (item.users.user2.id == this.user.uid) {
            return {name: item.users.user1.name, url: item.users.user1.photoURL};
          } else {
            return {name: item.users.user2.name, url: item.users.user2.photoURL};
@@ -664,7 +655,6 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 
       _updateUserInfo: function(user) {
         this._firebaseUpdateUserInfo(user);
-        this.computeNotificationPath();
       },
 
       /*******************************
@@ -691,26 +681,26 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
       },
 
       /*******************************
-       * LOCATION TODO: MOVE TO FETCH
+       * LOCATION
        *******************************/
       _getLocation: function() {
-        // TODO: Use fetch, cache location - only updates when it changes by x margin
-        var self = this;
+        // TODO: Cache location - only updates when it changes by x margin
+        let self = this;
         navigator.geolocation.getCurrentPosition(function(position) {
-          var request = new XMLHttpRequest();
-          var method = 'GET';
-          var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='
+          let request = new XMLHttpRequest();
+          let method = 'GET';
+          let url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='
               + position.coords.latitude + ','
               + position.coords.longitude;
 
-          request.open('GET', url, true);
-          request.onreadystatechange = function() {
-            if (request.readyState == 4 && request.status == 200) {
-              var data = JSON.parse(request.responseText);
-              var addressComponents = data.results[0].address_components;
+          fetch(url)
+          .then(location => {
+            let data = location.json()
+            .then(data => {
+              let addressComponents = data.results[0].address_components;
 
-              var city, state, country;
-              for(var i = 0; i < addressComponents.length; i++){
+              let city, state, country;
+              for(let i = 0; i < addressComponents.length; i++){
                 if (addressComponents[i].types == 'locality,political') {
                   city = addressComponents[i].long_name;
                 } else if (addressComponents[i].types == 'administrative_area_level_1,political') {
@@ -722,15 +712,14 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 
               // TODO: this probably changes when you're on mobile and it should
               // be less bad and static.
-              var location = '';
+              let location = '';
               if (city) location += city + ', ';
               if (state) location += state + ', ';
               if (country) location += country;
               self.location = location;
               console.log('We have a location!', self.location);
-            }
-          };
-          request.send();
+            })
+          })
         });
       }
     });
