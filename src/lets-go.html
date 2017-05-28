@@ -35,6 +35,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 <link rel="import" href="firebase-helper.html">
 <link rel="import" href="view-posts.html">
 <link rel="import" href="view-chats.html">
+<link rel="import" href="activity-post.html">
 <link rel="import" href="notification-panel.html">
 
 <link rel="import" href="shared-styles.html">
@@ -42,7 +43,6 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 <dom-module id="lets-go">
   <template>
     <style is="custom-style" include="shared-styles">
-      /* TODO: REMOVE EXCESS STYLES */
       :host {
         --paper-tabs-selection-bar-color: var(--app-primary-color);
         --paper-tab-ink: var(--app-primary-color);
@@ -300,16 +300,21 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 
     <!-- Query Firebase for the list of public channels -->
     <!-- _ means that the data is not to be changed -->
-    <firebase-query data="{{_channels}}" path="/channels"></firebase-query>
+    <firebase-query
+      data="{{_posts}}"
+      path="/posts/-KVw-R8wx3CVtu3b_grO"
+      order-by-child="index"
+      limit-to-first="100">
+      </firebase-query>
     <firebase-query data="{{_chats}}" path="/chats"></firebase-query>
     <firebase-query data="{{_notifications}}" path="/notifications/[[user.uid]]"></firebase-query>
 
     <!-- Add public channles to indexeddb so there are persisted -->
     <app-indexeddb-mirror
       session="[[uid]]"
-      key="/channels"
-      data="[[_channels]]"
-      persisted-data="{{channels}}">
+      key="/posts"
+      data="[[_posts]]"
+      persisted-data="{{posts}}">
     </app-indexeddb-mirror>
 
     <!-- PERSISTED CHATS -->
@@ -323,7 +328,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
     <!-- PERSISTED NOTIFICATIONS -->
      <app-indexeddb-mirror
       session="[[uid]]"
-      key="/chats"
+      key="/notifications"
       data="[[_notifications]]"
       persisted-data="{{notifications}}">
     </app-indexeddb-mirror>
@@ -353,9 +358,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 
               <!-- REGION LINKS -->
               <h3 id="chats-header">Regions:</h3>
-              <template is="dom-repeat" items="[[channels]]" initial-count="10">
-                <channel-item drawer-toggle name="[[item.$key]]" channel="[[item]]"></channel-item>
-              </template>
+              <channel-item drawer-toggle name="-KVw-R8wx3CVtu3b_grO"></channel-item>
 
               <!-- CHAT LINKS -->
               <h3 id="chats-header">Chats:</h3>
@@ -425,9 +428,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
             </template>
 
             <!-- VIEW ACTIVITIES -->
-            <template is="dom-repeat" items="[[channels]]" initial-count="10">
-              <view-posts name="[[item.$key]]" uid="[[user.uid]]" channel="[[item.name]]" ref="[[item.$key]]" resources="[[resources]]"></view-posts>
-            </template>
+            <view-posts name="-KVw-R8wx3CVtu3b_grO" channel-key="-KVw-R8wx3CVtu3b_grO" current-user="[[user]]" posts="[[posts]]"></view-posts>
           </iron-pages>
 
         </div>
@@ -450,7 +451,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
           type: String
         },
 
-        channels: {
+        posts: {
           type: Array,
           value: []
         },
@@ -501,7 +502,8 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
         'create-chat': '_createChat',
         'delete-chat': '_deleteChat',
         'delete-notification': '_deleteNotification',
-        'send-message': '_sendMessage'
+        'send-message': '_sendMessage',
+        'request-activity': '_requestActivity'
       },
 
       // HANDLES LOGGING OUT
@@ -510,6 +512,19 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
         this.$.newPost.hidden = true;
         this.$.loading.hidden = true;
       },
+
+       /*******************************
+       * ACTIVITIES
+       *******************************/
+
+       _requestActivity: function(event) {
+          const activity = event.detail.activity;
+          const sendToUID = activity.uid;
+          const message = activity.activity;
+          const type = 'request';
+          this._firebaseRequestActivity(activity.$key, this.user.uid);
+          this._firebaseSendNotification(this.user, sendToUID, message, type);
+       },
 
       /*******************************
        * NOTIFICATIONS
@@ -658,10 +673,10 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
       },
 
       /*******************************
-       * Posts
+       * POSTS
        *******************************/
       _postDelete: function(event) {
-        this._firebaseDeleteMessage(event.detail.ref, event.detail.channelRef);
+        this._firebaseDeletePost(event.detail.post, event.detail.channel);
       },
 
       _postNewMessage: function(event) {

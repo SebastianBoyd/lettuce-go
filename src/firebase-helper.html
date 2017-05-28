@@ -62,7 +62,7 @@ Polymer.FirebaseHelper = {
     }.bind(this));
   },
 
-  _firebaseDeleteMessage: function(post, channel) {
+  _firebaseDeletePost: function(post, channel) {
     firebase.database().ref('/posts/' + channel).child(post).remove();
   },
 
@@ -163,6 +163,16 @@ Polymer.FirebaseHelper = {
     let now = new Date().getTime();
     const chat = {text: message, timeSent: now, userSent: user};
     dbRef.push().set(chat);
+  },
+
+  /*******************************
+  * REQUESTS
+  *******************************/
+
+  _firebaseRequestActivity: function(key, uid) {
+    const dbRef = firebase.database().ref(`/users/${uid}/requestedActivities`);
+    const request = {id: key};
+    dbRef.push().set(request);
   }
 };
 </script>
