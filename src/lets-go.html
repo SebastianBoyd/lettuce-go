@@ -5,31 +5,38 @@ Copyright (c) 2017 SB Technology Holdings International. All rights reserved.
 Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 -->
 
+<!-- POLYMER IMPORTS -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
+
+<!-- APP ELEMENTS -->
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
-
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 
-<link rel="import" href="../bower_components/vaadin-icons/vaadin-icons.html">
+<!-- IRON ELEMENTS -->
+
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/social-icons.html">
-
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+
+<!-- PAPER ELEMENTS -->
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-badge/paper-badge.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
-<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 
+<!-- POLYFIRE -->
+<link rel="import" href="../bower_components/polymerfire/firebase-query.html">
+
+<!-- CUSTOM ELEMENTS -->
 <link rel="import" href="channel-item.html">
 <link rel="import" href="chat-item.html">
 <link rel="import" href="firebase-helper.html">
@@ -298,18 +305,16 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
       }
     </style>
 
-    <!-- Query Firebase for the list of public channels -->
-    <!-- _ means that the data is not to be changed -->
+    <!-- FIREBASE QUERY FOR DATA FROM DATABASE -->
     <firebase-query
       data="{{_posts}}"
       path="/posts/-KVw-R8wx3CVtu3b_grO"
-      order-by-child="index"
-      limit-to-first="100">
-      </firebase-query>
-    <firebase-query data="{{_chats}}" path="/chats"></firebase-query>
+      order-by-child="index">
+    </firebase-query>
+    <firebase-query data="{{chats}}" path="/chats"></firebase-query>
     <firebase-query data="{{_notifications}}" path="/notifications/[[user.uid]]"></firebase-query>
 
-    <!-- Add public channles to indexeddb so there are persisted -->
+    <!-- PERSIST SOME DATA USING INDEXED DB -->
     <app-indexeddb-mirror
       session="[[uid]]"
       key="/posts"
@@ -317,15 +322,6 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
       persisted-data="{{posts}}">
     </app-indexeddb-mirror>
 
-    <!-- PERSISTED CHATS -->
-    <app-indexeddb-mirror
-      session="[[uid]]"
-      key="/chats"
-      data="[[_chats]]"
-      persisted-data="{{chats}}">
-    </app-indexeddb-mirror>
-
-    <!-- PERSISTED NOTIFICATIONS -->
      <app-indexeddb-mirror
       session="[[uid]]"
       key="/notifications"
@@ -450,26 +446,21 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
         page: {
           type: String
         },
-
         posts: {
           type: Array,
           value: []
         },
-
         user: {
           type: Object,
           observer: '_updateUserInfo'
         },
-
         location: {
           type: String
         },
-
         offline: {
           type: Boolean,
           observer: '_offlineChanged'
         },
-
         chats: {
           type: Array
         }
@@ -495,8 +486,6 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
       // UNIVERSAL EVENT LISTENERS (FIRED FROM OTHER ELEMENTS ex: this.fire())
       listeners: {
         'new-post': '_postNewMessage',
-        'delete-users': '_deleteUsers',
-        'add-users': '_addUsers',
         'post-delete': '_postDelete',
         'send-notification': '_sendNotification',
         'create-chat': '_createChat',
@@ -553,12 +542,35 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
       },
 
       /*******************************
+       * POSTS
+       *******************************/
+      _postDelete: function(event) {
+        this._firebaseDeletePost(event.detail.post, event.detail.channel);
+      },
+
+      _postNewMessage: function(event) {
+        let location = this.location || '';
+        this.$.newPost.hidden = true;
+        this._firebaseAddMessage(event.detail.channel, event.detail.message, event.detail.activity, event.detail.date, location);
+      },
+
+      // FUNCTION THAT TOGGLES POST CREATION ELEMENT
+       _showCreatePost: function() {
+        window.scrollTo(0, 0);
+        let resolvedPageUrl = this.resolveUrl('new-post.html');
+        this.importHref(resolvedPageUrl, function() {
+          this.$.newPost.create();
+          this.$.newPost.hidden = false;
+        }, null, true);
+      },
+
+      /*******************************
        * CHATS
        *******************************/
 
        // CREATES CHAT, CALLED WHEN YOU ACCEPT ACTIVITY REQUEST
        _createChat: function (event) {
-         let currentUser = {name: this.user.displayName, photoURL: this.user.photoURL, id: this.user.uid};
+         let currentUser = { name: this.user.displayName, photoURL: this.user.photoURL, id: this.user.uid };
          let otherUser = event.detail.otherUser;
          this._firebaseCreateChat(currentUser, otherUser);
        },
@@ -587,9 +599,9 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
        // COMPUTES NAME OF CHAT THAT SHOWS UP IN SIDEBAR
        _computeChatName: function(item) {
          if (item.users.user2.id == this.user.uid) {
-           return {name: item.users.user1.name, url: item.users.user1.photoURL};
+           return { name: item.users.user1.name, url: item.users.user1.photoURL };
          } else {
-           return {name: item.users.user2.name, url: item.users.user2.photoURL};
+           return { name: item.users.user2.name, url: item.users.user2.photoURL };
          }
        },
 
@@ -671,29 +683,6 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 
       _updateUserInfo: function(user) {
         this._firebaseUpdateUserInfo(user);
-      },
-
-      /*******************************
-       * POSTS
-       *******************************/
-      _postDelete: function(event) {
-        this._firebaseDeletePost(event.detail.post, event.detail.channel);
-      },
-
-      _postNewMessage: function(event) {
-        var location = this.location || '';
-        this.$.newPost.hidden = true;
-        this._firebaseAddMessage(event.detail.channel, event.detail.message, event.detail.activity, event.detail.date, location);
-      },
-
-      // FUNCTION THAT TOGGLES POST CREATION ELEMENT
-       _showCreatePost: function() {
-        window.scrollTo(0, 0);
-        var resolvedPageUrl = this.resolveUrl('new-post.html');
-        this.importHref(resolvedPageUrl, function() {
-          this.$.newPost.create();
-          this.$.newPost.hidden = false;
-        }, null, true);
       },
 
       /*******************************

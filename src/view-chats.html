@@ -239,19 +239,19 @@
       },
 
       _getDate: function (timestamp) {
-        var date = new Date(timestamp);
-        var seconds = Math.floor((new Date() - date) / 1000);
+        let date = new Date(timestamp);
+        let seconds = Math.floor((new Date() - date) / 1000);
 
         if (seconds < 3600) {
-          var minutes = Math.floor(seconds / 60)
+          let minutes = Math.floor(seconds / 60)
           return (minutes > 1) ? minutes + " minutes ago" : "Now";
         } else if (seconds < 86400) {
-          var hours = Math.floor(seconds / 3600)
+          let hours = Math.floor(seconds / 3600)
           return (hours > 1) ? hours + " hours ago" : "1 hour ago";
         } else {
-          var day = date.getDate();
-          var monthIndex = date.getMonth();
-          var year = date.getFullYear();
+          let day = date.getDate();
+          let monthIndex = date.getMonth();
+          let year = date.getFullYear();
           return `${monthNames[monthIndex]} ${day}, ${year}`;
         }
       },

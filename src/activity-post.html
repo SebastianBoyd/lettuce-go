@@ -1,13 +1,17 @@
+<!-- POLYMER STUFF -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
+
+<!-- IRON ICONS -->
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/iron-icons/social-icons.html">
 <link rel="import" href="../bower_components/iron-icons/communication-icons.html">
 <link rel="import" href="../bower_components/iron-icons/device-icons.html">
 
 <link rel="import" href="shared-styles.html">
+
 <dom-module id="activity-post">
   <template>
     <style include="shared-styles">
@@ -138,7 +142,7 @@
   </template>
 
   <script>
-    var monthNames = [
+    const monthNames = [
       "January", "February", "March",
       "April", "May", "June", "July",
       "August", "September", "October",
@@ -161,7 +165,6 @@
       },
 
       computeBGImage: function (activity) {
-        clean = activity.replace(/\s/g,'')
         return "background-image: url('../images/activities/" + activity + ".jpg');"
       },
 
@@ -189,13 +192,12 @@
 
       _delete: function(event) {
         let post = event.path[0].ref;
-        this.fire('post-delete', {post: post.$key, channel: '-KVw-R8wx3CVtu3b_grO'});
+        this.fire('post-delete', { post: post.$key, channel: '-KVw-R8wx3CVtu3b_grO' });
       },
 
       _request: function(event, item) {
         let post = event.path[0].ref;
-        this.fire('request-activity', {activity: post});
-        // this.fire('send-notification', {sendTo: uid, message: key, type: 'request'});
+        this.fire('request-activity', { activity: post });
       },
 
       _hasLocation: function(location) {
@@ -204,18 +206,6 @@
 
       _personalActivity: function(item) {
         return this.currentUser.uid === item.uid;
-      },
-      
-      _getEventTarget: function(event) {
-        var button = Polymer.dom(event).localTarget;
-
-        // TODO: figure out why this is: If you click on the icon, the
-        // rootTarget/localTarget is the icon and not the button
-        return (button.tagName === 'IRON-ICON') ? button.parentNode : button;
-      },
-
-      toggleFilter: function() {
-        this.$.filterElement.hidden = !this.$.filterElement.hidden;
       }
     });
   </script>

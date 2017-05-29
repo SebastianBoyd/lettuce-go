@@ -19,8 +19,6 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 <dom-module id="my-app">
   <template>
     <style is="custom-style" include="shared-styles">
-      /* TODO: REMOVE EXCESS STYLES */
-      /* COLOR THEME FOR APP */
       :host {
         display: block;
         margin: 0;
@@ -203,6 +201,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
       </div>
       <div id="right">
         <button on-tap="login" raised hidden$="[[offline]]">Sign In</button>
+        <h3 hidden$="[[!offline]]">You're Offline</h3>
       </div>
     </div>
     <div id="splash-content">

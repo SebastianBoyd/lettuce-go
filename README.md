@@ -10,6 +10,7 @@ We are using [Polymer](https://www.polymer-project.org/) and [Firebase](https://
 2. Open and terminal and navigate to this directory
 3. Run `bower i` to get the dependencies
 3. Install the Polymer CLI if you haven't already
-4. Run `polymer serve`
+4. Run `polymer serve -p 8080`
 5. Go to your `localhost:8080` in your browser
-6. Get coding!
+6. Check out current issues on the projects page under MVP
+7. Get coding!

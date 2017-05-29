@@ -1,11 +1,13 @@
+<!-- POLYMER STUFF -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+
+<!-- OTHER MISC IMPORTS -->
 <link rel="import" href="../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="../bower_components/app-datepicker/app-datepicker.html">
 <link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
-<link rel="import" href="../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../bower_components/paper-input/paper-input-char-counter.html">
-<link rel="import" href="../bower_components/paper-input/paper-input-container.html">
-<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+
 
 <link rel="import" href="shared-styles.html">
 
@@ -21,10 +23,6 @@
       }
 
       :host([hidden]) {
-        display: none !important;
-      }
-
-      [hidden] {
         display: none !important;
       }
 
@@ -100,7 +98,7 @@
   </template>
 
   <script>
-    var SYMBOLS = '!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~';
+    const SYMBOLS = '!"#$%&\'()*+,-./:;\<=>?@[]^_`{|}~';
 
     Polymer({
       is: 'new-post',
@@ -117,13 +115,13 @@
 
       ready: function() {
         let date = new Date();
-        var mm = date.getMonth() + 1; // getMonth() is zero-based
-        var dd = date.getDate();
+        let mm = date.getMonth() + 1; // getMonth() is zero-based
+        let dd = date.getDate();
 
         this.currentDate = [date.getFullYear(),
-                (mm>9 ? '' : '0') + mm,
-                (dd>9 ? '' : '0') + dd
-              ].join('/');
+            (mm>9 ? '' : '0') + mm,
+            (dd>9 ? '' : '0') + dd
+          ].join('/');
       },
 
       // POSTS TO FIREBASE USING this.fire()

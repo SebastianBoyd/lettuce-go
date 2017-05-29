@@ -6,7 +6,10 @@
     "src/lets-go.html",
     "src/new-post.html",
     "src/channel-item.html",
+    "src/chat-item.html",
     "src/view-posts.html",
+    "src/view-chats.html",
+    "src/notification-panel.html",
     "src/firebase-helper.html"
   ],
   "sources": [

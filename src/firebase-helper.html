@@ -15,7 +15,7 @@ Polymer.FirebaseHelper = {
     }
 
     firebase.database().ref('/users/' + user.uid).once('value', function(snapshot) {
-      var userInfo = snapshot.val();
+      let userInfo = snapshot.val();
 
       this.$.newPost.hidden = true;
       this.$.loading.hidden = true;
@@ -40,11 +40,12 @@ Polymer.FirebaseHelper = {
     }.bind(this));
   },
 
+  // POST NEW MESSAGE
+  // TODO: REMOVE CHANNELS, RENAME FUNCTIONS
   _firebaseAddMessage: function(channel, message, activity, date, location) {
-    // console.log(channel, message, activity, date, location);
     // Get the channel ref from the names -> keys mapping
     firebase.database().ref('/channels/' + channel).once('value', function(snapshot) {
-      var now = new Date().getTime();
+      let now = new Date().getTime();
 
       firebase.database().ref('/posts/').child(channel)
         .push({
@@ -62,64 +63,9 @@ Polymer.FirebaseHelper = {
     }.bind(this));
   },
 
+  // DELETES GIVEN POST
   _firebaseDeletePost: function(post, channel) {
-    firebase.database().ref('/posts/' + channel).child(post).remove();
-  },
-
-  _firebaseAddUsers: function(ref, newUsers) {
-    this.$.newChannel.hide();
-
-    // Add these users in the channels database
-    firebase.database().ref('/channels/' + ref).once('value', function(snapshot) {
-      var currentUsers = snapshot.val().users;
-      currentUsers = currentUsers.concat(newUsers);
-      snapshot.ref.update({users: currentUsers});
-    });
-
-    // For each of the users in the list, add this channel to them.
-    firebase.database().ref('/users/').once('value', function(snapshot) {
-      var users = snapshot.val();
-
-      for (var user in users) {
-        if (newUsers.indexOf(users[user].email) != -1 ) {
-          var currentUserChannels = users[user].channels || [];
-          currentUserChannels.push(ref);
-          firebase.database().ref('/users/' + user).update({channels: currentUserChannels});
-        }
-      }
-    });
-  },
-
-  _firebaseDeleteUsers: function(ref, delUsers) {
-    this.$.newChannel.hide();
-
-    // Remove these users in the channels database
-    firebase.database().ref('/channels/' + ref).once('value', function(snapshot) {
-      var currentUsers = snapshot.val().users;
-
-      for (var user in delUsers) {
-        var index = currentUsers.indexOf(delUsers[user]);
-        if (index != -1 ) {
-          currentUsers.splice(index, 1);
-        }
-      }
-      snapshot.ref.update({users: currentUsers});
-    });
-
-
-    // For each of the users in the list, remove this channel from them.
-    firebase.database().ref('/users/').once('value', function(snapshot) {
-      var users = snapshot.val();
-
-      for (var user in users) {
-        if (delUsers.indexOf(users[user].email) != -1 ) {
-          var currentUserChannels = users[user].channels || [];
-          var channelIndex = currentUserChannels.indexOf(ref);
-          currentUserChannels.splice(channelIndex, 1);
-          firebase.database().ref('/users/' + user).update({channels: currentUserChannels});
-        }
-      }
-    });
+    firebase.database().ref(`/posts/${channel}`).child(post).remove();
   },
 
   /*******************************
@@ -169,6 +115,7 @@ Polymer.FirebaseHelper = {
   * REQUESTS
   *******************************/
 
+  // ADDS TO REQUESTED ACTIVITIES LIST
   _firebaseRequestActivity: function(key, uid) {
     const dbRef = firebase.database().ref(`/users/${uid}/requestedActivities`);
     const request = {id: key};
