@@ -578,7 +578,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
        // DELETES GIVEN CHAT
        // TODO: CONVERT TO BLOCKING
        _deleteChat: function (event) {
-        this._firebaseDeleteChat(event.detail.key);
+         this._firebaseDeleteChat(event.detail.key);
        },
 
        // SENDS MESSAGE TO GIVE CHAT
@@ -589,7 +589,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
        // FILTER FUNCTION FOR KNOWING IF CHAT IS PERSONAL
        // TODO: ONY QUERY FOR PERSONAL CHATS
        isPersonalChat: function(item) {
-         if (item.users.user1.id == this.user.uid || item.users.user2.id == this.user.uid){
+         if (item.users.user1.id == this.user.uid || item.users.user2.id == this.user.uid) {
           return true;
          } else {
            return false;
@@ -607,8 +607,8 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 
        // HIDES FAB WHEN ON CHAT PAGE
        hideFab: function() {
-        let urlBool = window.location.href.includes('chat');
-        if (urlBool) {
+        const urlContainsChat = window.location.href.includes('chat');
+        if (urlContainsChat) {
           this.$.createPostButton.hidden = true;
         } else {
           this.$.createPostButton.hidden = false;
@@ -630,7 +630,6 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
        /*******************************
        * MISC LANGUAGE AND OFFLINE
        *******************************/
-
       _selectLanguageChanged: function (event) {
         this.set('queryParams.lang', event.target.value);
         this.fire('language-changed', {value: event.target.value});
@@ -664,14 +663,12 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
             this.$.pages.hidden = true;
             // We got things from Firebase now, so we can switch back to the easy case.
             this._initialOffline = false;
-          } else {
-            // this.$.newPost.hidden = true;
           }
         }
       },
 
       /*******************************
-       * Users
+       * USERS
        *******************************/
       _addUsers: function(event) {
         this._firebaseAddUsers(event.detail.ref, event.detail.users);
@@ -691,9 +688,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
       _getLocation: function() {
         // TODO: Cache location - only updates when it changes by x margin
         let self = this;
-        navigator.geolocation.getCurrentPosition(function(position) {
-          let request = new XMLHttpRequest();
-          let method = 'GET';
+        navigator.geolocation.getCurrentPosition(position => {
           let url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='
               + position.coords.latitude + ','
               + position.coords.longitude;
