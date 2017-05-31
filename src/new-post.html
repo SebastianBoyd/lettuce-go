@@ -131,6 +131,7 @@
         }
         this.fire('new-post', { message: this.$.write.value.trim(), channel: this.channel, date: this.date, activity: this.activity });
         this.activity = null;
+        this.$.write.value = '';
       },
 
       // HIDES PANEL WHEN CANCEL CLICKED

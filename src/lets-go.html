@@ -549,7 +549,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
       _postNewMessage: function(event) {
         let location = this.location || '';
         this.$.newPost.hidden = true;
-        this._firebaseAddMessage(event.detail.channel, event.detail.message, event.detail.activity, event.detail.date, location);
+        this._firebaseAddPost(event.detail.channel, event.detail.message, event.detail.activity, event.detail.date, location);
       },
 
       // FUNCTION THAT TOGGLES POST CREATION ELEMENT

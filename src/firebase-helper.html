@@ -42,7 +42,7 @@ Polymer.FirebaseHelper = {
 
   // POST NEW MESSAGE
   // TODO: REMOVE CHANNELS, RENAME FUNCTIONS
-  _firebaseAddMessage: function(channel, message, activity, date, location) {
+  _firebaseAddPost: function(channel, message, activity, date, location) {
     // Get the channel ref from the names -> keys mapping
     firebase.database().ref('/channels/' + channel).once('value', function(snapshot) {
       let now = new Date().getTime();
