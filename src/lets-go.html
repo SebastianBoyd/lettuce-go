@@ -396,10 +396,6 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 
         <!-- LIST CONTENT -->
         <div class="main-content">
-          <div id="loading">
-            <div id="spinner"></div>
-          </div>
-
           <!-- ADD ACTIVITY BUTTON -->
           <paper-fab id="createPostButton" icon="icons:add" on-click="_showCreatePost" disabled="[[offline]]" elevation="4"></paper-fab>
 
@@ -426,6 +422,8 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
             <!-- VIEW ACTIVITIES -->
             <view-posts name="-KVw-R8wx3CVtu3b_grO" channel-key="-KVw-R8wx3CVtu3b_grO" current-user="[[user]]" posts="[[posts]]"></view-posts>
           </iron-pages>
+
+          <div id="loading"><div id="spinner"></div></div>
 
         </div>
         <!-- END MAIN CONTENT -->
