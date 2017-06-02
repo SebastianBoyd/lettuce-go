@@ -22,11 +22,6 @@
 
       ::-webkit-scrollbar {display: none;}
 
-      #name {
-        padding: 0;
-        margin: 0;
-      }
-
       input {
         display: flex;
         border: none;
@@ -78,6 +73,19 @@
         flex-direction: row;
         align-items: center;
         margin: 4px;
+      }
+
+      #name {
+        padding: 0;
+        margin: 0 8px 0 0;
+        flex-grow: 10;
+      }
+
+      .add-to-calendar {
+        background: var(--app-secondary-color);
+        color: var(--app-primary-text-color);
+        margin: 0 8px;
+        border-radius: 3px;
       }
 
       .line {
@@ -143,20 +151,14 @@
         margin: 0 4px;
         align-self: center;
       }
-
-      .top-icon {
-        color: var(--app-secondary-color);
-        margin: 0 8px;
-      }
     </style>
 
     <firebase-query data="{{chats}}" path="[[computePath(chatKey)]]"></firebase-query>
 
     <div id="panel">
       <div id="top">
-        <iron-icon icon="communication:chat"></iron-icon>
-        <h3 id="name">[[otherUser.name]]</h3>
-        <paper-icon-button class="top-icon" icon="icons:perm-contact-calendar" on-click="addToCalendar"></paper-icon-button>
+        <h2 id="name">[[otherUser.name]]</h2>
+        <paper-icon-button class="add-to-calendar" icon="icons:event" on-click="addToCalendar"></paper-icon-button>
       </div>
 
       <div class="line"></div>

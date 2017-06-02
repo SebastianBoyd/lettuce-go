@@ -6,55 +6,42 @@
   <template>
     <style>
       :host {
-        display: block;
-        box-sizing: border-box;
-        padding-left: 16px;
+        display: flex;
+        font-weight: 300;
+        width: 100%;
       }
 
       :host(.iron-selected) {
-        background: rgba(255, 255, 255, 0.3);
+        background: #F5F5F5;
       }
 
-      :host(.iron-selected) a {
-        font-weight: bold;
+      a {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 8px 8px 8px 16px;
+        width: 100%;
+        text-decoration: none;
+        color: #455A64;
       }
 
       [hidden] {
         display: none !important;
       }
 
-      a {
-        box-sizing: border-box;
-        width: 100%;
-        text-decoration: none;
-        color: #455A64;
-        font-weight: 300;
-        @apply(--layout-horizontal);
-        @apply(--layout-justified);
-        vertical-align: middle;
-        text-align: left;
-      }
-
-      .channel-settings {
-        display: inline-block;
-        vertical-align: middle;
+      .channel-icon {
+        display: flex;
         color: rgba(0, 0, 0, 0.4);
       }
 
-      .channel-settings:hover {
+      .channel-icon:hover {
         color: rgba(0, 0, 0, 0.9);
-      }
-
-      iron-icon {
-        vertical-align: middle;
       }
     </style>
 
     <a href="/channel/-KVw-R8wx3CVtu3b_grO?lang=en">
-      <span style="padding:8px 0;">
-        <iron-icon class="channel-settings" icon="social:public"></iron-icon>
-        <span>Global</span>
-      </span>
+      <iron-icon class="channel-icon" icon="social:public"></iron-icon>
+      <span style="padding: 0 4px;">Global</span>
     </a>
 
   </template>

@@ -5,29 +5,23 @@
   <template>
     <style>
       :host {
-        display: block;
-        box-sizing: border-box;
-        padding-left: 16px;
+        display: flex;
+        font-weight: 300;
+        width: 100%;
       }
 
       :host(.iron-selected) {
-        background: rgba(255, 255, 255, 0.3);
-      }
-
-      :host(.iron-selected) a {
-        font-weight: bold;
+        background: #F5F5F5;
       }
 
       a {
-        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 8px 8px 8px 16px;
         width: 100%;
         text-decoration: none;
         color: #455A64;
-        font-weight: 300;
-        @apply(--layout-horizontal);
-        @apply(--layout-justified);
-        vertical-align: middle;
-        text-align: left;
       }
 
       [hidden] {
@@ -35,8 +29,7 @@
       }
 
       .delete-chat {
-        display: inline-block;
-        vertical-align: middle;
+        display: flex;
         color: rgba(0, 0, 0, 0.4);
       }
 
@@ -44,25 +37,23 @@
         color: rgba(0, 0, 0, 0.9);
       }
 
-      iron-icon {
-        vertical-align: middle;
-      }
-
-      #profilePhoto {
+      #profile-photo {
+        display: flex;
         border-radius: 50%;
         width: 36px;
         height: 36px;
-        vertical-align: middle;
+      }
+
+      #name {
+        padding: 0 4px;
       }
     </style>
 
-    <a href="/chat/[[key]]?lang=en">
-      <span style="padding:8px 0;">
-        <img src="[[user.url]]" alt="Photo" id="profilePhoto">
-        <span>[[user.name]]</span>
+      <a href="/chat/[[key]]?lang=en">
+        <img src="[[user.url]]" alt="Photo" id="profile-photo">
+        <span id="name">[[user.name]]</span>
         <iron-icon class="delete-chat" on-click="_deleteChannel" icon="icons:delete"></iron-icon>
-      </span>
-    </a>
+      </a>
 
   </template>
 
