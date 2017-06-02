@@ -86,15 +86,15 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
       .left-toolbar {
         padding: 0;
         color: white;
-        letter-spacing: 2px;
+        letter-spacing: 1px;
         font-size: 24px;
         padding-left: 16px;
         vertical-align: middle;
       }
 
       .left-toolbar select {
-        -webkit-appearance:none;
-        -moz-appearance:none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
         appearance: none;
         box-sizing: border-box;
         display: inline-block;
@@ -455,8 +455,14 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
           observer: '_offlineChanged'
         },
         chats: {
-          type: Array
+          type: Array,
+          observer: 'yo'
         }
+      },
+
+      yo: function() {
+        // Just testing for security, this should only show the current users chats!
+        console.log(this.chats);
       },
 
       // MAINLY FOR TRANSLATING
