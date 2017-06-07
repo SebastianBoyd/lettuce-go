@@ -147,7 +147,7 @@
         let message = this.notification.message;
         switch (this.notification.type) {
           case 'request':
-            this.displayMesssage = `${userSent.name} requested ${message} with you.`;
+            this.displayMesssage = `${userSent.name} requested ${message.activity} with you.`;
             break;
           case 'decline':
             this.displayMesssage = `${userSent.name} declined your request ${message}.`;
@@ -166,7 +166,7 @@
       },
 
       _acceptRequest: function(evt) {
-        this.fire('create-chat', { otherUser: this.notification.userSent });
+        this.fire('create-chat', { otherUser: this.notification.userSent, mutualActivity: this.notification.message });
         const notificationID = evt.path[2].id;
 
         this.fire('delete-notification', { noteID: notificationID });

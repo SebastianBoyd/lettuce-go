@@ -212,6 +212,9 @@
         },
         chats: {
           value: [],
+        },
+        mutual: {
+          type: Object
         }
       },
 
@@ -282,10 +285,16 @@
       },
 
       addToCalendar: function() {
-        const title = 'Your+Event+Name';
-        const dates = '20140127T224000Z/20140320T221500Z';
-        const description = 'Here is the description';
-        const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${description}&sf=true&output=xml`;
+        const title = this.mutual.activity;
+        const location = this.mutual.location;
+        let date = this.mutual.date.replace('/', '');
+        date = date.replace('/', '');
+        const year = date.substring(0, 4);
+        const month = date.substring(4, 6);
+        const day = date.substring(6, 8);
+        const dates = `${year}${month}${day}T190000Z/${year}${month}${day}T200000Z`;
+        const description = 'Description Here';
+        const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${description}&location=${location}&sf=true&output=xml`;
         window.open(url,'_blank');
       }
     });

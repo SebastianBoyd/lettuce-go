@@ -413,7 +413,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 
             <!-- VIEW CHATS -->
             <template is="dom-repeat" items="[[chats]]" filter="isPersonalChat" initial-count="10">
-              <view-chats name="[[item.$key]]" chat-key="[[item.$key]]" current-user="[[user]]" users="[[item.users]]"></view-chats>
+              <view-chats name="[[item.$key]]" chat-key="[[item.$key]]" current-user="[[user]]" users="[[item.users]]" mutual="[[item.mutualActivity]]"></view-chats>
             </template>
 
             <!-- VIEW ACTIVITIES -->
@@ -457,14 +457,8 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
           observer: '_offlineChanged'
         },
         chats: {
-          type: Array,
-          observer: 'yo'
+          type: Array
         }
-      },
-
-      yo: function() {
-        // Just testing for security, this should only show the current users chats!
-        console.log(this.chats);
       },
 
       // MAINLY FOR TRANSLATING
@@ -509,11 +503,11 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
        *******************************/
 
        _requestActivity: function(event) {
+          const sendToUID = event.detail.activity.uid;
           const activity = event.detail.activity;
-          const sendToUID = activity.uid;
-          const message = activity.activity;
+          const message = {date: activity.date, activity: activity.activity, location: activity.location, email: activity.email};
           const type = 'request';
-          this._firebaseRequestActivity(activity.$key, this.user.uid);
+          this._firebaseRequestActivity(event.detail.activity.$key, this.user.uid);
           this._firebaseSendNotification(this.user, sendToUID, message, type);
        },
 
@@ -529,16 +523,16 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
       // EXECUTES WHEN REQUEST BUTTON CLICKED
       _sendNotification: function (event) {
         console.log('Sending Notification');
-        let sendToUID = event.detail.sendTo;
-        let message = event.detail.message;
-        let type = event.detail.type;
-        let user = this.user;
+        const sendToUID = event.detail.sendTo;
+        const message = {text: event.detail.message};
+        const type = event.detail.type;
+        const user = this.user;
         this._firebaseSendNotification(user, sendToUID, message, type);
       },
 
       // FIRED WHEN USER ACCEPTS OR DECLINES NOTIFICATION
       _deleteNotification: function (event) {
-        let noteID = event.detail.noteID;
+        const noteID = event.detail.noteID;
         this._firebaseDeleteNotification(this.user.uid, noteID);
       },
 
@@ -573,7 +567,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
        _createChat: function (event) {
          let currentUser = { name: this.user.displayName, photoURL: this.user.photoURL, id: this.user.uid };
          let otherUser = event.detail.otherUser;
-         this._firebaseCreateChat(currentUser, otherUser);
+         this._firebaseCreateChat(currentUser, otherUser, event.detail.mutualActivity);
        },
 
        // DELETES GIVEN CHAT

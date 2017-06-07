@@ -93,10 +93,11 @@ Polymer.FirebaseHelper = {
   * CHATS
   *******************************/
 
-  _firebaseCreateChat: function(currentUser, otherUser) {
+  _firebaseCreateChat: function(currentUser, otherUser, mutualActivity) {
+    console.log(mutualActivity);
     const dbRef = firebase.database().ref('/chats/');
     const userList = {user1: currentUser, user2: otherUser};
-    const chat = {users: userList};
+    const chat = {users: userList, mutualActivity: mutualActivity};
     dbRef.push().set(chat);
   },
 

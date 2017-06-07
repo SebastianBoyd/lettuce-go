@@ -79,6 +79,7 @@
 
     <!-- BEGIN PANEL -->
     <div class="title">Add an Activity</div>
+    <span id="warning" style="display: none; color: red;">Please select an activitiy.</span>
     <vaadin-combo-box label="Choose an Activity" value="{{activity}}" items="[[activities]]"></vaadin-combo-box>
     <div class="title">Pick a Date:</div>
 
@@ -129,9 +130,14 @@
         if (!this.$.write.value) {
           this.$.write.value = 'No Description Provided.';
         }
+        if (!this.activity) {
+          this.$.warning.style.display = 'block';
+          return;
+        }
         this.fire('new-post', { message: this.$.write.value.trim(), channel: this.channel, date: this.date, activity: this.activity });
         this.activity = null;
         this.$.write.value = '';
+        this.$.warning.style.display = 'none';
       },
 
       // HIDES PANEL WHEN CANCEL CLICKED
