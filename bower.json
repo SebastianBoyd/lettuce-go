@@ -16,14 +16,11 @@
     "iron-selector": "PolymerElements/iron-selector#^1.0.0",
     "paper-button": "PolymerElements/paper-button#^1.0.0",
     "paper-icon-button": "^1.1.5",
-    "paper-toggle-button": "PolymerElements/paper-toggle-button#^1.0.0",
     "polymerfire": "firebase/polymerfire#^0.9.0",
     "app-storage": "polymerelements/app-storage#^0.9.0",
     "polymer": "Polymer/polymer#^1.6.0",
-    "emojilib": "muan/emojilib#^2.0.0",
-    "intl": "andyearnshaw/intl.js#^1.0.0",
-    "vaadin-combo-box": "^1.1.5",
     "app-datepicker": "^2.9.1",
+    "intl": "andyearnshaw/intl.js#^1.0.0",
     "paper-fab": "^1.2.2",
     "paper-badge": "^1.1.4",
     "iron-input": "^1.0.11",
@@ -31,12 +28,14 @@
     "iron-icons": "^2.0.0",
     "paper-slider": "^2.0.0",
     "web-animations-js": "^2.2.5",
-    "neon-animation": "PolymerElements/neon-animation#^2.0.0"
+    "neon-animation": "PolymerElements/neon-animation#^2.0.0",
+    "vaadin-combo-box": "vaadin/vaadin-combo-box#^1.3.3"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
   },
   "resolutions": {
-    "paper-input": "^1.1.3"
+    "paper-input": "^1.1.3",
+    "webcomponentsjs": "^v1.0.0"
   }
 }

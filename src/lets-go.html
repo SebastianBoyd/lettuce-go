@@ -20,7 +20,6 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 
 <!-- IRON ELEMENTS -->
-
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/social-icons.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
@@ -169,10 +168,14 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
         @apply(--layout-flex-auto);
       }
 
-      paper-button[raised] {
+      /*paper-button[raised] {
         background-color: var(--app-primary-color);
         color: white;
         font-size: 14px;
+      }*/
+
+      #logout {
+        background: var(--app-secondary-color);
       }
 
       paper-icon-button {
@@ -382,7 +385,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
             <!-- PROFILE PHOTO AND SIGN OUT BUTTON -->
             <div class="userInfo">
               <img class="avatar" alt="github avatar" src="[[user.photoURL]]">
-              <paper-button on-tap="logout" hidden$="[[offline]]">Sign Out</paper-button>
+              <paper-button on-tap="logout" hidden$="[[offline]]" id="logout">Sign Out</paper-button>
             </div>
           </app-toolbar>
         </app-header>
@@ -495,6 +498,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
         firebase.auth().signOut();
         this.$.newPost.hidden = true;
         this.$.loading.hidden = true;
+        window.location.href = '';
         location.reload();
       },
 
@@ -623,24 +627,8 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
       },
 
        /*******************************
-       * MISC LANGUAGE AND OFFLINE
+       * OFFLINE
        *******************************/
-      _selectLanguageChanged: function (event) {
-        this.set('queryParams.lang', event.target.value);
-        this.fire('language-changed', {value: event.target.value});
-        switch (event.target.value) {
-          case "he":
-          case "ar":
-          case "ff":
-          case "fa":
-          case "yi":
-          case "ur":
-            document.body.style.setProperty("direction", "rtl");
-            break;
-          default:
-            document.body.style.setProperty("direction","ltr");
-        }
-      },
 
       _offlineChanged: function(offline, previous) {
         if (previous === undefined) {

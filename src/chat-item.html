@@ -24,6 +24,10 @@
         color: #455A64;
       }
 
+      a:hover {
+        background: rgba(230, 228, 228, 0.84);
+      }
+
       [hidden] {
         display: none !important;
       }
@@ -46,14 +50,15 @@
 
       #name {
         padding: 0 4px;
+        flex-grow: 10;
       }
     </style>
 
-      <a href="/chat/[[key]]?lang=en">
-        <img src="[[user.url]]" alt="Photo" id="profile-photo">
-        <span id="name">[[user.name]]</span>
-        <iron-icon class="delete-chat" on-click="_deleteChannel" icon="icons:delete"></iron-icon>
-      </a>
+    <a href="/chat/[[key]]?lang=en">
+      <img src="[[user.url]]" alt="Photo" id="profile-photo">
+      <span id="name">[[user.name]]</span>
+      <iron-icon class="delete-chat" on-click="_deleteChannel" icon="icons:delete"></iron-icon>
+    </a>
 
   </template>
 
