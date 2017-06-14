@@ -1,5 +1,6 @@
 <!-- POLYMER STUFF -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 
@@ -101,20 +102,20 @@
   <script>
     const SYMBOLS = '!"#$%&\'()*+,-./:;\<=>?@[]^_`{|}~';
 
-    Polymer({
-      is: 'new-post',
+    class NewPost extends Polymer.Element {
+      static get is() { return 'new-post'; }
 
-      behaviors: [
-        Polymer.AppLocalizeBehavior
-      ],
-
-      properties: {
-        currentDate: {
-          type: String
+      static get properties() {
+        return {
+          /* properties meta data object just like 1.x */
+          currentDate: {
+            type: String
+          }
         }
-      },
+      }
 
-      ready: function() {
+      constructor() {
+        super();
         let date = new Date();
         let mm = date.getMonth() + 1; // getMonth() is zero-based
         let dd = date.getDate();
@@ -123,10 +124,10 @@
             (mm>9 ? '' : '0') + mm,
             (dd>9 ? '' : '0') + dd
           ].join('/');
-      },
+      }
 
       // POSTS TO FIREBASE USING this.fire()
-      _post: function () {
+      _post () {
         if (!this.$.write.value) {
           this.$.write.value = 'No Description Provided.';
         }
@@ -138,17 +139,17 @@
         this.activity = null;
         this.$.write.value = '';
         this.$.warning.style.display = 'none';
-      },
+      }
 
       // HIDES PANEL WHEN CANCEL CLICKED
-      hide: function () {
+      hide () {
         this.hidden = true;
-      },
+      }
 
       computeActivitiesURL(){
         return "../src/activities-en.json"
       }
-    });
-
+    }
+    customElements.define(NewPost.is, NewPost);
   </script>
 </dom-module>

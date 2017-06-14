@@ -1,5 +1,6 @@
 <!-- POLYMER STUFF -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
 
@@ -149,30 +150,38 @@
       "November", "December"
     ];
 
-    Polymer({
-      is: 'activity-post',
-      behaviors: [
-        Polymer.AppLocalizeBehavior
-      ],
+    class ActivityPost extends Polymer.Element {
+      static get is() { return 'activity-post'; }
 
-      properties: {
-        item: {
-          type: Object
-        },
-        currentUser: {
-          type: Object
+      static get properties() {
+        return {
+          /* properties meta data object just like 1.x */
+          item: {
+            type: Object
+          },
+          currentUser: {
+            type: Object
+          }
         }
-      },
+      }
 
-      computeBGImage: function (activity) {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+      }
+
+      computeBGImage (activity) {
         return "background-image: url('../images/activities/" + activity + ".jpg');"
-      },
+      }
 
-      _getTitle: function(title) {
+      _getTitle(title) {
         return title || '';
-      },
+      }
 
-      _getDate: function(timestamp) {
+      _getDate(timestamp) {
         let date = new Date(timestamp);
         let seconds = Math.floor((new Date() - date) / 1000);
 
@@ -188,25 +197,26 @@
           let year = date.getFullYear();
           return day + ' '  + monthNames[monthIndex] + ' ' + year;
         }
-      },
+      }
 
-      _delete: function(event) {
+      _delete(event) {
         let post = event.path[0].ref;
         this.fire('post-delete', { post: post.$key, channel: '-KVw-R8wx3CVtu3b_grO' });
-      },
+      }
 
-      _request: function(event, item) {
+      _request(event, item) {
         let post = event.path[0].ref;
         this.fire('request-activity', { activity: post });
-      },
+      }
 
-      _hasLocation: function(location) {
+      _hasLocation(location) {
         return !!location;
-      },
+      }
 
-      _personalActivity: function(item) {
+      _personalActivity(item) {
         return this.currentUser.uid === item.uid;
       }
-    });
+    }
+    customElements.define(ActivityPost.is, ActivityPost);
   </script>
 </dom-module>
