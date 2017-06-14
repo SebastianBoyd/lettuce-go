@@ -19,7 +19,7 @@
         display: block;
       }
       .item {
-        @apply(--layout-vertical);
+        @apply --layout-vertical;
         margin: 8px 0;
         background: rgba(255, 255, 255, 0.5);
         border-radius: 3px;
@@ -54,8 +54,8 @@
       .action-container {
         font-size: 10px;
         margin-left: -5px;
-        @apply(--layout-horizontal);
-        @apply(--layout-wrap);
+        @apply --layout-horizontal;
+        @apply --layout-wrap;
       }
 
       .hint {
@@ -76,12 +76,12 @@
       }
 
       .horizontal {
-        @apply(--layout-horizontal);
+        @apply --layout-horizontal;
         padding: 16px;
       }
 
       .vertical {
-        @apply(--layout-vertical);
+        @apply --layout-vertical;
       }
 
       iron-icon.action {
@@ -101,7 +101,7 @@
       button:hover {
         color: var(--app-error-color);
       }
-      
+
       .card-top {
         height: 20vh;
         width: 100%;
