@@ -424,7 +424,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
             <view-posts name="-KVw-R8wx3CVtu3b_grO" channel-key="-KVw-R8wx3CVtu3b_grO" current-user="[[user]]" posts="[[posts]]"></view-posts>
           </iron-pages>
 
-          <div id="loading"><div id="spinner"></div></div>
+          <div id="loading" hidden=[[_posts]]><div id="spinner"></div></div>
 
         </div>
         <!-- END MAIN CONTENT -->
@@ -474,11 +474,12 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
         ]
       }
 
-      static get behaviors(){return [Polymer.FirebaseHelper, Polymer.AppLocalizeBehavior]}
+      static get behaviors(){return [Polymer.FirebaseHelper]}
 
       // TODO: CHANGE THIS.FIRE()
       // UNIVERSAL EVENT LISTENERS (FIRED FROM OTHER ELEMENTS ex: this.fire())
       static get listeners () {
+        
         return {'new-post': '_postNewMessage',
         'post-delete': '_postDelete',
         'send-notification': '_sendNotification',
@@ -512,7 +513,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
       }
 
       resizeHeader() {
-        this.$.header.fire('iron-resize');
+        this.$.header.this.dispatchEvent(new CustomEvent('iron-resize'));
       }
 
        /*******************************
