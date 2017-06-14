@@ -460,7 +460,8 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
           observer: '_offlineChanged'
         },
         chats: {
-          type: Array
+          type: Array,
+          observer: '_chatsLoaded'
         }
       },
 
@@ -648,6 +649,10 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
             this._initialOffline = false;
           }
         }
+      },
+
+      _chatsLoaded: function (event) {
+        console.log(event);
       },
 
       /*******************************
