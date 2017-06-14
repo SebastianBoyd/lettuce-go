@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
 
 <dom-module id="channel-item">
   <template>
@@ -51,10 +52,13 @@
   </template>
 
   <script>
-    Polymer({
-      is: 'channel-item',
+  class ChannelItem extends Polymer.Element {
 
-      properties: {
+    static get is() { return 'channel-item'; }
+
+    static get properties() {
+      return {
+        /* properties meta data object just like 1.x */
         channel: {
           type: Object
         },
@@ -64,6 +68,21 @@
           value: false
         }
       }
-    });
+    }
+
+
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      super.connectedCallback();
+    }
+
+    }
+
+    // Register custom element definition using standard platform API
+    customElements.define(ChannelItem.is, ChannelItem);
+
   </script>
 </dom-module>

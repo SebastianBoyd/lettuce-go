@@ -5,6 +5,7 @@
 <link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
 
 <link rel="import" href="shared-styles.html">
 <dom-module id="view-chats">
@@ -135,7 +136,7 @@
         font-size: .7em;
         padding-bottom: 6px;
       }
-      
+
       .lower {
         display: flex;
       }
@@ -188,12 +189,14 @@
   </template>
 
   <script>
-    Polymer({
-      is: 'view-chats',
-      behaviors: [
-        Polymer.AppLocalizeBehavior
-      ],
-      properties: {
+
+  class ViewChats extends Polymer.Element {
+
+    static get is() { return 'view-chats'; }
+
+    static get properties() {
+      return {
+        /* properties meta data object just like 1.x */
         textMessage: {
           type: String
         },
@@ -216,87 +219,102 @@
         mutual: {
           type: Object
         }
-      },
-
-      ready: function() {
-        // AUTO SCROLL
-        this.$.messages.addEventListener('dom-change', evt => {
-          this.$.messageWrapper.scrollTop = this.$.messageWrapper.scrollHeight - this.$.messageWrapper.clientHeight;
-        });
-      },
-
-      checkForEnter: function(evt) {
-        if (evt.keyCode == 13) {
-          this._sendMessage(evt);
-        }
-      },
-
-      _getName: function() { 
-        if (this.users.user1.id == this.currentUser.uid) {
-          this.otherUser = this.users.user2;
-        } else {
-          this.otherUser = this.users.user1;
-        }
-      },
-
-      computePath: function(id) {
-        return `/chats/${id}/chats`;
-      },
-
-      _getDate: function (timestamp) {
-        let date = new Date(timestamp);
-        let seconds = Math.floor((new Date() - date) / 1000);
-
-        if (seconds < 3600) {
-          let minutes = Math.floor(seconds / 60)
-          return (minutes > 1) ? minutes + " minutes ago" : "Now";
-        } else if (seconds < 86400) {
-          let hours = Math.floor(seconds / 3600)
-          return (hours > 1) ? hours + " hours ago" : "1 hour ago";
-        } else {
-          let day = date.getDate();
-          let monthIndex = date.getMonth();
-          let year = date.getFullYear();
-          return `${monthNames[monthIndex]} ${day}, ${year}`;
-        }
-      },
-
-      computeAlignment: function(user) {
-        if (user.uid == this.currentUser.uid) {
-          return 'align-items: flex-end;';
-        } else {
-          return 'align-items: flex-start;';
-        }
-      },
-
-      computePhotoAlignment: function(user) {
-        if (user.uid != this.currentUser.uid) {
-          return 'flex-direction: row-reverse;';
-        }
-      },
-
-      _sendMessage: function (evt) {
-        if (this.$.message.value != '') {
-          let user = { name: this.currentUser.displayName, photoURL: this.currentUser.photoURL, uid: this.currentUser.uid };
-          this.fire('send-message', { messageID: this.chatKey, value: this.textMessage, user: user });
-          this.fire('send-notification', { sendTo: this.otherUser.id, user: user, message: this.textMessage, type: 'chat' });
-          this.$.message.value = '';
-        }
-      },
-
-      addToCalendar: function() {
-        const title = this.mutual.activity;
-        const location = this.mutual.location;
-        let date = this.mutual.date.replace('/', '');
-        date = date.replace('/', '');
-        const year = date.substring(0, 4);
-        const month = date.substring(4, 6);
-        const day = date.substring(6, 8);
-        const dates = `${year}${month}${day}T190000Z/${year}${month}${day}T200000Z`;
-        const description = 'Description Here';
-        const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${description}&location=${location}&sf=true&output=xml`;
-        window.open(url,'_blank');
       }
-    });
+    }
+
+    static get observers() {
+      return [
+        /* observer array just like 1.x */
+        '_myPropChanged(myProp.*)'
+      ]
+    }
+
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      super.connectedCallback();
+      // AUTO SCROLL
+      this.$.messages.addEventListener('dom-change', evt => {
+        this.$.messageWrapper.scrollTop = this.$.messageWrapper.scrollHeight - this.$.messageWrapper.clientHeight;
+      });
+    }
+
+    _myPropChanged(changeRecord) {
+    }
+
+    checkForEnter(evt) {
+      if (evt.keyCode == 13) {
+        this._sendMessage(evt);
+      }
+    }
+
+    _getName() {
+      if (this.users.user1.id == this.currentUser.uid) {
+        this.otherUser = this.users.user2;
+      } else {
+        this.otherUser = this.users.user1;
+      }
+    }
+
+    computePath(id) {
+      return `/chats/${id}/chats`;
+    }
+
+    _getDate(timestamp) {
+      let date = new Date(timestamp);
+      let seconds = Math.floor((new Date() - date) / 1000);
+
+      if (seconds < 3600) {
+        let minutes = Math.floor(seconds / 60)
+        return (minutes > 1) ? minutes + " minutes ago" : "Now";
+      } else if (seconds < 86400) {
+        let hours = Math.floor(seconds / 3600)
+        return (hours > 1) ? hours + " hours ago" : "1 hour ago";
+      } else {
+        let day = date.getDate();
+        let monthIndex = date.getMonth();
+        let year = date.getFullYear();
+        return `${monthNames[monthIndex]} ${day}, ${year}`;
+      }
+    }
+
+    computeAlignment(user) {
+      if (user.uid == this.currentUser.uid) {
+        return 'align-items: flex-end;';
+      } else {
+        return 'align-items: flex-start;';
+      }
+    }
+
+    _sendMessage(evt) {
+      if (this.$.message.value != '') {
+        let user = { name: this.currentUser.displayName, photoURL: this.currentUser.photoURL, uid: this.currentUser.uid };
+        this.fire('send-message', { messageID: this.chatKey, value: this.textMessage, user: user });
+        this.fire('send-notification', { sendTo: this.otherUser.id, user: user, message: this.textMessage, type: 'chat' });
+        this.$.message.value = '';
+      }
+    }
+
+    addToCalendar() {
+      const title = this.mutual.activity;
+      const location = this.mutual.location;
+      let date = this.mutual.date.replace('/', '');
+      date = date.replace('/', '');
+      const year = date.substring(0, 4);
+      const month = date.substring(4, 6);
+      const day = date.substring(6, 8);
+      const dates = `${year}${month}${day}T190000Z/${year}${month}${day}T200000Z`;
+      const description = 'Description Here';
+      const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${description}&location=${location}&sf=true&output=xml`;
+      window.open(url,'_blank');
+    }
+
+    }
+
+    // Register custom element definition using standard platform API
+    customElements.define(ViewChats.is, ViewChats);
+
   </script>
 </dom-module>
