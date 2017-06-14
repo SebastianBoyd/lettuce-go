@@ -285,11 +285,12 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
       }.bind(this));
 
       this.$.googleAuth.auth.onAuthStateChanged(function(user) {
+        let self = this;
         if (!!user) {
           Polymer.importHref(this.resolveUrl('lets-go.html'), function() {
-            this.$.feed.user = user;
-            this.$.signin.hidden = true;
-            this.$.feed.hidden = false;
+            self.$.feed.user = user;
+            self.$.signin.hidden = true;
+            self.$.feed.hidden = false;
             // We went from hidden to visible, so app-layout needs to recompute its size.
             this.$.feed.resizeHeader();
           });
