@@ -570,9 +570,10 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
        _showCreatePost() {
         window.scrollTo(0, 0);
         let resolvedPageUrl = this.resolveUrl('new-post.html');
-        this.importHref(resolvedPageUrl, function() {
-          this.$.newPost.create();
-          this.$.newPost.hidden = false;
+        let self = this;
+        Polymer.importHref(resolvedPageUrl, function() {
+          console.log(self.$.newPost);
+          self.$.newPost.hidden = false;
         }, null, true);
       }
 
