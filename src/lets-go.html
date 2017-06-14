@@ -7,6 +7,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 
 <!-- POLYMER IMPORTS -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 
 <!-- APP ELEMENTS -->
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
@@ -48,7 +49,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 
 <dom-module id="lets-go">
   <template>
-    <style is="custom-style" include="shared-styles">
+    <style include="shared-styles">
       :host {
         --paper-tabs-selection-bar-color: var(--app-primary-color);
         --paper-tab-ink: var(--app-primary-color);
@@ -164,8 +165,8 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
       }
 
       .spacer {
-        @apply(--layout-flex);
-        @apply(--layout-flex-auto);
+        @apply --layout-flex;
+        @apply --layout-flex-auto;
       }
 
       /*paper-button[raised] {
@@ -435,203 +436,214 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
   </template>
 
   <script>
-    Polymer({
-      is: 'lets-go',
+    class LetsGo extends Polymer.Element {
+      static get is() { return 'lets-go'; }
 
-      behaviors: [Polymer.FirebaseHelper, Polymer.AppLocalizeBehavior],
-
-      properties: {
-        page: {
-          type: String
-        },
-        posts: {
-          type: Array,
-          value: []
-        },
-        user: {
-          type: Object,
-          observer: '_updateUserInfo'
-        },
-        location: {
-          type: String
-        },
-        offline: {
-          type: Boolean,
-          observer: '_offlineChanged'
-        },
-        chats: {
-          type: Array,
-          observer: '_chatsLoaded'
+      static get properties() {
+        return {
+          /* properties meta data object just like 1.x */
+          page: {
+            type: String
+          },
+          posts: {
+            type: Array,
+            value: []
+          },
+          user: {
+            type: Object,
+            observer: '_updateUserInfo'
+          },
+          location: {
+            type: String
+          },
+          offline: {
+            type: Boolean,
+            observer: '_offlineChanged'
+          },
+          chats: {
+            type: Array,
+            observer: '_chatsLoaded'
+          }
         }
-      },
+      }
 
-      // MAINLY FOR TRANSLATING
-      ready: function() {
-        this.loadResources(this.resolveUrl('locales.json'));
-        Polymer.RenderStatus.afterNextRender(this, function() {
-          // This looks like work, so do it later.
-          this._getLocation();
-        });
-      },
+      static get observers() {
+        return [
+          /* observer array just like 1.x */
+          '_routePageChanged(subroute.path)',
+        ]
+      }
 
-      resizeHeader: function() {
-        this.$.header.fire('iron-resize');
-      },
+      static get behaviors(){return [Polymer.FirebaseHelper, Polymer.AppLocalizeBehavior]}
 
-      observers: [
-        '_routePageChanged(subroute.path)',
-      ],
-
+      // TODO: CHANGE THIS.FIRE()
       // UNIVERSAL EVENT LISTENERS (FIRED FROM OTHER ELEMENTS ex: this.fire())
-      listeners: {
-        'new-post': '_postNewMessage',
+      static get listener () {
+        return {'new-post': '_postNewMessage',
         'post-delete': '_postDelete',
         'send-notification': '_sendNotification',
         'create-chat': '_createChat',
         'delete-chat': '_deleteChat',
         'delete-notification': '_deleteNotification',
         'send-message': '_sendMessage',
-        'request-activity': '_requestActivity'
-      },
+        'request-activity': '_requestActivity'};
+      }
+
+      constructor() {
+        super();
+        // this.loadResources(this.resolveUrl('locales.json'));
+        Polymer.RenderStatus.afterNextRender(this, function() {
+          // This looks like work, so do it later.
+          this._getLocation();
+        });
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+      }
 
       // HANDLES LOGGING OUT
-      logout: function() {
+      logout () {
         firebase.auth().signOut();
         this.$.newPost.hidden = true;
         this.$.loading.hidden = true;
         window.location.href = '';
         location.reload();
-      },
+      }
+
+      resizeHeader() {
+        this.$.header.fire('iron-resize');
+      }
 
        /*******************************
        * ACTIVITIES
        *******************************/
 
-       _requestActivity: function(event) {
+       _requestActivity (event) {
           const sendToUID = event.detail.activity.uid;
           const activity = event.detail.activity;
           const message = {date: activity.date, activity: activity.activity, location: activity.location, email: activity.email};
           const type = 'request';
           this._firebaseRequestActivity(event.detail.activity.$key, this.user.uid);
           this._firebaseSendNotification(this.user, sendToUID, message, type);
-       },
+       }
 
       /*******************************
        * NOTIFICATIONS
        *******************************/
 
       // HANDLES DISPLAYING NOTIFICATION PANEL
-      _showNotifications: function (event) {
+      _showNotifications (event) {
         this.$.notificationPanel.hidden = !this.$.notificationPanel.hidden;
-      },
+      }
 
       // EXECUTES WHEN REQUEST BUTTON CLICKED
-      _sendNotification: function (event) {
+      _sendNotification (event) {
         console.log('Sending Notification');
         const sendToUID = event.detail.sendTo;
         const message = {text: event.detail.message};
         const type = event.detail.type;
         const user = this.user;
         this._firebaseSendNotification(user, sendToUID, message, type);
-      },
+      }
 
       // FIRED WHEN USER ACCEPTS OR DECLINES NOTIFICATION
-      _deleteNotification: function (event) {
+      _deleteNotification (event) {
         const noteID = event.detail.noteID;
         this._firebaseDeleteNotification(this.user.uid, noteID);
-      },
+      }
 
       /*******************************
        * POSTS
        *******************************/
-      _postDelete: function(event) {
+      _postDelete(event) {
         this._firebaseDeletePost(event.detail.post, event.detail.channel);
-      },
+      }
 
-      _postNewMessage: function(event) {
+      _postNewMessage(event) {
         let location = this.location || '';
         this.$.newPost.hidden = true;
         this._firebaseAddPost(event.detail.channel, event.detail.message, event.detail.activity, event.detail.date, location);
-      },
+      }
 
       // FUNCTION THAT TOGGLES POST CREATION ELEMENT
-       _showCreatePost: function() {
+       _showCreatePost() {
         window.scrollTo(0, 0);
         let resolvedPageUrl = this.resolveUrl('new-post.html');
         this.importHref(resolvedPageUrl, function() {
           this.$.newPost.create();
           this.$.newPost.hidden = false;
         }, null, true);
-      },
+      }
 
       /*******************************
        * CHATS
        *******************************/
 
        // CREATES CHAT, CALLED WHEN YOU ACCEPT ACTIVITY REQUEST
-       _createChat: function (event) {
+       _createChat (event) {
          let currentUser = { name: this.user.displayName, photoURL: this.user.photoURL, id: this.user.uid };
          let otherUser = event.detail.otherUser;
          this._firebaseCreateChat(currentUser, otherUser, event.detail.mutualActivity);
-       },
+       }
 
        // DELETES GIVEN CHAT
        // TODO: CONVERT TO BLOCKING
-       _deleteChat: function (event) {
+       _deleteChat (event) {
          this._firebaseDeleteChat(event.detail.key);
-       },
+       }
 
        // SENDS MESSAGE TO GIVE CHAT
-       _sendMessage: function (event) {
+       _sendMessage (event) {
          this._firebaseSendChat(event.detail.messageID, event.detail.user, event.detail.value);
-       },
+       }
 
        // FILTER FUNCTION FOR KNOWING IF CHAT IS PERSONAL
        // TODO: ONY QUERY FOR PERSONAL CHATS
-       isPersonalChat: function(item) {
+       isPersonalChat(item) {
          if (item.users.user1.id == this.user.uid || item.users.user2.id == this.user.uid) {
           return true;
          } else {
            return false;
          }
-       },
+       }
 
        // COMPUTES NAME OF CHAT THAT SHOWS UP IN SIDEBAR
-       _computeChatName: function(item) {
+       _computeChatName(item) {
          if (item.users.user2.id == this.user.uid) {
            return { name: item.users.user1.name, url: item.users.user1.photoURL };
          } else {
            return { name: item.users.user2.name, url: item.users.user2.photoURL };
          }
-       },
+       }
 
        // HIDES FAB WHEN ON CHAT PAGE
-       hideFab: function() {
+       hideFab() {
         const urlContainsChat = window.location.href.includes('chat');
         if (urlContainsChat) {
           this.$.createPostButton.hidden = true;
         } else {
           this.$.createPostButton.hidden = false;
         }
-       },
+       }
 
       /*******************************
        * Routes
        *******************************/
-      _routePageChanged: function (page) {
+      _routePageChanged (page) {
         this.$.notificationPanel.hidden = true;
         if (window.location.href.includes('chat')) {
           this.$.newPost.hidden = true;
         }
         this.hideFab();
         this.page = page.replace(/^\/|\/$/g, '') || '-KVw-R8wx3CVtu3b_grO';
-      },
+      }
 
        /*******************************
        * OFFLINE
        *******************************/
 
-      _offlineChanged: function(offline, previous) {
+      _offlineChanged(offline, previous) {
         if (previous === undefined) {
           this._initialOffline = offline;
         }
@@ -649,31 +661,31 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
             this._initialOffline = false;
           }
         }
-      },
+      }
 
-      _chatsLoaded: function (event) {
+      _chatsLoaded (event) {
         console.log(event);
-      },
+      }
 
       /*******************************
        * USERS
        *******************************/
-      _addUsers: function(event) {
+      _addUsers(event) {
         this._firebaseAddUsers(event.detail.ref, event.detail.users);
-      },
+      }
 
-      _deleteUsers: function(event) {
+      _deleteUsers(event) {
         this._firebaseDeleteUsers(event.detail.ref, event.detail.users);
-      },
+      }
 
-      _updateUserInfo: function(user) {
+      _updateUserInfo(user) {
         this._firebaseUpdateUserInfo(user);
-      },
+      }
 
       /*******************************
        * LOCATION
        *******************************/
-      _getLocation: function() {
+      _getLocation() {
         // TODO: Cache location - only updates when it changes by x margin
         let self = this;
         navigator.geolocation.getCurrentPosition(position => {
@@ -710,6 +722,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
           })
         });
       }
-    });
+    }
+    customElements.define(LetsGo.is, LetsGo);
   </script>
 </dom-module>
