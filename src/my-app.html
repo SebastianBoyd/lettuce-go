@@ -202,7 +202,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
         <div class="item title">Let's Go</div>
       </div>
       <div id="right">
-        <button on-tap="login" raised hidden$="[[offline]]">Sign In</button>
+        <button on-click="login" raised hidden$="[[offline]]">Sign In</button>
         <h3 hidden$="[[!offline]]">You're Offline</h3>
       </div>
     </div>
@@ -307,6 +307,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
     }
 
     login() {
+      console.log('login');
       this.$.googleAuth.signInWithPopup();
     }
 
