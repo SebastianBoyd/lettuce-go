@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
@@ -91,31 +92,40 @@
   </template>
 
   <script>
-    Polymer({
-      is: 'view-posts',
-      behaviors: [
-        Polymer.AppLocalizeBehavior
-      ],
+    class ViewPosts extends Polymer.Element {
+      static get is() { return 'view-posts'; }
 
-      properties: {
-        channelKey: {
-          type: String
-        },
-        currentUser: {
-          type: String
-        },
-        posts: {
-          type: Array
-        },
-        offline: {
-          type: Boolean,
-          value: false
+      static get properties() {
+        return {
+          /* properties meta data object just like 1.x */
+          channelKey: {
+            type: String
+          },
+          currentUser: {
+            type: String
+          },
+          posts: {
+            type: Array
+          },
+          offline: {
+            type: Boolean,
+            value: false
+          }
         }
-      },
+      }
 
-      toggleFilter: function() {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+      }
+
+      toggleFilter() {
         this.$.filterElement.hidden = !this.$.filterElement.hidden;
       }
-    });
+    }
+    customElements.define(ViewPosts.is, ViewPosts);
   </script>
 </dom-module>

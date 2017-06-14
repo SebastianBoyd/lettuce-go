@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
@@ -116,32 +117,43 @@
 
   <script>
 
-    Polymer({
-      is: 'view-notification',
+    class ViewNotificiation extends Polymer.Element {
+      static get is() { return 'view-notification'; }
 
-      properties: {
-        photoUrl: {
-          type: String
-        },
-        notification: {
-          type: Object,
-          observer: '_notificationArrive'
-        },
-        displayMesssage: {
-          type: String
-        },
-        buttonDisplay: {
-          type: String
-        },
-        key: {
-          type: String
-        },
-        sent: {
-          type: Number
+      static get properties() {
+        return {
+          /* properties meta data object just like 1.x */
+          photoUrl: {
+            type: String
+          },
+          notification: {
+            type: Object,
+            observer: '_notificationArrive'
+          },
+          displayMesssage: {
+            type: String
+          },
+          buttonDisplay: {
+            type: String
+          },
+          key: {
+            type: String
+          },
+          sent: {
+            type: Number
+          }
         }
-      },
+      }
 
-      _notificationArrive: function() {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+      }
+
+      _notificationArrive() {
         let $buttons = this.$$('.buttons');
         let userSent = this.notification.userSent;
         let message = this.notification.message;
@@ -163,25 +175,25 @@
             this.displayMesssage = 'We don\'t know!';
             break;
         }
-      },
+      }
 
-      _acceptRequest: function(evt) {
+      _acceptRequest(evt) {
         this.fire('create-chat', { otherUser: this.notification.userSent, mutualActivity: this.notification.message });
         const notificationID = evt.path[2].id;
 
         this.fire('delete-notification', { noteID: notificationID });
-      },
+      }
 
-      _declineRequest: function(evt) {
+      _declineRequest(evt) {
         this.fire('send-notification', { sendTo: this.notification.userSent.id, message: this.notification.message, type: 'decline' });
         this.fire('delete-notification', { noteID: this.key });
-      },
+      }
 
-      _okNotification: function() {
+      _okNotification() {
         this.fire('delete-notification', { noteID: this.key });
-      },
+      }
 
-      _getDate: function (timestamp) {
+      _getDate (timestamp) {
         let date = new Date(timestamp);
         let seconds = Math.floor((new Date() - date) / 1000);
 
@@ -198,7 +210,7 @@
           return `${monthNames[monthIndex]} ${day}, ${year}`;
         }
       }
-    });
-
+    }
+    customElements.define(ViewNotificaion.is, ViewNotificaion);
   </script>
 </dom-module>

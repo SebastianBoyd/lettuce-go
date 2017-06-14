@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
@@ -49,19 +50,30 @@
 
   <script>
 
-    Polymer({
-      is: 'notification-panel',
+    class NotificationPanel extends Polymer.Element {
+      static get is() { return 'notifications-panel'; }
 
-      properties: {
-        notifications: {
-          type: Array,
-          value: []
+      static get properties() {
+        return {
+          /* properties meta data object just like 1.x */
+          notifications: {
+            type: Array,
+            value: []
+          }
         }
-      },
-      _sort: function(a, b) {
+      }
+
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+      }
+      _sort(a, b) {
         // MAGIC SORTING WIZARD STUFF THING
       }
-    });
-
+    }
+    customElements.define(NotificationPanel.is, NotificationPanel);
   </script>
 </dom-module>
