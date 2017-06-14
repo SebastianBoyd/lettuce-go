@@ -287,6 +287,12 @@
       }
     }
 
+    computePhotoAlignment(user) {
+        if (user.uid != this.currentUser.uid) {
+          return 'flex-direction: row-reverse;';
+        }
+      }
+
     _sendMessage(evt) {
       if (this.$.message.value != '') {
         let user = { name: this.currentUser.displayName, photoURL: this.currentUser.photoURL, uid: this.currentUser.uid };
@@ -314,6 +320,5 @@
 
     // Register custom element definition using standard platform API
     customElements.define(ViewChats.is, ViewChats);
-
   </script>
 </dom-module>

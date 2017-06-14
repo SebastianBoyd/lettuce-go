@@ -31,6 +31,8 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 
 <!-- POLYFIRE -->
@@ -338,42 +340,22 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
         tail="{{subroute}}"
         query-params="{{queryParams}}"></app-route>
 
-    <!-- PAGE CONTENT -->
-
-    <!-- Layout for drawer - includes side bar -->
-    <app-drawer-layout id="drawerLayout">
-      <!-- Drawer content -->
-      <app-drawer id="drawer" swipe-open>
-        <div class="drawer-background">
-          <app-toolbar class="left-toolbar">
-            <div id="title">Let's Go</div>
-          </app-toolbar>
-
-          <div class="scrollable-list">
-            <!-- SIDE BAR -->
-            <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-
-              <!-- REGION LINKS -->
-              <h3 id="chats-header">Regions:</h3>
-              <channel-item drawer-toggle name="-KVw-R8wx3CVtu3b_grO"></channel-item>
-
-              <!-- CHAT LINKS -->
-              <h3 id="chats-header">Chats:</h3>
-              <template is="dom-repeat" items="[[chats]]" filter="isPersonalChat" initial-count="10">
-                <chat-item drawer-toggle key="[[item.$key]]" name="[[item.$key]]" user="[[_computeChatName(item)]]"></chat-item>
-              </template>
-
-            </iron-selector>
-          </div>
-
         </div>
       </app-drawer>
 
       <app-header-layout id="header">
+      <!--<h3 id="chats-header">Regions:</h3>
+      <channel-item drawer-toggle name="-KVw-R8wx3CVtu3b_grO"></channel-item>
+
+      <h3 id="chats-header">Chats:</h3>
+      <template is="dom-repeat" items="[[chats]]" filter="isPersonalChat" initial-count="10">
+        <chat-item drawer-toggle key="[[item.$key]]" name="[[item.$key]]" user="[[_computeChatName(item)]]"></chat-item>
+      </template>-->
         <!-- NAV BAR -->
         <app-header fixed>
           <app-toolbar>
-            <paper-icon-button icon="icons:menu" drawer-toggle></paper-icon-button>
+            <!--<paper-icon-button icon="icons:menu" drawer-toggle></paper-icon-button>-->
+            <div id="title">Let's Go</div>
             <div class="spacer"></div>
 
             <!-- NOTIFICATIONS -->
@@ -389,6 +371,11 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
               <paper-button on-tap="logout" hidden$="[[offline]]" id="logout">Sign Out</paper-button>
             </div>
           </app-toolbar>
+          <paper-tabs selected="0">
+            <paper-tab page="thing" on-tap="">Posts</paper-tab>
+            <paper-tab page="thing" on-tap="">Chats</paper-tab>
+            <paper-tab page="thing" on-tap="">Profile</paper-tab>
+          </paper-tabs>
         </app-header>
         <!-- END NAV BAR -->
 
@@ -429,8 +416,6 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
         </div>
         <!-- END MAIN CONTENT -->
       </app-header-layout>
-
-    </app-drawer-layout>
 
     <!-- END PAGE CONTENT -->
   </template>

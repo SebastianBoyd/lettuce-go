@@ -28,7 +28,8 @@
     "paper-slider": "^2.0.0",
     "web-animations-js": "^2.2.5",
     "neon-animation": "PolymerElements/neon-animation#^2.0.0",
-    "vaadin-combo-box": "vaadin/vaadin-combo-box#^2.0.0-alpha4"
+    "vaadin-combo-box": "vaadin/vaadin-combo-box#^2.0.0-alpha4",
+    "paper-tabs": "^2.0.0"
   },
   "devDependencies": {
     "web-component-tester": "^6.0.0"
