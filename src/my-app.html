@@ -8,8 +8,11 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-auth.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
-<link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<!-- import CSS mixin shim -->
+<link rel="import" href="/bower_components/shadycss/apply-shim.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -18,7 +21,7 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
 
 <dom-module id="my-app">
   <template>
-    <style is="custom-style" include="shared-styles">
+    <style include="shared-styles">
       :host {
         display: block;
         margin: 0;
@@ -241,54 +244,76 @@ Duncan Grubbs, Sebastian Boyd, Leo Krashanoff, Max Starr
   </template>
 
   <script>
-    Polymer({
-      is: 'my-app',
+  class MyElement extends Polymer.Element {
 
-      behaviors: [
-        Polymer.AppLocalizeBehavior
-      ],
+    static get is() { return 'my-app'; }
 
-      properties: {
+    static get properties() {
+      return {
+        /* properties meta data object just like 1.x */
         offline: {
           type: Boolean,
           value: false
         },
-      },
-
-      ready: function() {
-        this.loadResources(this.resolveUrl('locales.json'));
-
-        this.offline = navigator.onLine === false;
-        window.addEventListener('online', function() {
-          this.offline = false;
-        }.bind(this));
-        window.addEventListener('offline', function() {
-          this.offline = true;
-        }.bind(this));
-
-        this.addEventListener('language-changed', function(event) {
-          this.language = event.detail.value;
-        }.bind(this));
-
-        this.$.googleAuth.auth.onAuthStateChanged(function(user) {
-          if (!!user) {
-            this.importHref(this.resolveUrl('lets-go.html'), function() {
-              this.$.feed.user = user;
-              this.$.signin.hidden = true;
-              this.$.feed.hidden = false;
-              // We went from hidden to visible, so app-layout needs to recompute its size.
-              this.$.feed.resizeHeader();
-            });
-          } else {
-            this.$.signin.hidden = false;
-            this.$.feed.hidden = true;
-          }
-        }.bind(this));
-      },
-
-      login: function() {
-        this.$.googleAuth.signInWithPopup();
       }
-    });
+    }
+
+    static get observers() {
+      return [
+        /* observer array just like 1.x */
+        '_myPropChanged(myProp.*)'
+      ]
+    }
+
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      super.connectedCallback();
+
+      this.offline = navigator.onLine === false;
+      window.addEventListener('online', function() {
+        this.offline = false;
+      }.bind(this));
+      window.addEventListener('offline', function() {
+        this.offline = true;
+      }.bind(this));
+
+      this.addEventListener('language-changed', function(event) {
+        this.language = event.detail.value;
+      }.bind(this));
+
+      this.$.googleAuth.auth.onAuthStateChanged(function(user) {
+        if (!!user) {
+          Polymer.importHref(this.resolveUrl('lets-go.html'), function() {
+            this.$.feed.user = user;
+            this.$.signin.hidden = true;
+            this.$.feed.hidden = false;
+            // We went from hidden to visible, so app-layout needs to recompute its size.
+            this.$.feed.resizeHeader();
+          });
+        } else {
+          this.$.signin.hidden = false;
+          this.$.feed.hidden = true;
+        }
+      }.bind(this));
+
+    }
+
+    _myPropChanged(changeRecord) {
+
+    }
+
+    login() {
+      this.$.googleAuth.signInWithPopup();
+    }
+
+    }
+
+    // Register custom element definition using standard platform API
+    customElements.define(MyElement.is, MyElement);
+
+
   </script>
 </dom-module>
