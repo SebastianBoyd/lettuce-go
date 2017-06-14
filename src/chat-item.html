@@ -85,7 +85,7 @@
 
       _deleteChannel: function(event) {
         event.preventDefault();
-        this.fire('delete-chat', {key: this.key});
+        this.dispatchEvent(new CustomEvent('delete-chat', {key: this.key}));
       },
     });
   </script>

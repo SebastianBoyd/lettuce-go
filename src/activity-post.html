@@ -201,12 +201,12 @@
 
       _delete(event) {
         let post = event.path[0].ref;
-        this.fire('post-delete', { post: post.$key, channel: '-KVw-R8wx3CVtu3b_grO' });
+        this.dispatchEvent(new CustomEvent('post-delete', { post: post.$key, channel: '-KVw-R8wx3CVtu3b_grO' }));
       }
 
       _request(event, item) {
         let post = event.path[0].ref;
-        this.fire('request-activity', { activity: post });
+        this.dispatchEvent(new CustomEvent('request-activity', { activity: post }));
       }
 
       _hasLocation(location) {

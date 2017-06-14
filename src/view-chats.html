@@ -290,8 +290,8 @@
     _sendMessage(evt) {
       if (this.$.message.value != '') {
         let user = { name: this.currentUser.displayName, photoURL: this.currentUser.photoURL, uid: this.currentUser.uid };
-        this.fire('send-message', { messageID: this.chatKey, value: this.textMessage, user: user });
-        this.fire('send-notification', { sendTo: this.otherUser.id, user: user, message: this.textMessage, type: 'chat' });
+        this.dispatchEvent(new CustomEvent('send-message', { messageID: this.chatKey, value: this.textMessage, user: user }));
+        this.dispatchEvent(new CustomEvent('send-notification', { sendTo: this.otherUser.id, user: user, message: this.textMessage, type: 'chat' }));
         this.$.message.value = '';
       }
     }

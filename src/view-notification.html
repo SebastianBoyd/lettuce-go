@@ -178,19 +178,19 @@
       }
 
       _acceptRequest(evt) {
-        this.fire('create-chat', { otherUser: this.notification.userSent, mutualActivity: this.notification.message });
+        this.dispatchEvent(new CustomEvent('create-chat', { otherUser: this.notification.userSent, mutualActivity: this.notification.message }));
         const notificationID = evt.path[2].id;
 
-        this.fire('delete-notification', { noteID: notificationID });
+        this.dispatchEvent(new CustomEvent('delete-notification', { noteID: notificationID }));
       }
 
       _declineRequest(evt) {
-        this.fire('send-notification', { sendTo: this.notification.userSent.id, message: this.notification.message, type: 'decline' });
-        this.fire('delete-notification', { noteID: this.key });
+        this.dispatchEvent(new CustomEvent('send-notification', { sendTo: this.notification.userSent.id, message: this.notification.message, type: 'decline' }));
+        this.dispatchEvent(new CustomEvent('delete-notification', { noteID: this.key }));
       }
 
       _okNotification() {
-        this.fire('delete-notification', { noteID: this.key });
+        this.dispatchEvent(new CustomEvent('delete-notification', { noteID: this.key }));
       }
 
       _getDate (timestamp) {
