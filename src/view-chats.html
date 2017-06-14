@@ -1,11 +1,11 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../bower_components/iron-input/iron-input.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/communication-icons.html">
-<link rel="import" href="../bower_components/polymer/polymer.html">
 
 <link rel="import" href="shared-styles.html">
 <dom-module id="view-chats">
@@ -225,7 +225,6 @@
     static get observers() {
       return [
         /* observer array just like 1.x */
-        '_myPropChanged(myProp.*)'
       ]
     }
 
